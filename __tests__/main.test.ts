@@ -8,7 +8,20 @@
 
 import * as main from '../src/main'
 
-describe('action', () => {
+describe('first-contribution GitHub Action', () => {
+  // Check if unsupported event
+  // Check if octokit is call with correct token
+
+  // Check for supported events:
+  // 'issues.opened',
+  // 'issues.closed',
+  // 'pull_request.opened',
+  // 'pull_request.closed',
+  // 'pull_request_target.opened',
+  // 'pull_request_target.closed'
+
+  // Check for correct outputs
+
   it('runs action', async () => {
     const runMock = jest.spyOn(main, 'run')
     await main.run()
