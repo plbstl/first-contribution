@@ -34,6 +34,11 @@ extends:
   - plugin:github/recommended
   - plugin:jest/recommended
 
+settings:
+  import/resolver:
+    typescript: true
+    node: true
+
 rules:
   {
     'camelcase': 'off',
