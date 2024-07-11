@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
+import * as githubLib from '@actions/github'
 import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import { getActionInputs } from './utils/action-inputs'
 import { getFCEvent } from './utils/fc-event'
@@ -9,7 +9,9 @@ import { isFirstTimeContributor, isSupportedEvent } from './utils/helpers'
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-export async function run(): Promise<void> {
+export async function run(githubParam?: typeof import('@actions/github')): Promise<void> {
+  const github = githubParam || githubLib
+
   try {
     const payload = github.context.payload
 

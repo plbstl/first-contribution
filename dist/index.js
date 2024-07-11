@@ -29223,7 +29223,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(2186));
-const github = __importStar(__nccwpck_require__(5438));
+const githubLib = __importStar(__nccwpck_require__(5438));
 const action_inputs_1 = __nccwpck_require__(2873);
 const fc_event_1 = __nccwpck_require__(5416);
 const helpers_1 = __nccwpck_require__(9612);
@@ -29231,7 +29231,8 @@ const helpers_1 = __nccwpck_require__(9612);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function run() {
+async function run(githubParam) {
+    const github = githubParam || githubLib;
     try {
         const payload = github.context.payload;
         // check if event is supported
