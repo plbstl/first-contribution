@@ -29224,6 +29224,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
+const action_inputs_1 = __nccwpck_require__(2873);
+const fc_event_1 = __nccwpck_require__(5416);
+const helpers_1 = __nccwpck_require__(9612);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -29231,95 +29234,224 @@ const github = __importStar(__nccwpck_require__(5438));
 async function run() {
     try {
         const payload = github.context.payload;
-        const event = `${github.context.eventName}.${payload.action}`;
-        // check supported events + actions
-        const supportedEvents = [
-            'issues.opened',
-            'issues.closed',
-            'pull_request.opened',
-            'pull_request.closed',
-            'pull_request_target.opened',
-            'pull_request_target.closed'
-        ];
-        if (!supportedEvents.includes(event)) {
+        // check if event is supported
+        const supportedEvent = (0, helpers_1.isSupportedEvent)(github.context.eventName, payload.action);
+        if (!supportedEvent) {
             return;
         }
         // create octokit client
         const token = core.getInput('token', { required: true });
         const octokit = github.getOctokit(token);
-        // check is first-timer
-        if (payload.pull_request) {
-            if (!['FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR'].includes(payload.pull_request.author_association)) {
-                return;
-            }
+        // check if author is first-timer
+        const firstTimeContributor = await (0, helpers_1.isFirstTimeContributor)(github.context, octokit);
+        if (!firstTimeContributor) {
+            return;
         }
-        else {
-            const response = await octokit.rest.issues.listForRepo({
-                ...github.context.repo,
-                creator: payload.issue?.user.login,
-                state: 'all'
-            });
-            if (response.data.filter(issue => !issue.pull_request).length > 1) {
-                return;
-            }
-        }
-        // retrieve msg input
-        const messageInputs = [
-            'discussion-created-msg',
-            'issue-opened-msg',
-            'issue-completed-msg',
-            'issue-not-planned-msg',
-            'pr-opened-msg',
-            'pr-merged-msg',
-            'pr-closed-msg'
-        ];
-        const eventType = payload.pull_request ? 'pr' : 'issue';
-        const issueOrPullRequest = (payload.issue || payload.pull_request);
-        let eventAction = 'opened';
-        if (payload.action !== 'opened') {
-            if (payload.pull_request) {
-                eventAction = payload.pull_request?.merged ? 'merged' : 'closed';
-            }
-            else {
-                eventAction = payload.issue?.state_reason === 'completed' ? 'completed' : 'not-planned';
-            }
-        }
-        let msg = core.getInput(`${eventType}-${eventAction}-msg`).trim();
-        if (messageInputs.includes(msg)) {
-            msg = core.getInput(msg).trim();
-        }
-        // create comment
+        // retrieve inputs
+        const fcEvent = (0, fc_event_1.getFCEvent)(payload);
+        const actionInputs = (0, action_inputs_1.getActionInputs)(fcEvent);
+        // helper variables
         let commentUrl = '';
-        if (msg) {
+        const issueOrPullRequest = (payload.issue || payload.pull_request);
+        // create comment
+        if (actionInputs.msg) {
             const comment = await octokit.rest.issues.createComment({
                 ...github.context.repo,
-                body: msg,
+                body: actionInputs.msg,
                 issue_number: issueOrPullRequest.number
             });
             commentUrl = comment.data.html_url;
         }
         // add labels
-        if (payload.action === 'opened') {
-            const labelsInput = core.getInput(`${eventType}-labels`) || core.getInput('labels');
-            const labels = labelsInput.split(',').map(label => label.trim());
-            if (labels.length > 0) {
-                await octokit.rest.issues.addLabels({
-                    ...github.context.repo,
-                    issue_number: issueOrPullRequest.number
-                });
-            }
+        if (payload.action === 'opened' && actionInputs.labels.length > 0) {
+            await octokit.rest.issues.addLabels({
+                ...github.context.repo,
+                issue_number: issueOrPullRequest.number
+            });
         }
         core.setOutput('comment-url', commentUrl);
         core.setOutput('id', issueOrPullRequest.number);
-        core.setOutput('type', eventType);
+        core.setOutput('type', fcEvent.name);
         core.setOutput('username', issueOrPullRequest.user.login);
-        //
+        // ----
     }
     catch (error) {
         // Fail the workflow run if an error occurs
         if (error instanceof Error)
             core.setFailed(error.message);
     }
+}
+
+
+/***/ }),
+
+/***/ 2873:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getActionInputs = getActionInputs;
+const core = __importStar(__nccwpck_require__(2186));
+/**
+ * Gets all inputs to first-contribution GitHub Action and categorize them.
+ * @param event A `first-contribution` event.
+ * @returns Labels and a message that can be added to the issue or pull request.
+ */
+function getActionInputs(event) {
+    return {
+        labels: getLabelsInput(event.name),
+        msg: getMsgInput(event)
+    };
+}
+/**
+ * Retrieves the relevant `-labels` input or a fallback.
+ * @param eventName A `first-contribution` event name.
+ * @returns An array of labels to add to the issue or pull request.
+ */
+function getLabelsInput(eventName) {
+    const labels = core.getInput(`${eventName}-labels`) || core.getInput('labels');
+    return labels.split(',').map(label => label.trim());
+}
+/**
+ * Retrieves the relevant `-msg` input.
+ *
+ * Also checks if the message is a symlink to another `-msg`
+ * input, and if so, uses the value of the symlinked input instead.
+ *
+ * For example:
+ * ```yaml
+ * pr-commented-on-msg: issue-commented-on-msg
+ * # `getMsgInput()` will return the value of `issue-commented-on-msg` input
+ * ```
+ *
+ * @param event A `first-contribution` event.
+ * @returns Text that can be used as comment.
+ */
+function getMsgInput(event) {
+    const messageInputs = [
+        'discussion-created-msg',
+        'issue-opened-msg',
+        'issue-completed-msg',
+        'issue-not-planned-msg',
+        'pr-opened-msg',
+        'pr-merged-msg',
+        'pr-closed-msg'
+    ];
+    let msg = core.getInput(`${event.name}-${event.state}-msg`).trim();
+    if (messageInputs.includes(msg)) {
+        msg = core.getInput(msg).trim();
+    }
+    return msg;
+}
+
+
+/***/ }),
+
+/***/ 5416:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getFCEvent = getFCEvent;
+/**
+ * Creates and returns a new `first-contribution` event.
+ * @param payload Webhook payload of the triggered event.
+ */
+function getFCEvent(payload) {
+    let actionType = 'opened';
+    if (payload.action !== 'opened') {
+        if (payload.pull_request) {
+            // This is a pull request.
+            actionType = payload.pull_request?.merged ? 'merged' : 'closed';
+        }
+        else {
+            // This is an issue.
+            actionType = payload.issue?.state_reason === 'completed' ? 'completed' : 'not-planned';
+        }
+    }
+    return {
+        state: actionType,
+        name: payload.pull_request ? 'pr' : 'issue'
+    };
+}
+
+
+/***/ }),
+
+/***/ 9612:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isSupportedEvent = isSupportedEvent;
+exports.isFirstTimeContributor = isFirstTimeContributor;
+/**
+ * Checks whether the triggered event is supported by first-contribution GitHub Action.
+ * @param eventName Name of the triggered event.
+ * @param [action] Action that caused the event to trigger.
+ * @returns
+ */
+function isSupportedEvent(eventName, action) {
+    const eventCode = `${eventName}.${action}`;
+    const supportedEventCodes = [
+        'issues.opened',
+        'issues.closed',
+        'pull_request.opened',
+        'pull_request.closed',
+        'pull_request_target.opened',
+        'pull_request_target.closed'
+    ];
+    return supportedEventCodes.includes(eventCode);
+}
+/**
+ * Checks whether the author of the issue or pull request is a first-time contributor.
+ * @param githubContext Context from the `@actions/github` library.
+ * @param octokit - A GitHub Octokit client.
+ * @returns `true` if author is a first-time contributor, and `false` otherwise.
+ */
+async function isFirstTimeContributor(githubContext, octokit) {
+    const payload = githubContext.payload;
+    const firstTimePrAuthorAssociations = ['FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR'];
+    if (payload.pull_request) {
+        // This is a pull request.
+        return firstTimePrAuthorAssociations.includes(payload.pull_request.author_association);
+    }
+    // This is an issue.
+    const response = await octokit.rest.issues.listForRepo({
+        ...githubContext.repo,
+        creator: payload.issue?.user.login,
+        state: 'all'
+    });
+    if (response.data.filter(issue => !issue.pull_request).length === 1) {
+        return true;
+    }
+    return false;
 }
 
 
