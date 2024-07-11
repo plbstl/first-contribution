@@ -29334,7 +29334,7 @@ function getActionInputs(event) {
  */
 function getLabelsInput(eventName) {
     const labels = core.getInput(`${eventName}-labels`) || core.getInput('labels');
-    return labels.split(',').map(label => label.trim());
+    return labels ? labels.split(',').map(label => label.trim()) : [];
 }
 /**
  * Retrieves the relevant `-msg` input.

@@ -28,7 +28,7 @@ export function getActionInputs(event: FCEvent): ActionInputs {
  */
 function getLabelsInput(eventName: FCEvent['name']): string[] {
   const labels = core.getInput(`${eventName}-labels`) || core.getInput('labels')
-  return labels.split(',').map(label => label.trim())
+  return labels ? labels.split(',').map(label => label.trim()) : []
 }
 
 /**
