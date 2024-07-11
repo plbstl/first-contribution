@@ -99,5 +99,6 @@ __tests__/runner/*
 
 # IDE files
 .idea
-.vscode
+.vscode/**
+!.vscode/settings.json
 *.code-workspace

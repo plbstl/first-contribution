@@ -1,0 +1,4 @@
+{
+  "eslint.lintTask.enable": true,
+  "eslint.options": { "overrideConfigFile": "./.github/linters/.eslintrc.yml" }
+}
