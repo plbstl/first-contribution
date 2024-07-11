@@ -49,6 +49,41 @@ describe('first-contribution GitHub Action', () => {
     expect(runSpy).toHaveReturned()
   })
 
+  it("correctly set the action's outputs", async () => {
+    isSupportedEventSpy.mockReturnValue(true)
+    isFirstTimeContributorSpy.mockReturnValue(new Promise(resolve => resolve(true)))
+    getActionInputsSpyMock.mockReturnValue({ labels: [], msg: 'Random message' })
+    setOutputSpy.mockImplementation()
+
+    // Mock the GitHub Actions github library
+    const github = {
+      getOctokit: jest.fn().mockReturnValue({
+        rest: {
+          issues: {
+            createComment: jest.fn().mockReturnValue({ data: { html_url: 'commentUrl' } })
+          }
+        }
+      }),
+      context: {
+        repo: { owner: 'owner', repo: 'repo' },
+        payload: {
+          issue: {
+            number: 13,
+            user: { login: 'ghosty' }
+          }
+        }
+      }
+    } as unknown as typeof import('@actions/github')
+
+    await main.run(github)
+
+    expect(setOutputSpy).toHaveBeenCalledWith('comment-url', 'commentUrl')
+    expect(setOutputSpy).toHaveBeenCalledWith('id', 13)
+    expect(setOutputSpy).toHaveBeenCalledWith('type', 'issue')
+    expect(setOutputSpy).toHaveBeenCalledWith('username', 'ghosty')
+    expect(runSpy).toHaveReturned()
+  })
+
   // Check for supported events:
   // 'issues.opened',
   // 'issues.closed',
