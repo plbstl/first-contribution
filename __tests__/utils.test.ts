@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 /**
- * Unit tests for the action's main functionality, src/main.ts
- *
- * These should be run as if the action was called from a workflow.
- * Specifically, the inputs listed in `action.yml` should be set as environment
- * variables following the pattern `INPUT_<INPUT_NAME>`.
+ * Unit tests for the action's utilities, src/utils/*.ts
  */
 
 import * as core from '@actions/core'
@@ -53,7 +49,7 @@ class ResponseErrorMock extends Error {
   }
 }
 
-describe('helpers.ts', () => {
+describe('utils', () => {
   describe('isSupportedEvent()', () => {
     it('determine whether the triggered event is supported or not', () => {
       expect(isSupportedEvent('issues', 'opened')).toBe(true)
