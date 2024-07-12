@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 /**
  * Unit tests for the action's main functionality, src/main.ts
  *
@@ -71,19 +73,15 @@ describe('helpers.ts', () => {
         payload: { pull_request: { author_association: '' } }
       } as unknown as typeof import('@actions/github').context
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       githubContext.payload.pull_request!.author_association = 'FIRST_TIMER'
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(true)
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       githubContext.payload.pull_request!.author_association = 'FIRST_TIME_CONTRIBUTOR'
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(true)
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       githubContext.payload.pull_request!.author_association = 'CONTRIBUTOR'
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(false)
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       githubContext.payload.pull_request!.author_association = 'MANNEQUIN'
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(false)
     })
