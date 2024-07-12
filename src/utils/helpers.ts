@@ -108,7 +108,7 @@ export async function addLabels(
   opts: AddLabelsOpts
 ): Promise<void> {
   // Only add labels when the action that triggered the event is 'opened' and list of labels is NOT empty.
-  if (payloadAction !== 'opened' && opts.labels.length === 0) return
+  if (payloadAction !== 'opened' || opts.labels.length === 0) return
 
   // Add labels
   try {
