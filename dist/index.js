@@ -29224,9 +29224,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(2186));
 const githubLib = __importStar(__nccwpck_require__(5438));
+const add_labels_1 = __nccwpck_require__(9732);
+const create_comment_1 = __nccwpck_require__(485);
+const is_first_time_contributor_1 = __nccwpck_require__(3480);
+const is_supported_event_1 = __nccwpck_require__(5242);
 const action_inputs_1 = __nccwpck_require__(2873);
 const fc_event_1 = __nccwpck_require__(5416);
-const helpers_1 = __nccwpck_require__(9612);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -29236,7 +29239,7 @@ async function run(githubParam) {
     try {
         const payload = github.context.payload;
         // check if event is supported
-        const supportedEvent = (0, helpers_1.isSupportedEvent)(github.context.eventName, payload.action);
+        const supportedEvent = (0, is_supported_event_1.isSupportedEvent)(github.context.eventName, payload.action);
         if (!supportedEvent) {
             return;
         }
@@ -29244,7 +29247,7 @@ async function run(githubParam) {
         const token = core.getInput('token', { required: true });
         const octokit = github.getOctokit(token);
         // check if author is first-timer
-        const firstTimeContributor = await (0, helpers_1.isFirstTimeContributor)(github.context, octokit);
+        const firstTimeContributor = await (0, is_first_time_contributor_1.isFirstTimeContributor)(github.context, octokit);
         if (!firstTimeContributor) {
             return;
         }
@@ -29254,13 +29257,13 @@ async function run(githubParam) {
         // helper variables
         const issueOrPullRequest = (payload.issue || payload.pull_request);
         // create comment
-        const commentUrl = await (0, helpers_1.createComment)(octokit, {
+        const commentUrl = await (0, create_comment_1.createComment)(octokit, {
             ...github.context.repo,
             body: actionInputs.msg,
             issue_number: issueOrPullRequest.number
         });
         // add labels
-        await (0, helpers_1.addLabels)(octokit, payload.action || '', {
+        await (0, add_labels_1.addLabels)(octokit, payload.action || '', {
             ...github.context.repo,
             labels: actionInputs.labels,
             issue_number: issueOrPullRequest.number
@@ -29367,6 +29370,73 @@ function getMsgInput(event) {
 
 /***/ }),
 
+/***/ 9732:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.addLabels = addLabels;
+/**
+ * Adds labels to the specified issue or pull request.
+ * @param octokit - A GitHub Octokit client.
+ * @param payloadAction - Action that triggered the event.
+ * @param opts {@link AddLabelsOpts}
+ */
+async function addLabels(octokit, payloadAction, opts) {
+    // Only add labels when the action that triggered the event is 'opened' and list of labels is NOT empty.
+    if (payloadAction !== 'opened' || opts.labels.length === 0)
+        return;
+    // Add labels
+    try {
+        await octokit.rest.issues.addLabels({ ...opts });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }
+    catch (error) {
+        if (error.response) {
+            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
+        }
+        throw new Error(error.message);
+    }
+}
+
+
+/***/ }),
+
+/***/ 485:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createComment = createComment;
+/**
+ * Creates a comment in the specified issue or pull request.
+ * @param octokit - A GitHub Octokit client.
+ * @param opts {@link CreateCommentOpts}
+ * @returns A link to the created comment on GitHub.
+ */
+async function createComment(octokit, opts) {
+    // Only add comment when body is NOT empty.
+    if (!opts.body)
+        return '';
+    // Create a comment on GitHub and return its html_url
+    try {
+        const comment = await octokit.rest.issues.createComment(opts);
+        return comment.data.html_url;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }
+    catch (error) {
+        if (error.response) {
+            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
+        }
+        throw error;
+    }
+}
+
+
+/***/ }),
+
 /***/ 5416:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -29399,34 +29469,13 @@ function getFCEvent(payload) {
 
 /***/ }),
 
-/***/ 9612:
+/***/ 3480:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isSupportedEvent = isSupportedEvent;
 exports.isFirstTimeContributor = isFirstTimeContributor;
-exports.createComment = createComment;
-exports.addLabels = addLabels;
-/**
- * Checks whether the triggered event is supported by first-contribution GitHub Action.
- * @param eventName Name of the triggered event.
- * @param [action] Action that caused the event to trigger.
- * @returns
- */
-function isSupportedEvent(eventName, action) {
-    const eventCode = `${eventName}.${action}`;
-    const supportedEventCodes = [
-        'issues.opened',
-        'issues.closed',
-        'pull_request.opened',
-        'pull_request.closed',
-        'pull_request_target.opened',
-        'pull_request_target.closed'
-    ];
-    return supportedEventCodes.includes(eventCode);
-}
 /**
  * Checks whether the author of the issue or pull request is a first-time contributor.
  * @param githubContext Context from the `@actions/github` library.
@@ -29451,50 +29500,34 @@ async function isFirstTimeContributor(githubContext, octokit) {
     }
     return false;
 }
+
+
+/***/ }),
+
+/***/ 5242:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isSupportedEvent = isSupportedEvent;
 /**
- * Creates a comment in the specified issue or pull request.
- * @param octokit - A GitHub Octokit client.
- * @param opts {@link CreateCommentOpts}
- * @returns A link to the created comment on GitHub.
+ * Checks whether the triggered event is supported by first-contribution GitHub Action.
+ * @param eventName Name of the triggered event.
+ * @param [action] Action that caused the event to trigger.
+ * @returns
  */
-async function createComment(octokit, opts) {
-    // Only add comment when body is NOT empty.
-    if (!opts.body)
-        return '';
-    // Create a comment on GitHub and return its html_url
-    try {
-        const comment = await octokit.rest.issues.createComment(opts);
-        return comment.data.html_url;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }
-    catch (error) {
-        if (error.response) {
-            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
-        }
-        throw error;
-    }
-}
-/**
- * Adds labels to the specified issue or pull request.
- * @param octokit - A GitHub Octokit client.
- * @param payloadAction - Action that triggered the event.
- * @param opts {@link AddLabelsOpts}
- */
-async function addLabels(octokit, payloadAction, opts) {
-    // Only add labels when the action that triggered the event is 'opened' and list of labels is NOT empty.
-    if (payloadAction !== 'opened' || opts.labels.length === 0)
-        return;
-    // Add labels
-    try {
-        await octokit.rest.issues.addLabels({ ...opts });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }
-    catch (error) {
-        if (error.response) {
-            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
-        }
-        throw new Error(error.message);
-    }
+function isSupportedEvent(eventName, action) {
+    const eventCode = `${eventName}.${action}`;
+    const supportedEventCodes = [
+        'issues.opened',
+        'issues.closed',
+        'pull_request.opened',
+        'pull_request.closed',
+        'pull_request_target.opened',
+        'pull_request_target.closed'
+    ];
+    return supportedEventCodes.includes(eventCode);
 }
 
 

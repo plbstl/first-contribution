@@ -9,7 +9,10 @@
  */
 
 import type { GitHub } from '@actions/github/lib/utils'
-import { addLabels, createComment, isFirstTimeContributor, isSupportedEvent } from '../src/utils/helpers'
+import { addLabels } from '../src/utils/add-labels'
+import { createComment } from '../src/utils/create-comment'
+import { isFirstTimeContributor } from '../src/utils/is-first-time-contributor'
+import { isSupportedEvent } from '../src/utils/is-supported-event'
 import { ResponseErrorMock } from './tests-utils'
 
 // Mock listing repository issues using REST API
