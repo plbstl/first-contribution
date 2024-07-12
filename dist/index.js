@@ -29252,17 +29252,13 @@ async function run(githubParam) {
         const fcEvent = (0, fc_event_1.getFCEvent)(payload);
         const actionInputs = (0, action_inputs_1.getActionInputs)(fcEvent);
         // helper variables
-        let commentUrl = '';
         const issueOrPullRequest = (payload.issue || payload.pull_request);
         // create comment
-        if (actionInputs.msg) {
-            const comment = await octokit.rest.issues.createComment({
-                ...github.context.repo,
-                body: actionInputs.msg,
-                issue_number: issueOrPullRequest.number
-            });
-            commentUrl = comment.data.html_url;
-        }
+        const commentUrl = await (0, helpers_1.createComment)(octokit, {
+            ...github.context.repo,
+            body: actionInputs.msg,
+            issue_number: issueOrPullRequest.number
+        });
         // add labels
         if (payload.action === 'opened' && actionInputs.labels.length > 0) {
             await octokit.rest.issues.addLabels({
@@ -29412,6 +29408,7 @@ function getFCEvent(payload) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.isSupportedEvent = isSupportedEvent;
 exports.isFirstTimeContributor = isFirstTimeContributor;
+exports.createComment = createComment;
 /**
  * Checks whether the triggered event is supported by first-contribution GitHub Action.
  * @param eventName Name of the triggered event.
@@ -29453,6 +29450,29 @@ async function isFirstTimeContributor(githubContext, octokit) {
         return true;
     }
     return false;
+}
+/**
+ * Creates a comment in the specified issue or pull request.
+ * @param octokit - A GitHub Octokit client.
+ * @param opts {@link CreateCommentOpts}
+ * @returns A link to the created comment on GitHub.
+ */
+async function createComment(octokit, opts) {
+    // Only add comment when body is NOT empty.
+    if (!opts.body)
+        return '';
+    // Create a comment on GitHub and return its html_url
+    try {
+        const comment = await octokit.rest.issues.createComment(opts);
+        return comment.data.html_url;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }
+    catch (error) {
+        if (error.response) {
+            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
+        }
+        throw error;
+    }
 }
 
 
