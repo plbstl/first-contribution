@@ -10,6 +10,26 @@ import type { GitHub } from '@actions/github/lib/utils'
 import { addLabels, createComment, isFirstTimeContributor, isSupportedEvent } from '../src/utils/helpers'
 import { ResponseErrorMock } from './tests-utils'
 
+// Mock listing repository issues using REST API
+const octokitListForRepoMock = jest.fn()
+
+// Mock creating a comment using REST API
+const octokitCreateCommentMock = jest.fn().mockReturnValue({ data: { html_url: 'https://example.com' } })
+
+// Mock adding labels using REST API
+const octokitAddLabelsMock = jest.fn()
+
+// Mock the GitHub Actions octokit client library
+const octokit = {
+  rest: {
+    issues: {
+      addLabels: octokitAddLabelsMock,
+      createComment: octokitCreateCommentMock,
+      listForRepo: octokitListForRepoMock
+    }
+  }
+} as unknown as InstanceType<typeof GitHub>
+
 describe('helpers.ts', () => {
   describe('isSupportedEvent()', () => {
     it('determine whether the triggered event is supported or not', () => {
@@ -27,12 +47,6 @@ describe('helpers.ts', () => {
   })
 
   describe('isFirstTimeContributor()', () => {
-    // Mock GitHub octokit client for listing repository issues using REST API.
-    const octokitListForRepoMock = jest.fn()
-    const octokit = {
-      rest: { issues: { listForRepo: octokitListForRepoMock } }
-    } as unknown as InstanceType<typeof GitHub>
-
     it('determine whether the issue author is a first-time contributor or not', async () => {
       const githubContext = {
         repo: { owner: 'owner', repo: 'repo' },
@@ -76,12 +90,6 @@ describe('helpers.ts', () => {
   })
 
   describe('createComment()', () => {
-    // Mock '@actions/github' octokit client for creating a comment using REST API
-    const octokitCreateCommentMock = jest.fn().mockReturnValue({ data: { html_url: 'https://example.com' } })
-    const octokit = {
-      rest: { issues: { createComment: octokitCreateCommentMock } }
-    } as unknown as InstanceType<typeof GitHub>
-
     it('comment on an issue or pull request', async () => {
       const createCommentOpts = {
         body: 'Message body',
@@ -134,12 +142,6 @@ describe('helpers.ts', () => {
   })
 
   describe('addLabels()', () => {
-    // Mock '@actions/github' octokit client for adding labels using REST API
-    const octokitAddLabelsMock = jest.fn()
-    const octokit = {
-      rest: { issues: { addLabels: octokitAddLabelsMock } }
-    } as unknown as InstanceType<typeof GitHub>
-
     it('add labels to a new issue or pull request', async () => {
       const addLabelsOpts = {
         issue_number: 1,
