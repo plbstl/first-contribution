@@ -29260,12 +29260,11 @@ async function run(githubParam) {
             issue_number: issueOrPullRequest.number
         });
         // add labels
-        if (payload.action === 'opened' && actionInputs.labels.length > 0) {
-            await octokit.rest.issues.addLabels({
-                ...github.context.repo,
-                issue_number: issueOrPullRequest.number
-            });
-        }
+        await (0, helpers_1.addLabels)(octokit, payload.action || '', {
+            ...github.context.repo,
+            labels: actionInputs.labels,
+            issue_number: issueOrPullRequest.number
+        });
         core.setOutput('comment-url', commentUrl);
         core.setOutput('id', issueOrPullRequest.number);
         core.setOutput('type', fcEvent.name);
@@ -29409,6 +29408,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.isSupportedEvent = isSupportedEvent;
 exports.isFirstTimeContributor = isFirstTimeContributor;
 exports.createComment = createComment;
+exports.addLabels = addLabels;
 /**
  * Checks whether the triggered event is supported by first-contribution GitHub Action.
  * @param eventName Name of the triggered event.
@@ -29472,6 +29472,28 @@ async function createComment(octokit, opts) {
             throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
         }
         throw error;
+    }
+}
+/**
+ * Adds labels to the specified issue or pull request.
+ * @param octokit - A GitHub Octokit client.
+ * @param payloadAction - Action that triggered the event.
+ * @param opts {@link AddLabelsOpts}
+ */
+async function addLabels(octokit, payloadAction, opts) {
+    // Only add labels when the action that triggered the event is 'opened' and list of labels is NOT empty.
+    if (payloadAction !== 'opened' && opts.labels.length === 0)
+        return;
+    // Add labels
+    try {
+        await octokit.rest.issues.addLabels({ ...opts });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }
+    catch (error) {
+        if (error.response) {
+            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
+        }
+        throw new Error(error.message);
     }
 }
 

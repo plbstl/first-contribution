@@ -3,7 +3,7 @@ import * as githubLib from '@actions/github'
 import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import { getActionInputs } from './utils/action-inputs'
 import { getFCEvent } from './utils/fc-event'
-import { createComment, isFirstTimeContributor, isSupportedEvent } from './utils/helpers'
+import { addLabels, createComment, isFirstTimeContributor, isSupportedEvent } from './utils/helpers'
 
 /**
  * The main function for the action.
@@ -46,12 +46,11 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     })
 
     // add labels
-    if (payload.action === 'opened' && actionInputs.labels.length > 0) {
-      await octokit.rest.issues.addLabels({
-        ...github.context.repo,
-        issue_number: issueOrPullRequest.number
-      })
-    }
+    await addLabels(octokit, payload.action || '', {
+      ...github.context.repo,
+      labels: actionInputs.labels,
+      issue_number: issueOrPullRequest.number
+    })
 
     core.setOutput('comment-url', commentUrl)
     core.setOutput('id', issueOrPullRequest.number)
