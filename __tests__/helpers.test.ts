@@ -7,7 +7,7 @@
  */
 
 import type { GitHub } from '@actions/github/lib/utils'
-import { createComment, isFirstTimeContributor, isSupportedEvent } from '../src/utils/helpers'
+import { addLabels, createComment, isFirstTimeContributor, isSupportedEvent } from '../src/utils/helpers'
 import { ResponseErrorMock } from './tests-utils'
 
 describe('helpers.ts', () => {
@@ -99,7 +99,7 @@ describe('helpers.ts', () => {
     it('only add a comment when the input message is NOT empty', async () => {
       const createCommentOpts = {
         body: '',
-        issue_number: 1,
+        issue_number: 2,
         owner: 'owner',
         repo: 'repo'
       }
@@ -113,7 +113,7 @@ describe('helpers.ts', () => {
     it('throw a an error when comment cannot be created', async () => {
       const createCommentOpts = {
         body: 'Message body',
-        issue_number: 2,
+        issue_number: 3,
         owner: 'owner',
         repo: 'repo'
       }
@@ -130,6 +130,78 @@ describe('helpers.ts', () => {
       })
       await expect(createComment(octokit, createCommentOpts)).rejects.toThrow('407')
       await expect(createComment(octokit, createCommentOpts)).rejects.toThrow('response error')
+    })
+  })
+
+  describe('addLabels()', () => {
+    // Mock '@actions/github' octokit client for adding labels using REST API
+    const octokitAddLabelsMock = jest.fn()
+    const octokit = {
+      rest: { issues: { addLabels: octokitAddLabelsMock } }
+    } as unknown as InstanceType<typeof GitHub>
+
+    it('add labels to a new issue or pull request', async () => {
+      const addLabelsOpts = {
+        issue_number: 1,
+        labels: ['first label', 'label2'],
+        owner: 'owner',
+        repo: 'repo'
+      }
+
+      await addLabels(octokit, 'opened', addLabelsOpts)
+      expect(octokitAddLabelsMock).toHaveBeenCalledWith(addLabelsOpts)
+    })
+
+    it('only add labels when the list of labels is NOT empty', async () => {
+      const addLabelsOpts = {
+        issue_number: 2,
+        labels: [],
+        owner: 'owner',
+        repo: 'repo'
+      }
+
+      await addLabels(octokit, 'opened', addLabelsOpts)
+      expect(octokitAddLabelsMock).not.toHaveBeenCalled()
+    })
+
+    it('do not add labels when the event payload action is NOT `opened`', async () => {
+      const addLabelsOpts = {
+        issue_number: 3,
+        labels: ['valid list', 'first-timer'],
+        owner: 'owner',
+        repo: 'repo'
+      }
+
+      await addLabels(octokit, 'reopened', addLabelsOpts)
+      expect(octokitAddLabelsMock).not.toHaveBeenCalled()
+
+      await addLabels(octokit, 'created', addLabelsOpts)
+      expect(octokitAddLabelsMock).not.toHaveBeenCalled()
+
+      await addLabels(octokit, 'closed', addLabelsOpts)
+      expect(octokitAddLabelsMock).not.toHaveBeenCalled()
+    })
+
+    it('throw an error when labels cannot be added', async () => {
+      const addLabelsOpts = {
+        issue_number: 3,
+        labels: ['valid list', 'first-timer'],
+        owner: 'owner',
+        repo: 'repo'
+      }
+
+      // Non response error
+      octokitAddLabelsMock.mockImplementation(() => {
+        throw new Error('error message')
+      })
+      await expect(addLabels(octokit, 'opened', addLabelsOpts)).rejects.toThrow(/^error message$/)
+
+      // Response error
+      octokitAddLabelsMock.mockImplementation(() => {
+        throw new ResponseErrorMock(407, 'response error')
+      })
+      await expect(addLabels(octokit, 'opened', addLabelsOpts)).rejects.toThrow('407')
+      await expect(addLabels(octokit, 'opened', addLabelsOpts)).rejects.toThrow('response error')
     })
   })
 })
