@@ -7,7 +7,8 @@
  */
 
 import type { GitHub } from '@actions/github/lib/utils'
-import { isFirstTimeContributor, isSupportedEvent } from '../src/utils/helpers'
+import { createComment, isFirstTimeContributor, isSupportedEvent } from '../src/utils/helpers'
+import { ResponseErrorMock } from './tests-utils'
 
 describe('helpers.ts', () => {
   describe('isSupportedEvent()', () => {
@@ -71,6 +72,58 @@ describe('helpers.ts', () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       githubContext.payload.pull_request!.author_association = 'MANNEQUIN'
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(false)
+    })
+  })
+
+  describe('createComment()', () => {
+    // Mock '@actions/github' octokit client for creating a comment using REST API
+    const octokitCreateCommentMock = jest.fn().mockReturnValue({ data: { html_url: 'https://example.com' } })
+    const octokit = {
+      rest: { issues: { createComment: octokitCreateCommentMock } }
+    } as unknown as InstanceType<typeof GitHub>
+
+    it('comment on an issue or pull request', async () => {
+      const createCommentOpts = {
+        body: 'Message body',
+        issue_number: 1,
+        owner: 'owner',
+        repo: 'repo'
+      }
+
+      await expect(createComment(octokit, createCommentOpts)).resolves.toBe('https://example.com')
+    })
+
+    it('only add a comment when the input message is NOT empty', async () => {
+      const createCommentOpts = {
+        body: '',
+        issue_number: 1,
+        owner: 'owner',
+        repo: 'repo'
+      }
+
+      await expect(createComment(octokit, createCommentOpts)).resolves.toBe('')
+    })
+
+    it('throw a an error when comment cannot be created', async () => {
+      const createCommentOpts = {
+        body: 'Message body',
+        issue_number: 1,
+        owner: 'owner',
+        repo: 'repo'
+      }
+
+      // Non response error
+      octokitCreateCommentMock.mockImplementation(() => {
+        throw new Error('error message')
+      })
+      await expect(createComment(octokit, createCommentOpts)).rejects.toThrow(/^error message$/)
+
+      // Response error
+      octokitCreateCommentMock.mockImplementation(() => {
+        throw new ResponseErrorMock(407, 'response error')
+      })
+      await expect(createComment(octokit, createCommentOpts)).rejects.toThrow('407')
+      await expect(createComment(octokit, createCommentOpts)).rejects.toThrow('response error')
     })
   })
 })
