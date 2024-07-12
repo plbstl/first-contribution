@@ -29272,10 +29272,14 @@ async function run(githubParam) {
         core.setOutput('id', issueOrPullRequest.number);
         core.setOutput('type', fcEvent.name);
         core.setOutput('username', issueOrPullRequest.user.login);
-        // ----
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     catch (error) {
         // Fail the workflow run if an error occurs
+        if (error.response) {
+            core.setFailed(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
+            return;
+        }
         if (error instanceof Error)
             core.setFailed(error.message);
     }
@@ -29384,19 +29388,9 @@ exports.addLabels = addLabels;
  * @param opts {@link AddLabelsOpts}
  */
 async function addLabels(octokit, payloadAction, opts) {
-    // Only add labels when the action that triggered the event is 'opened' and list of labels is NOT empty.
-    if (payloadAction !== 'opened' || opts.labels.length === 0)
-        return;
-    // Add labels
-    try {
+    // Only add labels for new issues/PRs when the list of labels is NOT empty.
+    if (payloadAction === 'opened' && opts.labels.length > 0) {
         await octokit.rest.issues.addLabels({ ...opts });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }
-    catch (error) {
-        if (error.response) {
-            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
-        }
-        throw new Error(error.message);
     }
 }
 
@@ -29421,17 +29415,8 @@ async function createComment(octokit, opts) {
     if (!opts.body)
         return '';
     // Create a comment on GitHub and return its html_url
-    try {
-        const comment = await octokit.rest.issues.createComment(opts);
-        return comment.data.html_url;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }
-    catch (error) {
-        if (error.response) {
-            throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`);
-        }
-        throw error;
-    }
+    const comment = await octokit.rest.issues.createComment(opts);
+    return comment.data.html_url;
 }
 
 

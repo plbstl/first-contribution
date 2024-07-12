@@ -35,20 +35,6 @@ const octokit = {
   }
 } as unknown as InstanceType<typeof GitHub>
 
-// Mock an Octokit response error
-class ResponseErrorMock extends Error {
-  private _response: unknown
-
-  constructor(status: number, message: string) {
-    super(message)
-    this._response = { status, data: { message } }
-  }
-
-  get response(): unknown {
-    return this._response
-  }
-}
-
 describe('utils', () => {
   describe('isSupportedEvent()', () => {
     it('determine whether the triggered event is supported or not', () => {
@@ -282,28 +268,6 @@ describe('utils', () => {
       expect(commentUrl).toBe('')
       expect(octokitCreateCommentMock).not.toHaveBeenCalled()
     })
-
-    it('throw a an error when comment cannot be created', async () => {
-      const createCommentOpts = {
-        body: 'Message body',
-        issue_number: 3,
-        owner: 'owner',
-        repo: 'repo'
-      }
-
-      // Non response error
-      octokitCreateCommentMock.mockImplementation(() => {
-        throw new Error('error message')
-      })
-      await expect(createComment(octokit, createCommentOpts)).rejects.toThrow(/^error message$/)
-
-      // Response error
-      octokitCreateCommentMock.mockImplementation(() => {
-        throw new ResponseErrorMock(407, 'response error')
-      })
-      await expect(createComment(octokit, createCommentOpts)).rejects.toThrow('407')
-      await expect(createComment(octokit, createCommentOpts)).rejects.toThrow('response error')
-    })
   })
 
   describe('addLabels()', () => {
@@ -347,28 +311,6 @@ describe('utils', () => {
 
       await addLabels(octokit, 'closed', addLabelsOpts)
       expect(octokitAddLabelsMock).not.toHaveBeenCalled()
-    })
-
-    it('throw an error when labels cannot be added', async () => {
-      const addLabelsOpts = {
-        issue_number: 3,
-        labels: ['valid list', 'first-timer'],
-        owner: 'owner',
-        repo: 'repo'
-      }
-
-      // Non response error
-      octokitAddLabelsMock.mockImplementation(() => {
-        throw new Error('error message')
-      })
-      await expect(addLabels(octokit, 'opened', addLabelsOpts)).rejects.toThrow(/^error message$/)
-
-      // Response error
-      octokitAddLabelsMock.mockImplementation(() => {
-        throw new ResponseErrorMock(407, 'response error')
-      })
-      await expect(addLabels(octokit, 'opened', addLabelsOpts)).rejects.toThrow('407')
-      await expect(addLabels(octokit, 'opened', addLabelsOpts)).rejects.toThrow('response error')
     })
   })
 })

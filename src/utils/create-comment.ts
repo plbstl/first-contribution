@@ -11,16 +11,8 @@ export async function createComment(octokit: InstanceType<typeof GitHub>, opts: 
   if (!opts.body) return ''
 
   // Create a comment on GitHub and return its html_url
-  try {
-    const comment = await octokit.rest.issues.createComment(opts)
-    return comment.data.html_url
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error.response) {
-      throw new Error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
-    }
-    throw error
-  }
+  const comment = await octokit.rest.issues.createComment(opts)
+  return comment.data.html_url
 }
 
 type CreateCommentOpts = {

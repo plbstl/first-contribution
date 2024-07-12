@@ -60,9 +60,13 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.setOutput('type', fcEvent.name)
     core.setOutput('username', issueOrPullRequest.user.login)
 
-    // ----
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     // Fail the workflow run if an error occurs
+    if (error.response) {
+      core.setFailed(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
+      return
+    }
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
