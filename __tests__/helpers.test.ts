@@ -90,7 +90,10 @@ describe('helpers.ts', () => {
         repo: 'repo'
       }
 
-      await expect(createComment(octokit, createCommentOpts)).resolves.toBe('https://example.com')
+      const commentUrl = await createComment(octokit, createCommentOpts)
+
+      expect(commentUrl).toBe('https://example.com')
+      expect(octokitCreateCommentMock).toHaveBeenCalledWith(createCommentOpts)
     })
 
     it('only add a comment when the input message is NOT empty', async () => {
@@ -101,13 +104,16 @@ describe('helpers.ts', () => {
         repo: 'repo'
       }
 
-      await expect(createComment(octokit, createCommentOpts)).resolves.toBe('')
+      const commentUrl = await createComment(octokit, createCommentOpts)
+
+      expect(commentUrl).toBe('')
+      expect(octokitCreateCommentMock).not.toHaveBeenCalled()
     })
 
     it('throw a an error when comment cannot be created', async () => {
       const createCommentOpts = {
         body: 'Message body',
-        issue_number: 1,
+        issue_number: 2,
         owner: 'owner',
         repo: 'repo'
       }
