@@ -1,14 +1,6 @@
 import * as core from '@actions/core'
 import type { FCEvent } from './fc-event'
 
-/** Categorized inputs of the first-contribution GitHub Action. */
-interface ActionInputs {
-  /** Relevant `-labels` input. */
-  labels: string[]
-  /** Relevant `-msg` input. */
-  msg: string
-}
-
 /**
  * Gets all inputs to first-contribution GitHub Action and categorize them.
  * @param event A `first-contribution` event.
@@ -19,6 +11,14 @@ export function getActionInputs(event: FCEvent): ActionInputs {
     labels: getLabelsInput(event.name),
     msg: getMsgInput(event)
   }
+}
+
+/** Categorized inputs of the first-contribution GitHub Action. */
+interface ActionInputs {
+  /** Relevant `-labels` input. */
+  labels: string[]
+  /** Relevant `-msg` input. */
+  msg: string
 }
 
 /**
