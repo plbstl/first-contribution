@@ -38,7 +38,7 @@ describe('action', () => {
   it('exit action when the issue or pull request author is NOT a first-time contributor', async () => {
     isSupportedEventSpy.mockReturnValue(true)
     getInputSpy.mockReturnValue('***')
-    isFirstTimeContributorSpy.mockReturnValue(new Promise(resolve => resolve(false)))
+    isFirstTimeContributorSpy.mockResolvedValue(false)
 
     await main.run()
 
@@ -50,7 +50,7 @@ describe('action', () => {
 
   it("correctly set the action's outputs", async () => {
     isSupportedEventSpy.mockReturnValue(true)
-    isFirstTimeContributorSpy.mockReturnValue(new Promise(resolve => resolve(true)))
+    isFirstTimeContributorSpy.mockResolvedValue(true)
     getActionInputsSpyMock.mockReturnValue({ labels: [], msg: 'Random message' })
     setOutputSpy.mockImplementation()
 
