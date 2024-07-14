@@ -10,12 +10,14 @@ export async function addLabels(
   octokit: InstanceType<typeof GitHub>,
   payloadAction: string,
   opts: AddLabelsOpts
-): Promise<void> {
+): Promise<boolean> {
   // Only add labels for new issues/PRs when the list of labels is NOT empty.
   if (payloadAction === 'opened' && opts.labels.length > 0) {
     // can fail when label is not already created in the repository.
     await octokit.rest.issues.addLabels({ ...opts })
+    return true
   }
+  return false
 }
 
 interface AddLabelsOpts {

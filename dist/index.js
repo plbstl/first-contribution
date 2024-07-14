@@ -29280,12 +29280,12 @@ async function run(githubParam) {
         core.debug(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added');
         // add labels
         core.debug('Attempting to add labels to issue or pull request');
-        await (0, add_labels_1.addLabels)(octokit, payload.action || '', {
+        const didAddLabels = await (0, add_labels_1.addLabels)(octokit, payload.action || '', {
             ...github.context.repo,
             labels: actionInputs.labels,
             issue_number: issueOrPullRequest.number
         });
-        // core.debug('Labels added') TODO: check add labels
+        core.debug(didAddLabels ? `Labels added: ${actionInputs.labels}` : 'No label was added');
         core.setOutput('comment-url', commentUrl);
         core.setOutput('number', issueOrPullRequest.number);
         core.setOutput('type', fcEvent.name);
@@ -29410,7 +29410,9 @@ async function addLabels(octokit, payloadAction, opts) {
     if (payloadAction === 'opened' && opts.labels.length > 0) {
         // can fail when label is not already created in the repository.
         await octokit.rest.issues.addLabels({ ...opts });
+        return true;
     }
+    return false;
 }
 
 

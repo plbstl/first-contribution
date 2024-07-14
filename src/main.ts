@@ -66,12 +66,12 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
 
     // add labels
     core.debug('Attempting to add labels to issue or pull request')
-    await addLabels(octokit, payload.action || '', {
+    const didAddLabels = await addLabels(octokit, payload.action || '', {
       ...github.context.repo,
       labels: actionInputs.labels,
       issue_number: issueOrPullRequest.number
     })
-    // core.debug('Labels added') TODO: check add labels
+    core.debug(didAddLabels ? `Labels added: ${actionInputs.labels}` : 'No label was added')
 
     core.setOutput('comment-url', commentUrl)
     core.setOutput('number', issueOrPullRequest.number)
