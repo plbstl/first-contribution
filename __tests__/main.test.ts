@@ -24,7 +24,7 @@ const getActionInputsSpyMock = jest.spyOn(actionInputsUtils, 'getActionInputs')
 const isFirstTimeContributorSpy = jest.spyOn(isFirstTimeContributorUtils, 'isFirstTimeContributor')
 const isSupportedEventSpy = jest.spyOn(isSupportedEventUtils, 'isSupportedEvent')
 
-describe('first-contribution GitHub Action', () => {
+describe('action', () => {
   it('exit action when the triggered event is NOT supported', async () => {
     isSupportedEventSpy.mockReturnValue(false)
 
@@ -85,13 +85,29 @@ describe('first-contribution GitHub Action', () => {
     expect(runSpy).toHaveReturned()
   })
 
-  // Check for supported events:
-  // 'issues.opened',
-  // 'issues.closed',
-  // 'pull_request.opened',
-  // 'pull_request.closed',
-  // 'pull_request_target.opened',
-  // 'pull_request_target.closed'
+  it('set a failed status', async () => {
+    const errorSpyMock = jest.spyOn(core, 'error').mockImplementation()
+    const setFailedSpyMock = jest.spyOn(core, 'setFailed').mockImplementation()
 
-  // Check for correct outputs
+    // // Non response error
+    isSupportedEventSpy.mockImplementation(() => {
+      throw new Error('error message')
+    })
+    await main.run()
+    expect(setFailedSpyMock).toHaveBeenCalledWith('error message')
+    expect(errorSpyMock).not.toHaveBeenCalled()
+    expect(runSpy).toHaveReturned()
+
+    // // Response error
+    isSupportedEventSpy.mockImplementation(() => {
+      const err = new Error()
+      // @ts-expect-error Mock response object
+      err.response = { status: 407, data: { message: 'response error' } }
+      throw err
+    })
+    await main.run()
+    expect(setFailedSpyMock).toHaveBeenCalledWith(expect.stringMatching(/^(?=.*407)(?=.*response error).*$/))
+    expect(errorSpyMock).not.toHaveBeenCalled()
+    expect(runSpy).toHaveReturned()
+  })
 })
