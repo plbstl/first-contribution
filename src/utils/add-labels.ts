@@ -13,6 +13,7 @@ export async function addLabels(
 ): Promise<void> {
   // Only add labels for new issues/PRs when the list of labels is NOT empty.
   if (payloadAction === 'opened' && opts.labels.length > 0) {
+    // can fail when label is not already created in the repository.
     await octokit.rest.issues.addLabels({ ...opts })
   }
 }
