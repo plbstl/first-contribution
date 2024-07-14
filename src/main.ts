@@ -1,12 +1,14 @@
 import * as core from '@actions/core'
 import * as githubLib from '@actions/github'
 import type { Issue, PullRequest } from '@octokit/webhooks-types'
-import { addLabels } from '../src/utils/add-labels'
-import { createComment } from '../src/utils/create-comment'
-import { isFirstTimeContributor } from '../src/utils/is-first-time-contributor'
-import { isSupportedEvent } from '../src/utils/is-supported-event'
-import { getActionInputs } from './utils/action-inputs'
-import { getFCEvent } from './utils/fc-event'
+import {
+  addLabels,
+  createComment,
+  getActionInputs,
+  getFCEvent,
+  isFirstTimeContributor,
+  isSupportedEvent
+} from '../src/utils'
 
 /**
  * The main function for the action.

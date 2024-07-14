@@ -8,9 +8,7 @@
 
 import * as core from '@actions/core'
 import * as main from '../src/main'
-import * as actionInputsUtils from '../src/utils/action-inputs'
-import * as isFirstTimeContributorUtils from '../src/utils/is-first-time-contributor'
-import * as isSupportedEventUtils from '../src/utils/is-supported-event'
+import * as utils from '../src/utils'
 
 // Spy on the action's main function
 const runSpy = jest.spyOn(main, 'run')
@@ -20,9 +18,9 @@ const getInputSpy = jest.spyOn(core, 'getInput')
 const setOutputSpy = jest.spyOn(core, 'setOutput')
 
 // Spy on the acton's utils
-const getActionInputsSpyMock = jest.spyOn(actionInputsUtils, 'getActionInputs')
-const isFirstTimeContributorSpy = jest.spyOn(isFirstTimeContributorUtils, 'isFirstTimeContributor')
-const isSupportedEventSpy = jest.spyOn(isSupportedEventUtils, 'isSupportedEvent')
+const getActionInputsSpyMock = jest.spyOn(utils, 'getActionInputs')
+const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
+const isSupportedEventSpy = jest.spyOn(utils, 'isSupportedEvent')
 
 describe('action', () => {
   it('exit action when the triggered event is NOT supported', async () => {

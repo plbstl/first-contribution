@@ -6,11 +6,7 @@
 
 import * as core from '@actions/core'
 import type { GitHub } from '@actions/github/lib/utils'
-import { getActionInputs } from '../src/utils/action-inputs'
-import { addLabels } from '../src/utils/add-labels'
-import { createComment } from '../src/utils/create-comment'
-import { isFirstTimeContributor } from '../src/utils/is-first-time-contributor'
-import { isSupportedEvent } from '../src/utils/is-supported-event'
+import { addLabels, createComment, getActionInputs, isFirstTimeContributor, isSupportedEvent } from '../src/utils'
 
 // Spy on the GitHub Actions core library
 const getInputSpy = jest.spyOn(core, 'getInput')

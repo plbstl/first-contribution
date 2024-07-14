@@ -29224,12 +29224,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(2186));
 const githubLib = __importStar(__nccwpck_require__(5438));
-const add_labels_1 = __nccwpck_require__(9732);
-const create_comment_1 = __nccwpck_require__(485);
-const is_first_time_contributor_1 = __nccwpck_require__(3480);
-const is_supported_event_1 = __nccwpck_require__(5242);
-const action_inputs_1 = __nccwpck_require__(2873);
-const fc_event_1 = __nccwpck_require__(5416);
+const utils_1 = __nccwpck_require__(6252);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -29242,7 +29237,7 @@ async function run(githubParam) {
         core.debug('Retrieved webhook payload');
         // check if event is supported
         core.debug('Checking if triggered event is supported');
-        const supportedEvent = (0, is_supported_event_1.isSupportedEvent)(github.context.eventName, payload.action);
+        const supportedEvent = (0, utils_1.isSupportedEvent)(github.context.eventName, payload.action);
         if (!supportedEvent) {
             core.info(`\`${github.context.eventName}.${payload.action}\` event is NOT supported. Exiting..`);
             return;
@@ -29259,20 +29254,20 @@ async function run(githubParam) {
         const issueOrPullRequest = (payload.issue || payload.pull_request);
         // check if author is first-timer
         core.debug('Checking if issue or pull request author is a first-time contributor');
-        const firstTimeContributor = await (0, is_first_time_contributor_1.isFirstTimeContributor)(github.context, octokit);
+        const firstTimeContributor = await (0, utils_1.isFirstTimeContributor)(github.context, octokit);
         if (!firstTimeContributor) {
             core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`);
             return;
         }
         core.debug('Author is a first-time contributor');
         // retrieve inputs
-        const fcEvent = (0, fc_event_1.getFCEvent)(payload);
+        const fcEvent = (0, utils_1.getFCEvent)(payload);
         core.debug('Retrieving relevant message and labels inputs');
-        const actionInputs = (0, action_inputs_1.getActionInputs)(fcEvent);
+        const actionInputs = (0, utils_1.getActionInputs)(fcEvent);
         core.debug('Message and labels inputs retrieved');
         // create comment
         core.debug('Attempting to create comment on GitHub');
-        const commentUrl = await (0, create_comment_1.createComment)(octokit, {
+        const commentUrl = await (0, utils_1.createComment)(octokit, {
             ...github.context.repo,
             body: actionInputs.msg,
             issue_number: issueOrPullRequest.number
@@ -29280,7 +29275,7 @@ async function run(githubParam) {
         core.debug(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added');
         // add labels
         core.debug('Attempting to add labels to issue or pull request');
-        const didAddLabels = await (0, add_labels_1.addLabels)(octokit, payload.action || '', {
+        const didAddLabels = await (0, utils_1.addLabels)(octokit, payload.action || '', {
             ...github.context.repo,
             labels: actionInputs.labels,
             issue_number: issueOrPullRequest.number
@@ -29471,6 +29466,29 @@ function getFCEvent(payload) {
         name: payload.pull_request ? 'pr' : 'issue'
     };
 }
+
+
+/***/ }),
+
+/***/ 6252:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isSupportedEvent = exports.isFirstTimeContributor = exports.getFCEvent = exports.createComment = exports.addLabels = exports.getActionInputs = void 0;
+var action_inputs_1 = __nccwpck_require__(2873);
+Object.defineProperty(exports, "getActionInputs", ({ enumerable: true, get: function () { return action_inputs_1.getActionInputs; } }));
+var add_labels_1 = __nccwpck_require__(9732);
+Object.defineProperty(exports, "addLabels", ({ enumerable: true, get: function () { return add_labels_1.addLabels; } }));
+var create_comment_1 = __nccwpck_require__(485);
+Object.defineProperty(exports, "createComment", ({ enumerable: true, get: function () { return create_comment_1.createComment; } }));
+var fc_event_1 = __nccwpck_require__(5416);
+Object.defineProperty(exports, "getFCEvent", ({ enumerable: true, get: function () { return fc_event_1.getFCEvent; } }));
+var is_first_time_contributor_1 = __nccwpck_require__(3480);
+Object.defineProperty(exports, "isFirstTimeContributor", ({ enumerable: true, get: function () { return is_first_time_contributor_1.isFirstTimeContributor; } }));
+var is_supported_event_1 = __nccwpck_require__(5242);
+Object.defineProperty(exports, "isSupportedEvent", ({ enumerable: true, get: function () { return is_supported_event_1.isSupportedEvent; } }));
 
 
 /***/ }),

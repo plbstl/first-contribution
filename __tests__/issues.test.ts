@@ -6,12 +6,7 @@
 
 import * as core from '@actions/core'
 import * as main from '../src/main'
-import * as actionInputsUtils from '../src/utils/action-inputs'
-// import * as createCommentUtils from '../src/utils/create-comment'
-import * as fcEventUtils from '../src/utils/fc-event'
-// import * as isFirstTimeContributorUtils from '../src/utils/is-first-time-contributor'
-import * as isSupportedEventUtils from '../src/utils/is-supported-event'
-// import * as addLabelsUtils from '../src/utils/add-labels'
+import * as utils from '../src/utils'
 
 /** Number of action outputs */
 const NUMBER_OF_OUTPUTS = 4
@@ -20,12 +15,12 @@ const NUMBER_OF_OUTPUTS = 4
 const runSpy = jest.spyOn(main, 'run')
 
 // Spy on the acton's utils
-// const isFirstTimeContributorSpy = jest.spyOn(isFirstTimeContributorUtils, 'isFirstTimeContributor')
-const isSupportedEventSpy = jest.spyOn(isSupportedEventUtils, 'isSupportedEvent')
-const getFCEventSpy = jest.spyOn(fcEventUtils, 'getFCEvent')
-const getActionInputsSpy = jest.spyOn(actionInputsUtils, 'getActionInputs')
-// const createCommentSpy = jest.spyOn(createCommentUtils, 'createComment')
-// const addLabelsSpy = jest.spyOn(addLabelsUtils, 'addLabels')
+// const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
+const isSupportedEventSpy = jest.spyOn(utils, 'isSupportedEvent')
+const getFCEventSpy = jest.spyOn(utils, 'getFCEvent')
+const getActionInputsSpy = jest.spyOn(utils, 'getActionInputs')
+// const createCommentSpy = jest.spyOn(utils, 'createComment')
+// const addLabelsSpy = jest.spyOn(utils, 'addLabels')
 
 // Mock the GitHub Actions octokit client
 const getOctokit = jest.fn().mockReturnValue({
