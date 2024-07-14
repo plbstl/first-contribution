@@ -56,7 +56,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     })
 
     core.setOutput('comment-url', commentUrl)
-    core.setOutput('id', issueOrPullRequest.number)
+    core.setOutput('number', issueOrPullRequest.number)
     core.setOutput('type', fcEvent.name)
     core.setOutput('username', issueOrPullRequest.user.login)
 

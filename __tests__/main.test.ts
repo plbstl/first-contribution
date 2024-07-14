@@ -79,7 +79,7 @@ describe('action', () => {
     await main.run(github)
 
     expect(setOutputSpy).toHaveBeenCalledWith('comment-url', 'commentUrl')
-    expect(setOutputSpy).toHaveBeenCalledWith('id', 13)
+    expect(setOutputSpy).toHaveBeenCalledWith('number', 13)
     expect(setOutputSpy).toHaveBeenCalledWith('type', 'issue')
     expect(setOutputSpy).toHaveBeenCalledWith('username', 'ghosty')
     expect(runSpy).toHaveReturned()
