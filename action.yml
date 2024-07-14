@@ -1,6 +1,6 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: First Contribution
+description: Automatically respond to a user's first contribution to your repository, using GitHub Actions.
+author: Paul Ebose
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
