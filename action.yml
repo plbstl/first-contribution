@@ -4,20 +4,52 @@ author: Paul Ebose
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: activity
+  color: green
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
+  token:
+    description:
+      The GitHub access token (e.g. secrets.GITHUB_TOKEN) used to add relevant comments and labels. This defaults to
+      `github.token`.
+    default: ${{ github.token }}
+  issue-opened-msg:
+    description: Message to reply a first-time contributor with, when they open a new issue.
+  pr-opened-msg:
+    description: Message to reply a first-time contributor with, when they open a new pull request.
+  issue-completed-msg:
+    description: Message to reply a first-time contributor with, when their authored issue is CLOSED AS COMPLETED.
+  issue-not-planned-msg:
+    description: Message to reply a first-time contributor with, when their authored issue is CLOSED AS NOT_PLANNED.
+  pr-merged-msg:
+    description: Message to reply a first-time contributor with, when their authored pull request is MERGED.
+  pr-closed-msg:
+    description:
+      Message to reply a first-time contributor with, when their authored pull request is CLOSED without being merged.
+  labels:
+    description:
+      Comma-separated list of labels that should be added to an issue or pull request opened by a first-time
+      contributor.
+  issue-labels:
+    description:
+      Comma-separated list of labels that should be added to an issue authored by a first-time contributor. Takes
+      precedence over the 'labels' input.
+  pr-labels:
+    description:
+      Comma-separated list of labels that should be added to a pull request authored by a first-time contributor. Takes
+      precedence over the 'labels' input.
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  type:
+    description: Where the first contribution was made. `issue` or `pr`.
+  number:
+    description: Unique number of the issue or pull request.
+  username:
+    description: GitHub username of the first-time contributor.
+  comment-url:
+    description: URL to the comment that was made in response to the user's first contribution.
 
 runs:
   using: node20
