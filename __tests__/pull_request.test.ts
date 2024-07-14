@@ -11,6 +11,7 @@ import * as actionInputsUtils from '../src/utils/action-inputs'
 import * as fcEventUtils from '../src/utils/fc-event'
 // import * as isFirstTimeContributorUtils from '../src/utils/is-first-time-contributor'
 import * as isSupportedEventUtils from '../src/utils/is-supported-event'
+// import * as addLabelsUtils from '../src/utils/add-labels'
 
 /** Number of action outputs */
 const NUMBER_OF_OUTPUTS = 4
@@ -24,6 +25,7 @@ const isSupportedEventSpy = jest.spyOn(isSupportedEventUtils, 'isSupportedEvent'
 const getFCEventSpy = jest.spyOn(fcEventUtils, 'getFCEvent')
 const getActionInputsSpy = jest.spyOn(actionInputsUtils, 'getActionInputs')
 // const createCommentSpy = jest.spyOn(createCommentUtils, 'createComment')
+// const addLabelsSpy = jest.spyOn(addLabelsUtils, 'addLabels')
 
 // Mock the GitHub Actions octokit client
 const getOctokit = jest.fn().mockReturnValue({
@@ -80,7 +82,7 @@ describe('pull_request', () => {
         msg: 'Thank you for opening this pull request.'
       })
       // TODO: expect(createCommentSpy).toHaveReturnedWith('https://pull_request.opened')
-      // TODO: check add labels
+      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
@@ -118,7 +120,7 @@ describe('pull_request', () => {
         msg: 'This PR has been successfully merged!'
       })
       // TODO: expect(createCommentSpy).toHaveReturnedWith('https://pull_request.closed')
-      // TODO: check add labels
+      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
@@ -154,7 +156,7 @@ describe('pull_request', () => {
         msg: 'PR was closed. Will not be merged'
       })
       // TODO: expect(createCommentSpy).toHaveReturnedWith('https://pull_request.closed')
-      // TODO: check add labels
+      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
