@@ -279,8 +279,9 @@ describe('utils', () => {
         repo: 'repo'
       }
 
-      await addLabels(octokit, 'opened', addLabelsOpts)
+      const didAddLabels = await addLabels(octokit, 'opened', addLabelsOpts)
       expect(octokitAddLabelsMock).toHaveBeenCalledWith(addLabelsOpts)
+      expect(didAddLabels).toBe(true)
     })
 
     it('only add labels when the list of labels is NOT empty', async () => {
@@ -291,8 +292,9 @@ describe('utils', () => {
         repo: 'repo'
       }
 
-      await addLabels(octokit, 'opened', addLabelsOpts)
+      const didAddLabels = await addLabels(octokit, 'opened', addLabelsOpts)
       expect(octokitAddLabelsMock).not.toHaveBeenCalled()
+      expect(didAddLabels).toBe(false)
     })
 
     it('do not add labels when the event payload action is NOT `opened`', async () => {
