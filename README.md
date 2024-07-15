@@ -88,7 +88,7 @@ You can check out the [examples below](#examples).
 
 ### Outputs 📤
 
-first-contribution GitHub action provides the following outputs:
+first-contribution GitHub Action provides the following outputs:
 
 | Output        | Type    | Description                                                                                                                                                |
 | ------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
