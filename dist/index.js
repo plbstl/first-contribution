@@ -29256,8 +29256,7 @@ async function run(githubParam) {
         core.debug('Checking if issue or pull request author is a first-time contributor');
         const firstTimeContributor = await (0, utils_1.isFirstTimeContributor)(github.context, octokit);
         if (!firstTimeContributor) {
-            core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`);
-            return;
+            return core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`);
         }
         core.debug('Author is a first-time contributor');
         // retrieve inputs
