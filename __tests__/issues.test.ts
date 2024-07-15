@@ -46,7 +46,7 @@ const getInputSpyMock = jest.spyOn(core, 'getInput').mockImplementation(name => 
     case 'issue-completed-msg':
       return 'Issue has been completed!'
     case 'issue-not-planned-msg':
-      return 'This issue is not planned.'
+      return 'pr-closed-msg'
     default:
       return ''
   }
@@ -139,14 +139,14 @@ describe('issues', () => {
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'issue', state: 'not-planned' })
       expect(getActionInputsSpy).toHaveReturnedWith({
         labels: ['first timer'],
-        msg: 'This issue is not planned.'
+        msg: ''
       })
 
       expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
-      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('html_url.com')
+      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('')
       expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(false)
 
-      expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
+      expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'msg-symlink'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
 
       expect(runSpy).toHaveReturned()
