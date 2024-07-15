@@ -15,12 +15,12 @@ const NUMBER_OF_OUTPUTS = 4
 const runSpy = jest.spyOn(main, 'run')
 
 // Spy on the acton's utils
-// const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
+const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
 const isSupportedEventSpy = jest.spyOn(utils, 'isSupportedEvent')
 const getFCEventSpy = jest.spyOn(utils, 'getFCEvent')
 const getActionInputsSpy = jest.spyOn(utils, 'getActionInputs')
-// const createCommentSpy = jest.spyOn(utils, 'createComment')
-// const addLabelsSpy = jest.spyOn(utils, 'addLabels')
+const createCommentSpy = jest.spyOn(utils, 'createComment')
+const addLabelsSpy = jest.spyOn(utils, 'addLabels')
 
 // Mock the GitHub Actions octokit client
 const getOctokit = jest.fn().mockReturnValue({
@@ -70,14 +70,15 @@ describe('issues', () => {
       await main.run(github)
 
       expect(isSupportedEventSpy).toHaveReturnedWith(true)
-      // TODO: expect(isFirstTimeContributorSpy).toHaveReturnedWith(true)
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'issue', state: 'opened' })
       expect(getActionInputsSpy).toHaveReturnedWith({
         labels: ['first timer'],
         msg: 'Thank you for reporting this issue.'
       })
-      // TODO: expect(createCommentSpy).toHaveReturnedWith('https://issues.opened')
-      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
+
+      expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
+      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('html_url.com')
+      expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(true)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'issue-labels', 'issue-opened-msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
@@ -103,14 +104,15 @@ describe('issues', () => {
       await main.run(github)
 
       expect(isSupportedEventSpy).toHaveReturnedWith(true)
-      // TODO: expect(isFirstTimeContributorSpy).toHaveReturnedWith(true)
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'issue', state: 'completed' })
       expect(getActionInputsSpy).toHaveReturnedWith({
         labels: ['first timer'],
         msg: 'Issue has been completed!'
       })
-      // TODO: expect(createCommentSpy).toHaveReturnedWith('https://issues.closed')
-      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
+
+      expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
+      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('html_url.com')
+      expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(false)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
@@ -134,14 +136,15 @@ describe('issues', () => {
       await main.run(github)
 
       expect(isSupportedEventSpy).toHaveReturnedWith(true)
-      // TODO: expect(isFirstTimeContributorSpy).toHaveReturnedWith(true)
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'issue', state: 'not-planned' })
       expect(getActionInputsSpy).toHaveReturnedWith({
         labels: ['first timer'],
         msg: 'This issue is not planned.'
       })
-      // TODO: expect(createCommentSpy).toHaveReturnedWith('https://issues.closed')
-      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
+
+      expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
+      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('html_url.com')
+      expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(false)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)

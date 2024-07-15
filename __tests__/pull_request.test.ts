@@ -15,12 +15,12 @@ const NUMBER_OF_OUTPUTS = 4
 const runSpy = jest.spyOn(main, 'run')
 
 // Spy on the acton's utils
-// const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
+const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
 const isSupportedEventSpy = jest.spyOn(utils, 'isSupportedEvent')
 const getFCEventSpy = jest.spyOn(utils, 'getFCEvent')
 const getActionInputsSpy = jest.spyOn(utils, 'getActionInputs')
-// const createCommentSpy = jest.spyOn(createCommentUtils, 'createComment')
-// const addLabelsSpy = jest.spyOn(addLabelsUtils, 'addLabels')
+const createCommentSpy = jest.spyOn(utils, 'createComment')
+const addLabelsSpy = jest.spyOn(utils, 'addLabels')
 
 // Mock the GitHub Actions octokit client
 const getOctokit = jest.fn().mockReturnValue({
@@ -70,14 +70,15 @@ describe('pull_request', () => {
       await main.run(github)
 
       expect(isSupportedEventSpy).toHaveReturnedWith(true)
-      // TODO: expect(isFirstTimeContributorSpy).toHaveReturnedWith(true)
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'pr', state: 'opened' })
       expect(getActionInputsSpy).toHaveReturnedWith({
         labels: ['first-contrib'],
         msg: 'Thank you for opening this pull request.'
       })
-      // TODO: expect(createCommentSpy).toHaveReturnedWith('https://pull_request.opened')
-      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
+
+      expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
+      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('html_url.com')
+      expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(true)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
@@ -108,14 +109,15 @@ describe('pull_request', () => {
       await main.run(github)
 
       expect(isSupportedEventSpy).toHaveReturnedWith(true)
-      // TODO: expect(isFirstTimeContributorSpy).toHaveReturnedWith(true)
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'pr', state: 'merged' })
       expect(getActionInputsSpy).toHaveReturnedWith({
         labels: ['first-contrib'],
         msg: 'This PR has been successfully merged!'
       })
-      // TODO: expect(createCommentSpy).toHaveReturnedWith('https://pull_request.closed')
-      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
+
+      expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
+      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('html_url.com')
+      expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(false)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
@@ -144,14 +146,15 @@ describe('pull_request', () => {
       await main.run(github)
 
       expect(isSupportedEventSpy).toHaveReturnedWith(true)
-      // TODO: expect(isFirstTimeContributorSpy).toHaveReturnedWith(true)
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'pr', state: 'closed' })
       expect(getActionInputsSpy).toHaveReturnedWith({
         labels: ['first-contrib'],
         msg: 'PR was closed. Will not be merged'
       })
-      // TODO: expect(createCommentSpy).toHaveReturnedWith('https://pull_request.closed')
-      // TODO: expect(addLabelsSpy).toHaveReturnedWith(true)
+
+      expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
+      expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe('html_url.com')
+      expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(false)
 
       expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
       expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_OUTPUTS)
