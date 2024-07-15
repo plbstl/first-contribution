@@ -87,7 +87,17 @@ describe('action', () => {
     const errorSpyMock = jest.spyOn(core, 'error').mockImplementation()
     const setFailedSpyMock = jest.spyOn(core, 'setFailed').mockImplementation()
 
-    // // Non response error
+    // Generic throw
+    isSupportedEventSpy.mockImplementation(() => {
+      // eslint-disable-next-line no-throw-literal
+      throw '356'
+    })
+    await main.run()
+    expect(setFailedSpyMock).toHaveBeenCalledWith(expect.stringContaining('356'))
+    expect(errorSpyMock).not.toHaveBeenCalled()
+    expect(runSpy).toHaveReturned()
+
+    // Non response error
     isSupportedEventSpy.mockImplementation(() => {
       throw new Error('error message')
     })
@@ -96,7 +106,7 @@ describe('action', () => {
     expect(errorSpyMock).not.toHaveBeenCalled()
     expect(runSpy).toHaveReturned()
 
-    // // Response error
+    // Response error
     isSupportedEventSpy.mockImplementation(() => {
       const err = new Error()
       // @ts-expect-error Mock response object

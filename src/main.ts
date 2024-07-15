@@ -88,5 +88,6 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
       return
     }
     if (error instanceof Error) core.setFailed(error.message)
+    else core.setFailed(`Action failed with error ${error}`)
   }
 }
