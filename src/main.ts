@@ -63,7 +63,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
       body: actionInputs.msg,
       issue_number: issueOrPullRequest.number
     })
-    core.debug(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added')
+    core.info(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added')
 
     // add labels
     core.debug('Attempting to add labels to issue or pull request')
@@ -72,7 +72,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
       labels: actionInputs.labels,
       issue_number: issueOrPullRequest.number
     })
-    core.debug(didAddLabels ? `Labels added: ${actionInputs.labels}` : 'No label was added')
+    core.info(didAddLabels ? `Labels added: ${actionInputs.labels}` : 'No label was added')
 
     core.setOutput('comment-url', commentUrl)
     core.setOutput('number', issueOrPullRequest.number)
