@@ -13,21 +13,14 @@ export async function isFirstTimeContributor(
 ): Promise<boolean> {
   const payload = githubContext.payload
 
-  const firstTimePrAuthorAssociations = ['FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR']
-  if (payload.pull_request) {
-    // This is a pull request.
-    return firstTimePrAuthorAssociations.includes(payload.pull_request.author_association)
-  }
-
-  // This is an issue.
   const response = await octokit.rest.issues.listForRepo({
     ...githubContext.repo,
     creator: payload.issue?.user.login,
     state: 'all'
   })
-  if (response.data.filter(issue => !issue.pull_request).length === 1) {
+
+  if (response.data.length === 1) {
     return true
   }
-
   return false
 }
