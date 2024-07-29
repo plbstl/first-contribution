@@ -22,7 +22,7 @@ const addLabelsSpy = jest.spyOn(utils, 'addLabels')
 
 // Mock the GitHub Actions octokit client
 const listForRepoMock = jest.fn()
-const getOctokit = jest.fn().mockReturnValue({
+const getOctokitMock = jest.fn().mockReturnValue({
   rest: {
     issues: {
       addLabels: jest.fn(),
@@ -60,7 +60,7 @@ describe('issues', () => {
     it('handle when a new issue is opened', async () => {
       listForRepoMock.mockReturnValue({ data: [{}] })
       const github = {
-        getOctokit,
+        getOctokit: getOctokitMock,
         context: {
           eventName: 'issues',
           repo: { owner: 'owner', repo: 'repo' },
@@ -95,7 +95,7 @@ describe('issues', () => {
     it('handle when an issue is closed as completed', async () => {
       listForRepoMock.mockReturnValue({ data: [{ state: 'closed' }] })
       const github = {
-        getOctokit,
+        getOctokit: getOctokitMock,
         context: {
           eventName: 'issues',
           repo: { owner: 'owner', repo: 'repo' },
@@ -128,7 +128,7 @@ describe('issues', () => {
     it('handle when an issue is closed as not planned', async () => {
       listForRepoMock.mockReturnValue({ data: [{ state: 'closed' }] })
       const github = {
-        getOctokit,
+        getOctokit: getOctokitMock,
         context: {
           eventName: 'issues',
           repo: { owner: 'owner', repo: 'repo' },
