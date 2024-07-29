@@ -18,10 +18,10 @@ opened issues and pull requests are closed.
 - If the relevant message is empty, no comment will be made.
 - If no labels are provided, the issue or pull request labels will remain untouched.
 
-> [!NOTE]
->
-> You can reuse messages by passing the input parameter name instead. See the [Detailed example](#detailed) for more
-> info.
+### Notes
+
+- You can reuse messages by passing the input parameter name instead. See the [Detailed example](#detailed) for more information.
+- Labels are only added to new issues and pull requests.
 
 ### Inputs 📥
 
@@ -172,7 +172,7 @@ jobs:
 
 ### Detailed
 
-- Add relevant labels to issues or pull requests opened by first-time contributors.
+- Add relevant labels to issues and pull requests opened by first-time contributors.
 - Welcome first-time contributors when they open new issues and pull requests.
 - Comment on closed issues and pull requests, when the author is a first-time contributor.
 - Reuse text from other inputs.
