@@ -54,6 +54,10 @@ const getInputSpyMock = jest.spyOn(core, 'getInput').mockImplementation(name => 
 })
 
 describe('issues', () => {
+  beforeEach(() => {
+    listForRepoMock.mockReset()
+  })
+
   describe('.opened', () => {
     it('handle when a new issue is opened', async () => {
       listForRepoMock.mockReturnValue({ data: [{}] })
@@ -124,6 +128,7 @@ describe('issues', () => {
     })
 
     it('handle when an issue is closed as not planned', async () => {
+      listForRepoMock.mockReturnValue({ data: [{ state: 'closed' }] })
       const github = {
         getOctokit,
         context: {
