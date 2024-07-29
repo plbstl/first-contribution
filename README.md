@@ -6,12 +6,12 @@
 [![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/codeql.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-Automatically respond to a user's first contribution to your repository, using GitHub Actions.
+Automatically respond to a user's first issue or pull request in your repository.
 
 ## Usage
 
 You can respond to first-time contributors when they open new issues and pull requests. You can also respond when those
-opened issues or pull requests are closed.
+opened issues and pull requests are closed.
 
 - All inputs are optional.
 - All inputs have no default values (except for `token` which defaults to `{{ github.token }}`).
