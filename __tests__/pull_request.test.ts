@@ -54,6 +54,10 @@ const getInputSpyMock = jest.spyOn(core, 'getInput').mockImplementation(name => 
 })
 
 describe('pull_request', () => {
+  beforeEach(() => {
+    listForRepoMock.mockReset()
+  })
+
   describe('.opened', () => {
     it('handle when a new pull request is opened', async () => {
       listForRepoMock.mockReturnValue({ data: [{}] })
@@ -124,6 +128,7 @@ describe('pull_request', () => {
     })
 
     it('handle when a pull request is closed WITHOUT being merged', async () => {
+      listForRepoMock.mockReturnValue({ data: [{ state: 'closed' }] })
       const github = {
         getOctokit,
         context: {
