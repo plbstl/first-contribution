@@ -10,8 +10,12 @@ export async function createComment(octokit: InstanceType<typeof GitHub>, opts: 
   // Only add comment when body is NOT empty.
   if (!opts.body) return ''
 
+  // Replace {fc-author} with the issue or pull request author
+  const { author_username, body, ...rest } = opts
+  const transformedBody = body.replaceAll('{fc-author}', author_username)
+
   // Create a comment on GitHub and return its html_url
-  const comment = await octokit.rest.issues.createComment(opts)
+  const comment = await octokit.rest.issues.createComment({ ...rest, body: transformedBody })
   return comment.data.html_url
 }
 
@@ -24,4 +28,6 @@ type CreateCommentOpts = {
   owner: string
   /** Name of the repository. */
   repo: string
+  /** Username of the issue or pull request author. */
+  author_username: string
 }

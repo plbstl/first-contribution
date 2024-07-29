@@ -61,7 +61,8 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     const commentUrl = await createComment(octokit, {
       ...github.context.repo,
       body: actionInputs.msg,
-      issue_number: issueOrPullRequest.number
+      issue_number: issueOrPullRequest.number,
+      author_username: issueOrPullRequest.user.login
     })
     core.info(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added')
 

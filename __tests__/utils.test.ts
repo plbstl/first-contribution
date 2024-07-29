@@ -246,7 +246,7 @@ describe('utils', () => {
         repo: 'repo'
       }
 
-      const commentUrl = await createComment(octokit, createCommentOpts)
+      const commentUrl = await createComment(octokit, { ...createCommentOpts, author_username: 'randomUser007' })
 
       expect(commentUrl).toBe('https://example.com')
       expect(octokitCreateCommentMock).toHaveBeenCalledWith(createCommentOpts)
@@ -257,7 +257,8 @@ describe('utils', () => {
         body: '',
         issue_number: 2,
         owner: 'owner',
-        repo: 'repo'
+        repo: 'repo',
+        author_username: 'randomUser007'
       }
 
       const commentUrl = await createComment(octokit, createCommentOpts)
