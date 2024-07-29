@@ -1,5 +1,5 @@
 name: First Contribution
-description: Automatically respond to a user's first contribution to your repository, using GitHub Actions.
+description: Automatically respond to a user's first contribution to your repository.
 author: Paul Ebose
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
