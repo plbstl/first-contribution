@@ -26,7 +26,7 @@ opened issues and pull requests are closed.
 ### Inputs 📥
 
 ```yaml
-- uses: plbstl/first-contribution@v1
+- uses: plbstl/first-contribution@v2
   with:
     # The GitHub access token (e.g. secrets.GITHUB_TOKEN)
     # used to add relevant comments and labels.
@@ -120,7 +120,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v1
+      - uses: plbstl/first-contribution@v2
         with:
           pr-merged-msg: >
             @all-contributors please add @${{ github.event.pull_request.user.login }} for ${{
@@ -147,7 +147,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v1
+      - uses: plbstl/first-contribution@v2
         with:
           labels: first contrib
           issue-opened-msg: |
@@ -193,7 +193,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v1
+      - uses: plbstl/first-contribution@v2
         with:
           labels: first-timer, new contributor
           pr-labels: pr, first-contribution
