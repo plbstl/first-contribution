@@ -39,8 +39,8 @@ function getLabelsInput(eventName: FCEvent['name']): string[] {
  *
  * For example:
  * ```yaml
- * pr-commented-on-msg: issue-commented-on-msg
- * # `getMsgInput()` will return the value of `issue-commented-on-msg` input
+ * pr-opened-msg: issue-opened-msg
+ * # `getMsgInput()` will return the value of `issue-opened-msg` input
  * ```
  *
  * @param event A `first-contribution` event.
@@ -48,7 +48,6 @@ function getLabelsInput(eventName: FCEvent['name']): string[] {
  */
 function getMsgInput(event: FCEvent): string {
   const messageInputs = [
-    'discussion-created-msg',
     'issue-opened-msg',
     'issue-completed-msg',
     'issue-not-planned-msg',
