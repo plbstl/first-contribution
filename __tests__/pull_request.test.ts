@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 /**
  * Unit tests for the `pull_request` and `pull_request_target` events.
  */
