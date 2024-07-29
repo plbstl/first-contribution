@@ -29269,7 +29269,8 @@ async function run(githubParam) {
         const commentUrl = await (0, utils_1.createComment)(octokit, {
             ...github.context.repo,
             body: actionInputs.msg,
-            issue_number: issueOrPullRequest.number
+            issue_number: issueOrPullRequest.number,
+            author_username: issueOrPullRequest.user.login
         });
         core.info(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added');
         // add labels
@@ -29430,8 +29431,11 @@ async function createComment(octokit, opts) {
     // Only add comment when body is NOT empty.
     if (!opts.body)
         return '';
+    // Replace {fc-author} with the issue or pull request author
+    const { author_username, body, ...rest } = opts;
+    const transformedBody = body.replaceAll('{fc-author}', author_username);
     // Create a comment on GitHub and return its html_url
-    const comment = await octokit.rest.issues.createComment(opts);
+    const comment = await octokit.rest.issues.createComment({ ...rest, body: transformedBody });
     return comment.data.html_url;
 }
 
