@@ -60,7 +60,7 @@ describe('utils', () => {
 
       // 1 issue, 1 pull request
       octokitListForRepoMock.mockReturnValue({ data: [{}, { pull_request: {} }] })
-      await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(true)
+      await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(false)
 
       // multiple issues
       octokitListForRepoMock.mockReturnValue({ data: [{}, {}] })
@@ -69,19 +69,20 @@ describe('utils', () => {
 
     it('determine whether the pull request author is a first-time contributor or not', async () => {
       const githubContext = {
-        payload: { pull_request: { author_association: '' } }
+        repo: { owner: 'owner', repo: 'repo' },
+        payload: { pull_request: { user: { login: 'ghosty' } } }
       } as unknown as typeof import('@actions/github').context
 
-      githubContext.payload.pull_request!.author_association = 'FIRST_TIMER'
+      // 1 pull request
+      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: {} }] })
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(true)
 
-      githubContext.payload.pull_request!.author_association = 'FIRST_TIME_CONTRIBUTOR'
-      await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(true)
-
-      githubContext.payload.pull_request!.author_association = 'CONTRIBUTOR'
+      // 1 pull request, 1 issue
+      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: {} }, {}] })
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(false)
 
-      githubContext.payload.pull_request!.author_association = 'MANNEQUIN'
+      // multiple pull requests
+      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: {} }, { pull_request: {} }] })
       await expect(isFirstTimeContributor(githubContext, octokit)).resolves.toBe(false)
     })
   })

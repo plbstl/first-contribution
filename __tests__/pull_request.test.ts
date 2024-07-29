@@ -62,7 +62,7 @@ describe('pull_request', () => {
           repo: { owner: 'owner', repo: 'repo' },
           payload: {
             action: 'opened',
-            pull_request: { author_association: 'FIRST_TIME_CONTRIBUTOR', number: 8, user: { login: 'ghosty' } }
+            pull_request: { number: 8, user: { login: 'ghosty' } }
           }
         }
       } as never
@@ -96,12 +96,7 @@ describe('pull_request', () => {
           repo: { owner: 'owner', repo: 'repo' },
           payload: {
             action: 'closed',
-            pull_request: {
-              author_association: 'FIRST_TIME_CONTRIBUTOR',
-              number: 8,
-              user: { login: 'ghosty' },
-              merged: true
-            }
+            pull_request: { number: 8, user: { login: 'ghosty' }, merged: true }
           }
         }
       } as never
@@ -133,12 +128,7 @@ describe('pull_request', () => {
           repo: { owner: 'owner', repo: 'repo' },
           payload: {
             action: 'closed',
-            pull_request: {
-              author_association: 'FIRST_TIME_CONTRIBUTOR',
-              number: 9,
-              user: { login: 'ghosty' },
-              merged: false
-            }
+            pull_request: { number: 9, user: { login: 'ghosty' }, merged: false }
           }
         }
       } as never
