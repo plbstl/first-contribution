@@ -18,7 +18,7 @@ const getInputSpy = jest.spyOn(core, 'getInput')
 const setOutputSpy = jest.spyOn(core, 'setOutput')
 
 // Spy on the acton's utils
-const getActionInputsSpyMock = jest.spyOn(utils, 'getActionInputs')
+const getActionInputsSpy = jest.spyOn(utils, 'getActionInputs')
 const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
 const isSupportedEventSpy = jest.spyOn(utils, 'isSupportedEvent')
 
@@ -30,7 +30,7 @@ describe('action', () => {
 
     expect(isSupportedEventSpy).toHaveBeenCalled()
     expect(isFirstTimeContributorSpy).not.toHaveBeenCalled()
-    expect(getActionInputsSpyMock).not.toHaveBeenCalled()
+    expect(getActionInputsSpy).not.toHaveBeenCalled()
     expect(setOutputSpy).not.toHaveBeenCalled()
     expect(runSpy).toHaveReturned()
   })
@@ -43,7 +43,7 @@ describe('action', () => {
     await main.run()
 
     expect(isFirstTimeContributorSpy).toHaveBeenCalled()
-    expect(getActionInputsSpyMock).not.toHaveBeenCalled()
+    expect(getActionInputsSpy).not.toHaveBeenCalled()
     expect(setOutputSpy).not.toHaveBeenCalled()
     expect(runSpy).toHaveReturned()
   })
@@ -51,7 +51,7 @@ describe('action', () => {
   it("correctly set the action's outputs", async () => {
     isSupportedEventSpy.mockReturnValue(true)
     isFirstTimeContributorSpy.mockResolvedValue(true)
-    getActionInputsSpyMock.mockReturnValue({ labels: [], msg: 'Random message' })
+    getActionInputsSpy.mockReturnValue({ labels: [], msg: 'Random message' })
     setOutputSpy.mockImplementation()
 
     // Mock the GitHub Actions github library
