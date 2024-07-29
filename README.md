@@ -20,7 +20,8 @@ opened issues and pull requests are closed.
 
 ### Notes
 
-- You can reuse messages by passing the input parameter name instead. See the [Detailed example](#detailed) for more information.
+- You can reuse messages by passing the input parameter name instead. See the [Detailed example](#detailed) for more
+  information.
 - Labels are only added to new issues and pull requests.
 
 ### Inputs 📥
@@ -123,8 +124,7 @@ jobs:
       - uses: plbstl/first-contribution@v2
         with:
           pr-merged-msg: >
-            @all-contributors please add @${{ github.event.pull_request.user.login }} for ${{
-            join(github.event.pull_request.labels.*.name, ', ') }}
+            @all-contributors please add @{fc-author} for ${{ join(github.event.pull_request.labels.*.name, ', ') }}
 ```
 
 ### Welcome first-time issues and PRs
@@ -151,7 +151,7 @@ jobs:
         with:
           labels: first contrib
           issue-opened-msg: |
-            ### Hey @${{ github.actor }} !
+            ### Hey @{fc-author} !
 
             Looks like it's your first time interacting with (Project Name) here on GitHub.
 
@@ -161,7 +161,7 @@ jobs:
 
             Don't forget to star :star: the repo.
           pr-opened-msg: |
-            ### Hey @${{ github.actor }} !
+            ### Hey @{fc-author} !
 
             Thank you for taking the time to contribute to (Project Name). Your help is truly appreciated :heart:.
 
@@ -206,7 +206,7 @@ jobs:
           pr-closed-msg: issue-not-planned-msg
           # messages
           issue-opened-msg: |
-            ### Hey @${{ github.actor }}!
+            ### Hey @{fc-author}!
 
             Looks like it's your first time interacting with (Project Name) here on GitHub.
 
@@ -216,11 +216,11 @@ jobs:
 
             Don't forget to star :star: the repo.
           issue-completed-msg: |
-            ### Hey @${{ github.event.issue.user.login }}!
+            ### Hey @{fc-author}!
 
             Thank you for your contribution, feel free to come by anytime.
           issue-not-planned-msg: |
-            ### Hey @${{ github.event.issue.user.login }}!
+            ### Hey @{fc-author}!
 
             Thank you for taking the time to make a contribution, don't let this stop you from reaching out again.
 ```
