@@ -23,12 +23,13 @@ const createCommentSpy = jest.spyOn(utils, 'createComment')
 const addLabelsSpy = jest.spyOn(utils, 'addLabels')
 
 // Mock the GitHub Actions octokit client
+const listForRepoMock = jest.fn()
 const getOctokit = jest.fn().mockReturnValue({
   rest: {
     issues: {
       addLabels: jest.fn(),
       createComment: jest.fn().mockReturnValue({ data: { html_url: 'html_url.com' } }),
-      listForRepo: jest.fn().mockReturnValue({ data: [{}] })
+      listForRepo: listForRepoMock
     }
   }
 })
@@ -55,6 +56,7 @@ const getInputSpyMock = jest.spyOn(core, 'getInput').mockImplementation(name => 
 describe('issues', () => {
   describe('.opened', () => {
     it('handle when a new issue is opened', async () => {
+      listForRepoMock.mockReturnValue({ data: [{}] })
       const github = {
         getOctokit,
         context: {
@@ -89,6 +91,7 @@ describe('issues', () => {
 
   describe('.closed', () => {
     it('handle when an issue is closed as completed', async () => {
+      listForRepoMock.mockReturnValue({ data: [{ state: 'closed' }] })
       const github = {
         getOctokit,
         context: {
