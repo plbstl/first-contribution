@@ -21,10 +21,9 @@ opened issues and pull requests are closed.
 ### Notes
 
 - Labels are only added to new issues and pull requests.
-- You can reuse messages by passing the input parameter name instead.
 - You can use `{fc-author}` in any of the `-msg` inputs to reference the issue or pull request author.
-
-See the [Detailed example](#detailed) for more information.
+- You can reuse messages by passing the input parameter name instead. See the [Detailed example](#detailed) for more
+  information.
 
 ### Inputs 📥
 
