@@ -30,15 +30,15 @@
     "node": ">=20"
   },
   "scripts": {
-    "bundle": "npm run format:write && npm run package",
+    "bundle": "pnpm format:write && pnpm package",
     "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",
     "format:write": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . -c ./.github/linters/.eslintrc.yml",
     "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
-    "package:watch": "npm run package -- --watch",
+    "package:watch": "pnpm package --watch",
     "test": "jest",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
+    "all": "pnpm format:write && pnpm lint && pnpm test && pnpm coverage && pnpm package"
   },
   "license": "MIT",
   "jest": {
