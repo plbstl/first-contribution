@@ -31,13 +31,15 @@
   },
   "scripts": {
     "bundle": "pnpm format:write && pnpm package",
-    "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",
+    "coverage-badge": "make-coverage-badge --output-path badges/coverage.svg",
+    "jscpd-badge": "pnpm run jscpd --reporters badge",
     "format:write": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . -c .github/linters/eslint.config.mjs",
     "package": "ncc build src/index.ts --out dist --source-map --license licenses.txt",
     "package:watch": "pnpm package --watch",
     "test": "jest",
+    "jscpd": "jscpd --config .github/linters/.jscpd.json",
     "all": "pnpm format:write && pnpm lint && pnpm test && pnpm coverage && pnpm package"
   },
   "license": "MIT",
@@ -76,6 +78,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@jscpd/badge-reporter": "^4.0.1",
     "@octokit/webhooks-types": "^7.6.1",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.7.7",
@@ -88,6 +91,7 @@
     "eslint-plugin-no-only-tests": "^3.3.0",
     "globals": "^16.3.0",
     "jest": "^29.7.0",
+    "jscpd": "^4.0.5",
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.3.3",
     "typescript": "^5.9.2",

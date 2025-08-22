@@ -1,0 +1,9 @@
+{
+  "pattern": "{__tests__,src}/**",
+  "threshold": 0.3,
+  "reportersOptions": {
+    "badge": {
+      "path": "badges/jscpd.svg"
+    }
+  }
+}
