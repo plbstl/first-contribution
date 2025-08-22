@@ -27,7 +27,7 @@
     ".": "./dist/index.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "scripts": {
     "bundle": "pnpm format:write && pnpm package",
@@ -74,15 +74,15 @@
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0"
+    "@actions/github": "^6.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@jscpd/badge-reporter": "^4.0.1",
     "@octokit/webhooks-types": "^7.6.1",
-    "@types/jest": "^29.5.13",
-    "@types/node": "^22.7.7",
-    "@vercel/ncc": "^0.38.2",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
+    "@vercel/ncc": "^0.38.3",
     "eslint": "^9.33.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-github": "^6.0.0",
@@ -90,12 +90,12 @@
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "globals": "^16.3.0",
-    "jest": "^29.7.0",
+    "jest": "^30.0.5",
     "jscpd": "^4.0.5",
     "make-coverage-badge": "^1.2.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.40.0"
   },
-  "packageManager": "pnpm@9.12.1+sha256.91452fdfa46234ae447d46d5c4fc4e7e0a7058f90495c4b6f77f8beebbb154e3"
+  "packageManager": "pnpm@10.15.0"
 }
