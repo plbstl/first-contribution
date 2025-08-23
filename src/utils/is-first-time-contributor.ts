@@ -25,7 +25,7 @@ export async function isFirstTimeContributor(
   // Take into account whether the user only has opened issues and PRs,
   // for when commenting on a closed issue or PR.
   if (payload.action === 'closed') {
-    return response.data.some(issueOrPullRequest => issueOrPullRequest.state === 'closed')
+    return !response.data.some(issueOrPullRequest => issueOrPullRequest.state === 'closed')
   }
 
   if (response.data.length === 1) {
