@@ -4,6 +4,7 @@
   "version": "3.1.0",
   "author": "Paul Ebose",
   "private": true,
+  "type": "module",
   "homepage": "https://github.com/plbstl/first-contribution",
   "repository": {
     "type": "git",

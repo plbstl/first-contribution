@@ -1,4 +1,4 @@
-import type { GitHub } from '@actions/github/lib/utils'
+import type { GitHub } from '@actions/github/lib/utils.d.ts'
 
 /**
  * Adds labels to the specified issue or pull request.

@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import type { FCEvent } from './fc-event'
+import type { FCEvent } from './fc-event.ts'
 
 /**
  * Gets all inputs to first-contribution GitHub Action and categorize them.
