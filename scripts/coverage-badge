@@ -9,7 +9,7 @@ import path from 'node:path'
 // --- Configuration ---
 const DEFAULT_INPUT_PATH = './coverage/coverage-summary.json'
 const DEFAULT_OUTPUT_PATH = 'badges/coverage.svg'
-const LABEL = 'Coverage'
+const LABEL = 'coverage'
 // ---------------------
 
 /**

@@ -3,6 +3,7 @@
   "threshold": 0.3,
   "reportersOptions": {
     "badge": {
+      "subject": "copy/paste",
       "path": "badges/jscpd.svg"
     }
   }

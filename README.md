@@ -1,9 +1,11 @@
 # first-contribution
 
-[![GitHub Super-Linter](https://github.com/plbstl/first-contribution/actions/workflows/linter.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/linter.yml)
-![Tests](https://github.com/plbstl/first-contribution/actions/workflows/tests.yml/badge.svg)
-[![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/codeql.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg) [![jscpd](./badges/jscpd.svg)](./badges/jscpd.svg)
+![GitHub License](https://img.shields.io/github/license/plbstl/first-contribution)
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution?ref=badge_shield&issueType=license)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution.svg?type=shield&issueType=security)](https://app.fossa.com/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution?ref=badge_shield&issueType=security)
 
 Automatically respond to a user's first issue or pull request in your repository.
 
