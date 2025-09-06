@@ -48,7 +48,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     const firstTimeContributor = await isFirstTimeContributor(octokit, {
       ...github.context.repo,
       creator: issueOrPullRequest.user.login,
-      payload_action: payload_action
+      isPullRequest: !!payload.pull_request
     })
     if (!firstTimeContributor) {
       return core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`)
