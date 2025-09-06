@@ -1,4 +1,4 @@
-name: GitHub Actions Test
+name: Run Tests on Codebase
 
 on:
   pull_request:
@@ -12,14 +12,14 @@ permissions:
   contents: read
 
 jobs:
-  test-with-jest:
-    name: Jest Tests
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup PNPM
         id: setup-pnpm
@@ -27,34 +27,12 @@ jobs:
 
       - name: Setup Node.js
         id: setup-node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: pnpm
+        uses: actions/setup-node@v5
 
       - name: Install Dependencies
         id: install
-        run: pnpm install --frozen-lockfile --prefer-offline
+        run: pnpm install
 
       - name: Run Tests
-        id: jest-test
+        id: vitest-test
         run: pnpm run test
-
-  # test-as-workflow-file:
-  #   name: Workflow.yml Test
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout
-  #       id: checkout
-  #       uses: actions/checkout@v4
-
-  #     - name: Test Local Action
-  #       id: test-action
-  #       uses: ./
-  #       with:
-  #         milliseconds: 2000
-
-  #     - name: Print Output
-  #       id: output
-  #       run: echo "${{ steps.test-action.outputs.time }}"
