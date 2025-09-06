@@ -44,7 +44,11 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
 
     // check if author is first-timer
     core.debug('Checking if issue or pull request author is a first-time contributor')
-    const firstTimeContributor = await isFirstTimeContributor(github.context, octokit)
+    const firstTimeContributor = await isFirstTimeContributor(octokit, {
+      ...github.context.repo,
+      creator: issueOrPullRequest.user.login,
+      payload_action: payload.action
+    })
     if (!firstTimeContributor) {
       return core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`)
     }
