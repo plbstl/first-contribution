@@ -8,14 +8,16 @@ vitest.mock('@actions/github', () => {
   }
 })
 
+type IssueOrPullRequestStub = { number: number; user: { login: string }; [key: string]: unknown } | undefined
+
 /** `'@actions/github'.context` */
 export const mockGithubContext = {
   eventName: 'eventName',
   repo: { owner: 'owner', repo: 'repo' },
   payload: {
     action: 'action',
-    issue: { number: 123, user: { login: 'ghosty' } },
-    pull_request: undefined
+    issue: { number: 123, user: { login: 'ghosty' } } as IssueOrPullRequestStub,
+    pull_request: undefined as IssueOrPullRequestStub
   }
 }
 
