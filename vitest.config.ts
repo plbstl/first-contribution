@@ -7,6 +7,6 @@ export default defineConfig({
       include: ['src/**'],
       reporter: ['text', 'json-summary']
     },
-    setupFiles: ['__tests__/setup.ts']
+    setupFiles: ['tests/setup.ts']
   }
 })

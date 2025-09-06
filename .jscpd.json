@@ -1,5 +1,5 @@
 {
-  "pattern": "{__tests__,src}/**",
+  "pattern": "{tests,src}/**",
   "threshold": 0.3,
   "reportersOptions": {
     "badge": {
