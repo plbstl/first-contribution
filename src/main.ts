@@ -10,11 +10,13 @@ import {
   isSupportedEvent
 } from '../src/utils/index.ts'
 
+type ErrorOccurred = boolean
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-export async function run(githubParam?: typeof import('@actions/github')): Promise<void> {
+export async function run(githubParam?: typeof import('@actions/github')): Promise<ErrorOccurred> {
   const github = githubParam ?? githubLib
 
   try {
@@ -28,7 +30,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     const supportedEvent = isSupportedEvent(github.context.eventName, payload_action)
     if (!supportedEvent) {
       core.info(`\`${github.context.eventName}.${payload_action ?? ''}\` event is NOT supported. Exiting..`)
-      return
+      return false
     }
     core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)
 
@@ -53,7 +55,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     })
     if (!firstTimeContributor) {
       core.info(`\`${firstTimerUsername}\` is NOT a first-time contributor. Exiting..`)
-      return
+      return false
     }
     core.debug('Author is a first-time contributor')
 
@@ -87,9 +89,10 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.setOutput('type', fcEvent.name)
     core.setOutput('username', firstTimerUsername)
 
-    // --
+    return false
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
     else core.setFailed(`Action failed with error ${String(error)}`)
+    return true
   }
 }
