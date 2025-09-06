@@ -28,26 +28,33 @@ those contributions are closed.
 - You can reuse messages by passing another message input's name as the value. See the
   [Detailed example](#detailed-configuration) for more information.
 
-### Inputs 📥
+> [!NOTE]
+>
+> The `labels` inputs (`labels`, `issue-labels`, and `pr-labels`) are only applied when an issue or pull request is
+> opened. They do not apply to `closed` events.
 
-| Input                   | Description                                                                                                                                                                                                              | Default               |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `token`                 | The GitHub access token used to add comments and labels.                                                                                                                                                                 | `${{ github.token }}` |
-| `issue-opened-msg`      | Message to post on a first-time contributor's first issue.                                                                                                                                                               | `''`                  |
-| `pr-opened-msg`         | Message to post on a first-time contributor's first pull request.                                                                                                                                                        | `''`                  |
-| `issue-completed-msg`   | Message to post when a first-time contributor's issue is closed as 'completed'.                                                                                                                                          | `''`                  |
-| `issue-not-planned-msg` | Message to post when a first-time contributor's issue is closed as 'not planned'.                                                                                                                                        | `''`                  |
-| `pr-merged-msg`         | Message to post when a first-time contributor's pull request is merged.                                                                                                                                                  | `''`                  |
-| `pr-closed-msg`         | Message to post when a first-time contributor's pull request is closed without merging.                                                                                                                                  | `''`                  |
-| `labels`                | Comma-separated list of labels to add to any issue or PR from a first-time contributor.                                                                                                                                  | `''`                  |
-| `issue-labels`          | Comma-separated list of labels for a first-time issue. Takes precedence over `labels`.                                                                                                                                   | `''`                  |
-| `pr-labels`             | Comma-separated list of labels for a first-time pull request. Takes precedence over `labels`.                                                                                                                            | `''`                  |
-| `contribution-mode`     | Controls how first contributions are tracked. - (default): Triggers for a user's first issue AND their first PR separately. - `once`: Triggers only on the user's absolute first contribution (either an issue OR a PR). | `''`                  |
+<!--  -->
 
 > [!IMPORTANT]
 >
 > Make sure your workflow is configured to listen to the necessary events and has been granted the required
 > `permissions` for the action to function correctly. See the [examples below](#examples).
+
+### Inputs 📥
+
+| Input                   | Description                                                                                                                                                                                                                      | Default               |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `token`                 | The GitHub access token used to add comments and labels.                                                                                                                                                                         | `${{ github.token }}` |
+| `issue-opened-msg`      | Message to post on a first-time contributor's first issue.                                                                                                                                                                       | `''`                  |
+| `pr-opened-msg`         | Message to post on a first-time contributor's first pull request.                                                                                                                                                                | `''`                  |
+| `issue-completed-msg`   | Message to post when a first-time contributor's issue is closed as 'completed'.                                                                                                                                                  | `''`                  |
+| `issue-not-planned-msg` | Message to post when a first-time contributor's issue is closed as 'not planned'.                                                                                                                                                | `''`                  |
+| `pr-merged-msg`         | Message to post when a first-time contributor's pull request is merged.                                                                                                                                                          | `''`                  |
+| `pr-closed-msg`         | Message to post when a first-time contributor's pull request is closed without merging.                                                                                                                                          | `''`                  |
+| `labels`                | Comma-separated list of labels to add to any issue or PR from a first-time contributor **when opened**.                                                                                                                          | `''`                  |
+| `issue-labels`          | Comma-separated list of labels for a first-time issue **when opened**. Takes precedence over `labels`.                                                                                                                           | `''`                  |
+| `pr-labels`             | Comma-separated list of labels for a first-time pull request **when opened**. Takes precedence over `labels`.                                                                                                                    | `''`                  |
+| `contribution-mode`     | Controls how first contributions are tracked.<br/>- (default): Triggers for a user's first issue AND their first PR separately.<br/>- `once`: Triggers only on the user's absolute first contribution (either an issue OR a PR). | `''`                  |
 
 ### Outputs 📤
 
