@@ -7,115 +7,105 @@
  */
 
 import * as core from '@actions/core'
-import { describe, expect, it, vitest } from 'vitest'
+import { beforeEach, describe, expect, it, vitest } from 'vitest'
 import * as main from '../src/main.ts'
 import * as utils from '../src/utils/index.ts'
+import { getOctokitMock, mockGithubContext, octokitListForRepoMock, resetMockGithubContext } from './setup.ts'
 
 // Spy on the action's main function
 const runSpy = vitest.spyOn(main, 'run')
 
-// Spy on the GitHub Actions core library
-const getInputSpy = vitest.spyOn(core, 'getInput')
-const setOutputSpy = vitest.spyOn(core, 'setOutput')
+// Spy on (and mock) the GitHub Actions core library
+vitest.spyOn(core, 'getInput').mockReturnValue('')
+const setOutputSpy = vitest.spyOn(core, 'setOutput').mockReturnValue()
 
 // Spy on the acton's utils
-const getActionInputsSpy = vitest.spyOn(utils, 'getActionInputs')
 const isFirstTimeContributorSpy = vitest.spyOn(utils, 'isFirstTimeContributor')
 const isSupportedEventSpy = vitest.spyOn(utils, 'isSupportedEvent')
 
 describe('action', () => {
-  it('exit action when the triggered event is NOT supported', async () => {
-    isSupportedEventSpy.mockReturnValue(false)
+  // Reset the context to a default state for each test
+  beforeEach(() => {
+    resetMockGithubContext()
+  })
+
+  it('exits action when the triggered event is NOT supported', async () => {
+    await main.run()
+
+    expect(isSupportedEventSpy).toHaveReturnedWith(false)
+    expect(getOctokitMock).not.toHaveBeenCalled()
+  })
+
+  it('exits action when the issue or pull request author is NOT a first-time contributor', async () => {
+    mockGithubContext.eventName = 'issues'
+    mockGithubContext.payload.action = 'opened'
+    octokitListForRepoMock.mockReturnValue({ data: [{}, {}] })
 
     await main.run()
 
-    expect(isSupportedEventSpy).toHaveBeenCalled()
-    expect(isFirstTimeContributorSpy).not.toHaveBeenCalled()
-    expect(getActionInputsSpy).not.toHaveBeenCalled()
-    expect(setOutputSpy).not.toHaveBeenCalled()
-    expect(runSpy).toHaveReturned()
+    expect(isFirstTimeContributorSpy).toHaveResolvedWith(false)
+    expect(runSpy).toHaveResolvedWith(false)
   })
 
-  it('exit action when the issue or pull request author is NOT a first-time contributor', async () => {
-    isSupportedEventSpy.mockReturnValue(true)
-    getInputSpy.mockReturnValue('***')
-    isFirstTimeContributorSpy.mockResolvedValue(false)
+  it("sets the correct action's outputs for issues", async () => {
+    // Supported event
+    mockGithubContext.eventName = 'issues'
+    mockGithubContext.payload.action = 'closed'
+    mockGithubContext.payload.issue = { number: 16, user: { login: 'issue-ghosty' } }
+    // Is first-time contributor
+    octokitListForRepoMock.mockReturnValue({ data: [{ event: { state: 'opened' } }] })
 
     await main.run()
 
-    expect(isFirstTimeContributorSpy).toHaveBeenCalled()
-    expect(getActionInputsSpy).not.toHaveBeenCalled()
-    expect(setOutputSpy).not.toHaveBeenCalled()
-    expect(runSpy).toHaveReturned()
-  })
-
-  it("correctly set the action's outputs", async () => {
-    isSupportedEventSpy.mockReturnValue(true)
-    isFirstTimeContributorSpy.mockResolvedValue(true)
-    getActionInputsSpy.mockReturnValue({ labels: [], msg: 'Random message' })
-    setOutputSpy.mockReturnValue()
-
-    // Mock the GitHub Actions github library
-    const github = {
-      getOctokit: vitest.fn().mockReturnValue({
-        rest: {
-          issues: {
-            createComment: vitest.fn().mockReturnValue({ data: { html_url: 'commentUrl' } })
-          }
-        }
-      }),
-      context: {
-        repo: { owner: 'owner', repo: 'repo' },
-        payload: {
-          issue: {
-            number: 13,
-            user: { login: 'ghosty' }
-          }
-        }
-      }
-    } as unknown as typeof import('@actions/github')
-
-    await main.run(github)
-
-    expect(setOutputSpy).toHaveBeenCalledWith('comment-url', 'commentUrl')
-    expect(setOutputSpy).toHaveBeenCalledWith('number', 13)
+    expect(setOutputSpy).toHaveBeenCalledWith('comment-url', '')
+    expect(setOutputSpy).toHaveBeenCalledWith('number', 16)
     expect(setOutputSpy).toHaveBeenCalledWith('type', 'issue')
-    expect(setOutputSpy).toHaveBeenCalledWith('username', 'ghosty')
+    expect(setOutputSpy).toHaveBeenCalledWith('username', 'issue-ghosty')
     expect(runSpy).toHaveReturned()
   })
 
-  it('set a failed status', async () => {
-    const errorSpyMock = vitest.spyOn(core, 'error').mockReturnValue()
+  it("sets the correct action's outputs for pull requests", async () => {
+    // Supported event
+    mockGithubContext.eventName = 'pull_request_target'
+    mockGithubContext.payload.action = 'opened'
+    mockGithubContext.payload.issue = undefined
+    mockGithubContext.payload.pull_request = { number: 19, user: { login: 'pr-ghosty' } }
+    // Is first-time contributor
+    octokitListForRepoMock.mockReturnValue({ data: [{ event: { state: 'opened' }, pull_request: [{}] }] })
+
+    await main.run()
+
+    expect(setOutputSpy).toHaveBeenCalledWith('comment-url', '')
+    expect(setOutputSpy).toHaveBeenCalledWith('number', 19)
+    expect(setOutputSpy).toHaveBeenCalledWith('type', 'pr')
+    expect(setOutputSpy).toHaveBeenCalledWith('username', 'pr-ghosty')
+    expect(runSpy).toHaveReturned()
+  })
+
+  it('sets a failed status when an Error is thrown', async () => {
     const setFailedSpyMock = vitest.spyOn(core, 'setFailed').mockReturnValue()
 
-    // Generic throw
-    isSupportedEventSpy.mockImplementation(() => {
-      throw new Error('356')
-    })
-    await main.run()
-    expect(setFailedSpyMock).toHaveBeenCalledWith(expect.stringContaining('356'))
-    expect(errorSpyMock).not.toHaveBeenCalled()
-    expect(runSpy).toHaveReturned()
-
-    // Non response error
     isSupportedEventSpy.mockImplementation(() => {
       throw new Error('error message')
     })
-    await main.run()
-    expect(setFailedSpyMock).toHaveBeenCalledWith('error message')
-    expect(errorSpyMock).not.toHaveBeenCalled()
-    expect(runSpy).toHaveReturned()
 
-    // Response error
-    isSupportedEventSpy.mockImplementation(() => {
-      const err = new Error()
-      // @ts-expect-error Mock response object
-      err.response = { status: 407, data: { message: 'response error' } }
-      throw err
-    })
     await main.run()
-    expect(setFailedSpyMock).toHaveBeenCalledWith(expect.stringMatching(/^(?=.*407)(?=.*response error).*$/))
-    expect(errorSpyMock).not.toHaveBeenCalled()
-    expect(runSpy).toHaveReturned()
+
+    expect(setFailedSpyMock).toHaveBeenCalledWith('error message')
+    expect(runSpy).toHaveResolvedWith(true)
+  })
+
+  it('sets a failed status when something other than an Error is thrown', async () => {
+    const setFailedSpyMock = vitest.spyOn(core, 'setFailed').mockReturnValue()
+
+    isSupportedEventSpy.mockImplementation(() => {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw 234
+    })
+
+    await main.run()
+
+    expect(setFailedSpyMock).toHaveBeenCalledWith(expect.stringContaining('234'))
+    expect(runSpy).toHaveResolvedWith(true)
   })
 })
