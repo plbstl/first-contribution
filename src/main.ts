@@ -42,16 +42,17 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
 
     // helper variables
     const issueOrPullRequest = (payload.issue ?? payload.pull_request) as Issue | PullRequest
+    const firstTimerUsername = issueOrPullRequest.user.login
 
     // check if author is first-timer
     core.debug('Checking if issue or pull request author is a first-time contributor')
     const firstTimeContributor = await isFirstTimeContributor(octokit, {
       ...github.context.repo,
-      creator: issueOrPullRequest.user.login,
+      creator: firstTimerUsername,
       isPullRequest: !!payload.pull_request
     })
     if (!firstTimeContributor) {
-      core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`)
+      core.info(`\`${firstTimerUsername}\` is NOT a first-time contributor. Exiting..`)
       return
     }
     core.debug('Author is a first-time contributor')
@@ -68,7 +69,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
       ...github.context.repo,
       body: actionInputs.msg,
       issue_number: issueOrPullRequest.number,
-      author_username: issueOrPullRequest.user.login
+      author_username: firstTimerUsername
     })
     core.info(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added')
 
@@ -84,7 +85,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.setOutput('comment-url', commentUrl)
     core.setOutput('number', issueOrPullRequest.number)
     core.setOutput('type', fcEvent.name)
-    core.setOutput('username', issueOrPullRequest.user.login)
+    core.setOutput('username', firstTimerUsername)
 
     // --
   } catch (error) {
