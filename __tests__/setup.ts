@@ -3,13 +3,13 @@ import { vitest } from 'vitest'
 
 vitest.mock('@actions/github', () => {
   return {
-    context: mockGithubContext.context,
+    context: mockGithubContext,
     getOctokit: getOctokitMock
   }
 })
 
 /** `'@actions/github'.context` */
-export const defaultGithubContextForTests = {
+export const mockGithubContext = {
   eventName: 'eventName',
   repo: { owner: 'owner', repo: 'repo' },
   payload: {
@@ -19,7 +19,13 @@ export const defaultGithubContextForTests = {
   }
 }
 
-export const mockGithubContext = { context: { ...defaultGithubContextForTests } }
+export const resetMockGithubContext = (): void => {
+  mockGithubContext.eventName = 'eventName'
+  mockGithubContext.repo = { owner: 'owner', repo: 'repo' }
+  mockGithubContext.payload.action = 'action'
+  mockGithubContext.payload.issue = { number: 123, user: { login: 'ghosty' } }
+  mockGithubContext.payload.pull_request = undefined
+}
 
 // Mock octokit client
 export const octokitAddLabelsMock = vitest.fn()
