@@ -9,9 +9,8 @@ import * as main from '../src/main.ts'
 const runMock = vitest.spyOn(main, 'run').mockReturnValue(Promise.resolve())
 
 describe('index', () => {
-  it('calls run when imported', () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require('../src/index.ts')
+  it('calls run when imported', async () => {
+    await import('../src/index.ts')
 
     expect(runMock).toHaveBeenCalled()
   })
