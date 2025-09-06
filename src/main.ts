@@ -29,7 +29,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.debug('Checking if triggered event is supported')
     const supportedEvent = isSupportedEvent(github.context.eventName, payload_action)
     if (!supportedEvent) {
-      core.info(`\`${github.context.eventName}.${payload_action ?? ''}\` event is NOT supported. Exiting..`)
+      core.info(`\`${github.context.eventName}.${String(payload_action)}\` event is NOT supported. Exiting..`)
       return false
     }
     core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)

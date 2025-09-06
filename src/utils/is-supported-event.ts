@@ -5,7 +5,7 @@
  * @returns
  */
 export function isSupportedEvent(eventName: string, action?: string): action is 'opened' | 'closed' {
-  const eventCode = `${eventName}.${action ?? ''}`
+  const eventCode = `${eventName}.${String(action)}`
   const supportedEventCodes = [
     'issues.opened',
     'issues.closed',
