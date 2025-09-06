@@ -57,7 +57,7 @@ describe('utils', () => {
       creator: 'ghosty',
       owner: 'owner',
       repo: 'repo',
-      isPullRequest: false
+      is_pull_request: false
     }
 
     it.skip('determine whether the issue author is a first-time contributor or not', async () => {

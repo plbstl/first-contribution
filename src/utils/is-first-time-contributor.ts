@@ -15,7 +15,7 @@ export async function isFirstTimeContributor(
   octokit: InstanceType<typeof GitHub>,
   opts: IsFirstTimeContributorOpts
 ): Promise<boolean> {
-  const { isPullRequest, ...listForRepoOpts } = opts
+  const { is_pull_request: isPullRequest, ...listForRepoOpts } = opts
 
   // Fetch all issues and PRs by the author to get a complete history.
   // We set state to 'all' to ensure we don't miss any previous contributions.
@@ -49,7 +49,7 @@ interface IsFirstTimeContributorOpts {
   /** Username of the user that created the issue or pull request. */
   creator: string
   /** Whether the contribution that triggered the workflow is a pull request. */
-  isPullRequest: boolean
+  is_pull_request: boolean
   /** Username of the repository's owner. */
   owner: string
   /** Name of the repository. */
