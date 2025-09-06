@@ -15,7 +15,7 @@ import {
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 export async function run(githubParam?: typeof import('@actions/github')): Promise<void> {
-  const github = githubParam || githubLib
+  const github = githubParam ?? githubLib
 
   try {
     core.debug('Retrieving webhook payload')
@@ -27,7 +27,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.debug('Checking if triggered event is supported')
     const supportedEvent = isSupportedEvent(github.context.eventName, payload_action)
     if (!supportedEvent) {
-      core.info(`\`${github.context.eventName}.${payload_action}\` event is NOT supported. Exiting..`)
+      core.info(`\`${github.context.eventName}.${payload_action ?? ''}\` event is NOT supported. Exiting..`)
       return
     }
     core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)
@@ -41,7 +41,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.debug('octokit client created')
 
     // helper variables
-    const issueOrPullRequest = (payload.issue || payload.pull_request) as Issue | PullRequest
+    const issueOrPullRequest = (payload.issue ?? payload.pull_request) as Issue | PullRequest
 
     // check if author is first-timer
     core.debug('Checking if issue or pull request author is a first-time contributor')
@@ -51,7 +51,8 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
       isPullRequest: !!payload.pull_request
     })
     if (!firstTimeContributor) {
-      return core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`)
+      core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`)
+      return
     }
     core.debug('Author is a first-time contributor')
 
@@ -78,21 +79,16 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
       labels: actionInputs.labels,
       issue_number: issueOrPullRequest.number
     })
-    core.info(didAddLabels ? `Labels added: ${actionInputs.labels}` : 'No label was added')
+    core.info(didAddLabels ? `Labels added: ${actionInputs.labels.toString()}` : 'No label was added')
 
     core.setOutput('comment-url', commentUrl)
     core.setOutput('number', issueOrPullRequest.number)
     core.setOutput('type', fcEvent.name)
     core.setOutput('username', issueOrPullRequest.user.login)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    // Fail the workflow run if an error occurs
-    if (error.response) {
-      core.setFailed(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
-      return
-    }
+    // --
+  } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
-    else core.setFailed(`Action failed with error ${error}`)
+    else core.setFailed(`Action failed with error ${String(error)}`)
   }
 }

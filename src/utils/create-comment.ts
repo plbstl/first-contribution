@@ -19,7 +19,7 @@ export async function createComment(octokit: InstanceType<typeof GitHub>, opts: 
   return comment.data.html_url
 }
 
-type CreateCommentOpts = {
+interface CreateCommentOpts {
   /** The body of the comment to be made. */
   body: string
   /** The ID of the issue or pull request to comment on. */

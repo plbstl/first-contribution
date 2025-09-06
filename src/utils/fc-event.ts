@@ -10,7 +10,7 @@ export function getFCEvent(payload_action: 'opened' | 'closed', payload: Webhook
   if (payload_action === 'closed') {
     if (payload.pull_request) {
       // This is a pull request.
-      actionType = payload.pull_request?.merged ? 'merged' : 'closed'
+      actionType = payload.pull_request.merged ? 'merged' : 'closed'
     } else {
       // This is an issue.
       actionType = payload.issue?.state_reason === 'completed' ? 'completed' : 'not-planned'

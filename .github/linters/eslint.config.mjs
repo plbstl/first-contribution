@@ -28,7 +28,7 @@ export default tseslint.config([
     languageOptions: {
       ecmaVersion: 2022,
       parserOptions: {
-        projectService: true,
+        projectService: { allowDefaultProject: ['*.mjs'] },
         tsconfigRootDir: import.meta.dirname
       },
       globals: {
@@ -56,5 +56,11 @@ export default tseslint.config([
     files: ['**/*.test.ts'],
     ...jest.configs['flat/recommended'],
     ...jest.configs['flat/style']
+  },
+
+  // js files
+  {
+    files: ['**/*.js', '**/*.mjs'],
+    extends: [tseslint.configs.disableTypeChecked]
   }
 ])

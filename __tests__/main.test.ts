@@ -89,8 +89,7 @@ describe('action', () => {
 
     // Generic throw
     isSupportedEventSpy.mockImplementation(() => {
-      // eslint-disable-next-line no-throw-literal
-      throw '356'
+      throw new Error('356')
     })
     await main.run()
     expect(setFailedSpyMock).toHaveBeenCalledWith(expect.stringContaining('356'))
