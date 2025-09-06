@@ -47,5 +47,6 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IGNORE_GITIGNORED_FILES: true
+          LINTER_RULES_PATH: ./
           MARKDOWN_CONFIG_FILE: .markdownlint.yml
           YAML_CONFIG_FILE: .yamllint
