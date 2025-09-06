@@ -36,6 +36,7 @@
   },
   "scripts": {
     "format": "prettier --write .",
+    "typecheck": "tsc --build",
     "lint": "eslint .",
     "mdlint": "markdownlint .",
     "test": "vitest --run",
@@ -44,7 +45,7 @@
     "jscpd": "jscpd",
     "jscpd-badge": "pnpm run jscpd --reporters badge",
     "bundle": "rollup --config rollup.config.js",
-    "all": "pnpm format && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage-badge && pnpm jscpd-badge && pnpm bundle"
+    "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage-badge && pnpm jscpd-badge && pnpm bundle"
   },
   "license": "MIT",
   "dependencies": {
