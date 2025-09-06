@@ -6,6 +6,7 @@ export default defineConfig({
     coverage: {
       include: ['src/**'],
       reporter: ['text', 'json-summary']
-    }
+    },
+    setupFiles: ['__tests__/setup.ts']
   }
 })
