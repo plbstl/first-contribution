@@ -1,75 +1,55 @@
+import * as core from '@actions/core'
 import type { GitHub } from '@actions/github/lib/utils.ts'
 
 /**
- * Checks if an issue or PR author is a first-time contributor.
+ * Checks if an issue or pull request author is a first-time contributor based on the specified contribution mode.
  *
- * Users can have multiple opened issues and PRs, this action will have commented on only 1 of them.
- * But the first time that they close an issue/PR, we have to decide if it is their first authored issue/PR.
- *
- * Issues and PRs have separate comments to be attached.
- * A user can be a first-timer twice. Once for issues, and the other for PRs.
- *
- * `contribution-mode` action option can be set to tweak this behaviour.
+ * This function determines contributor status by fetching all issues and pull requests ever created by the author
+ * in the repository and analyzing the count based on the action's configuration.
  *
  * @param octokit A GitHub Octokit client.
- * @param opts {@link IsFirstTimeContributorOpts}
- * @returns `true` if the author meets the "first-time contributor" criteria
- * for the given event, and `false` otherwise.
+ * @param opts Options for checking the contributor's status. See {@link IsFirstTimeContributorOpts}.
+ * @returns `true` if the author meets the "first-time contributor" criteria for the given event, otherwise `false`.
  */
 export async function isFirstTimeContributor(
   octokit: InstanceType<typeof GitHub>,
   opts: IsFirstTimeContributorOpts
 ): Promise<boolean> {
-  const { payload_action, ...listForRepoOpts } = opts
+  const { isPullRequest, ...listForRepoOpts } = opts
 
-  const { data } = await octokit.rest.issues.listForRepo({
+  // Fetch all issues and PRs by the author to get a complete history.
+  // We set state to 'all' to ensure we don't miss any previous contributions.
+  const { data: contributions } = await octokit.rest.issues.listForRepo({
     ...listForRepoOpts,
-    state: payload_action === 'opened' ? 'open' : 'closed'
+    state: 'all'
   })
 
-  // Only 1 issue/PR means the first contribution
-  if (data.length === 1) {
-    return true
+  const contributionMode = core.getInput('contribution-mode')
+
+  // --- Mode 1: Track first contribution ONCE across both issues and PRs ---
+  // If the user has exactly one contribution (the one that triggered this workflow),
+  // they are a first-time contributor.
+  if (contributionMode === 'once') {
+    return contributions.length === 1
   }
 
-  // Check if the issue/PR was authored by a first-timer.
-  // They can have multiple opened issues/PRs, this action will have commented on only 1 of them.
-
-  // But the first time that they close an issue/PR, we have to add a new comment (if any).
-
-  // Something to consider, is, issues and PRs have separate comments to be attached.
-  // In a way, a user can be a first-timer twice. Once for issues, and the other for PRs.
-
-  // This needs to be explicit in the docs.
-
-  let prCount = 0
-  let issueCount = 0
-
-  for (const doc of data) {
-    if (doc.pull_request) {
-      prCount++
-    } else {
-      issueCount++
-    }
-
-    // This also works for closed issues/PRs because if the count is only 1,
-    // that means the "1" is this current issue/PR.
-    if (issueCount > 1 || prCount > 1) {
-      return false
-    }
+  // --- Mode 2: Track first issues and first PRs INDEPENDENTLY ---
+  // This is the default behavior. A user can be a first-timer for an issue
+  // and also a first-timer for a pull request.
+  if (isPullRequest) {
+    const prCount = contributions.filter(item => item.pull_request).length
+    return prCount === 1
+  } else {
+    const issueCount = contributions.filter(item => !item.pull_request).length
+    return issueCount === 1
   }
-
-  return true
 }
 
 interface IsFirstTimeContributorOpts {
   /** Username of the user that created the issue or pull request. */
   creator: string
-  /**
-   * The action that triggered the workflow run (e.g., 'opened', 'closed').
-   * Typically from `github.context.payload.action`.
-   */
-  payload_action: 'opened' | 'closed'
+  /** Whether the contribution that triggered the workflow is a pull request. */
+  isPullRequest: boolean
   /** Username of the repository's owner. */
   owner: string
   /** Name of the repository. */
