@@ -103,3 +103,6 @@ tests/runner/*
 .vscode/**
 !.vscode/settings.json
 *.code-workspace
+
+# Rollup
+.rollup.cache
