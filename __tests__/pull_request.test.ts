@@ -22,14 +22,15 @@ describe('pull_request', () => {
   })
 
   describe('.opened', () => {
+    // Mock requests
+    octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: [{}] }] })
+    octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
     it('handles when a new pull request is opened', async () => {
       // Supported event
       mockGithubContext.eventName = 'pull_request_target'
       mockGithubContext.payload.action = 'opened'
       mockGithubContext.payload.pull_request = { number: 4, user: { login: 'randy' } }
-      // Mock requests
-      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: [{}] }] })
-      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
 
       await main.run()
 
@@ -49,9 +50,6 @@ describe('pull_request', () => {
       mockGithubContext.eventName = 'pull_request_target'
       mockGithubContext.payload.action = 'closed'
       mockGithubContext.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: true }
-      // Mock requests
-      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: [{}] }] })
-      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
 
       await main.run()
 

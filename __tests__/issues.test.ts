@@ -22,14 +22,15 @@ describe('issues', () => {
   })
 
   describe('.opened', () => {
+    // Mock requests
+    octokitListForRepoMock.mockReturnValue({ data: [{}] })
+    octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
     it('handles when a new issue is opened', async () => {
       // Supported event
       mockGithubContext.eventName = 'issues'
       mockGithubContext.payload.action = 'opened'
       mockGithubContext.payload.issue = { number: 8, user: { login: 'ghosty' } }
-      // Mock requests
-      octokitListForRepoMock.mockReturnValue({ data: [{}] })
-      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
 
       await main.run()
 
@@ -49,9 +50,6 @@ describe('issues', () => {
       mockGithubContext.eventName = 'issues'
       mockGithubContext.payload.action = 'closed'
       mockGithubContext.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'completed' }
-      // Mock requests
-      octokitListForRepoMock.mockReturnValue({ data: [{}] })
-      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
 
       await main.run()
 
