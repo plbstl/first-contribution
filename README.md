@@ -1,5 +1,6 @@
 # first-contribution
 
+[![first-contribution CI](https://github.com/plbstl/first-contribution/actions/workflows/ci.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg) [![jscpd](./badges/jscpd.svg)](./badges/jscpd.svg)
 [![GitHub License](https://img.shields.io/github/license/plbstl/first-contribution)](./LICENSE)
