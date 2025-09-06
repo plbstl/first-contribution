@@ -5,7 +5,7 @@ export default defineConfig({
     clearMocks: true,
     coverage: {
       include: ['src/**'],
-      reporter: ['json-summary']
+      reporter: ['text', 'json-summary']
     }
   }
 })
