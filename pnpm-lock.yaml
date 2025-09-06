@@ -36,6 +36,9 @@ importers:
       '@vitest/eslint-plugin':
         specifier: ^1.3.9
         version: 1.3.9(eslint@9.33.0)(typescript@5.9.2)(vitest@3.2.4(@types/node@24.3.0))
+      badge-maker:
+        specifier: ^5.0.2
+        version: 5.0.2
       eslint:
         specifier: ^9.33.0
         version: 9.33.0
@@ -57,9 +60,6 @@ importers:
       jscpd:
         specifier: ^4.0.5
         version: 4.0.5
-      make-coverage-badge:
-        specifier: ^1.2.0
-        version: 1.2.0
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -846,6 +846,9 @@ packages:
   ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
 
+  anafanafo@2.0.0:
+    resolution: {integrity: sha512-Nlfq7NC4AOkTJerWRIZcOAiMNtIDVIGWGvQ98O7Jl6Kr2Dk0dX5u4MqN778kSRTy5KRqchpLdF2RtLFEz9FVkQ==}
+
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -929,6 +932,11 @@ packages:
     resolution: {integrity: sha512-GAwkz0AihzY5bkwIY5QDR+LvsRQgB/B+1foMPvi0FZPMl5fjD7ICiznUiBdLYMH1QYe6vqu4gWYytZOccLouFw==}
     engines: {node: '>= 10.0.0'}
 
+  badge-maker@5.0.2:
+    resolution: {integrity: sha512-Xd3YUmKPEShQcn6PFB03Wxq0RNJRFwVVroyRz0qIjSXwniYUGsGWNHqtNsQYi/Sbs8Ni7qAEf7LKgDOtcAoCDg==}
+    engines: {node: '>=20'}
+    hasBin: true
+
   badgen@3.2.3:
     resolution: {integrity: sha512-svDuwkc63E/z0ky3drpUppB83s/nlgDciH9m+STwwQoWyq7yCgew1qEfJ+9axkKdNq7MskByptWUN9j1PGMwFA==}
 
@@ -937,6 +945,9 @@ packages:
 
   before-after-hook@2.2.3:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
+
+  binary-search@1.3.6:
+    resolution: {integrity: sha512-nbE1WxOTTrUWIfsfZ4aHGYu5DOuNkbxGokjV6Z2kxfJK3uaAb8zNK1muzOeipoLHZjInT4Br88BHpzevc681xA==}
 
   blamer@1.0.6:
     resolution: {integrity: sha512-fv7QToPS87oD1m1bDDTf29zC/bVKJxj2Nqh1r/v4NhMtbnzDIbWOHBYIfxCjlmkVGu3FGOjKgdNG3SFm7TkvBQ==}
@@ -992,6 +1003,9 @@ packages:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
 
+  char-width-table-consumer@1.0.0:
+    resolution: {integrity: sha512-Fz4UD0LBpxPgL9i29CJ5O4KANwaMnX/OhhbxzvNa332h+9+nRKyeuLw4wA51lt/ex67+/AdsoBQJF3kgX2feYQ==}
+
   character-parser@2.2.0:
     resolution: {integrity: sha512-+UqJQjFEFaTAs3bNsF2j2kEN1baG/zghZbdqoYEDxGZtJo9LBzl1A+m0D4n3qKx8N2FNv8/Xp6yV9mQmBuptaw==}
 
@@ -1002,6 +1016,9 @@ packages:
   cli-table3@0.6.5:
     resolution: {integrity: sha512-+W/5efTR7y5HRD7gACw9yQjqMVvEMLBHmboM/kPWam+H+Hmyrgjh6YncVKK122YZkXrLudzTuAukUw9FnMf7IQ==}
     engines: {node: 10.* || >= 12.*}
+
+  color-convert@0.5.3:
+    resolution: {integrity: sha512-RwBeO/B/vZR3dfKL1ye/vx8MHZ40ugzpyfeVG5GsiuGnrlMWe2o8wxBbLCpw9CsxV+wHuzYlCiWnybrIA0ling==}
 
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
@@ -1031,6 +1048,12 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  css-color-converter@2.0.0:
+    resolution: {integrity: sha512-oLIG2soZz3wcC3aAl/7Us5RS8Hvvc6I8G8LniF/qfMmrm7fIKQ8RIDDRZeKyGL2SrWfNqYspuLShbnjBMVWm8g==}
+
+  css-unit-converter@1.1.2:
+    resolution: {integrity: sha512-IiJwMC8rdZE0+xiEZHeru6YoONC4rfPMqGm2W85jMIbkFvv5nFTwJVFHam2eFrN6txmoUYFAFXiv8ICVeTO0MA==}
 
   damerau-levenshtein@1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
@@ -1758,11 +1781,6 @@ packages:
   magicast@0.3.5:
     resolution: {integrity: sha512-L0WhttDl+2BOsybvEOLK7fW3UA0OQ0IQ2d6Zl2x/a6vVRs3bAY0ECOSHHeL5jD+SbOpOCUEi0y1DgHEn9Qn1AQ==}
 
-  make-coverage-badge@1.2.0:
-    resolution: {integrity: sha512-nA1eQZJ9vcY2UoQLVIdzqyRoNtAZHWlXJfrHkaMB/pQgTYBPmbImkykfxWeAtUQuLJXzb6eAhbR7nEgrt+S7FA==}
-    engines: {node: '>=6.11', npm: '>=5.3'}
-    hasBin: true
-
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
@@ -1806,10 +1824,6 @@ packages:
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
-
-  mri@1.1.4:
-    resolution: {integrity: sha512-6y7IjGPm8AzlvoUrwAaw1tLnUBudaS3752vcd8JtrpGGQn+rXIe63LFVHm/YMwtqAuh+LJPCFdlLYPWM1nYn6w==}
-    engines: {node: '>=4'}
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -3126,6 +3140,10 @@ snapshots:
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
 
+  anafanafo@2.0.0:
+    dependencies:
+      char-width-table-consumer: 1.0.0
+
   ansi-regex@5.0.1: {}
 
   ansi-regex@6.2.0: {}
@@ -3218,11 +3236,18 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.2
 
+  badge-maker@5.0.2:
+    dependencies:
+      anafanafo: 2.0.0
+      css-color-converter: 2.0.0
+
   badgen@3.2.3: {}
 
   balanced-match@1.0.2: {}
 
   before-after-hook@2.2.3: {}
+
+  binary-search@1.3.6: {}
 
   blamer@1.0.6:
     dependencies:
@@ -3287,6 +3312,10 @@ snapshots:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
 
+  char-width-table-consumer@1.0.0:
+    dependencies:
+      binary-search: 1.3.6
+
   character-parser@2.2.0:
     dependencies:
       is-regex: 1.2.1
@@ -3298,6 +3327,8 @@ snapshots:
       string-width: 4.2.3
     optionalDependencies:
       '@colors/colors': 1.5.0
+
+  color-convert@0.5.3: {}
 
   color-convert@2.0.1:
     dependencies:
@@ -3323,6 +3354,14 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  css-color-converter@2.0.0:
+    dependencies:
+      color-convert: 0.5.3
+      color-name: 1.1.4
+      css-unit-converter: 1.1.2
+
+  css-unit-converter@1.1.2: {}
 
   damerau-levenshtein@1.0.8: {}
 
@@ -4220,10 +4259,6 @@ snapshots:
       '@babel/types': 7.28.2
       source-map-js: 1.2.1
 
-  make-coverage-badge@1.2.0:
-    dependencies:
-      mri: 1.1.4
-
   make-dir@4.0.0:
     dependencies:
       semver: 7.7.2
@@ -4260,8 +4295,6 @@ snapshots:
   minimist@1.2.8: {}
 
   minipass@7.1.2: {}
-
-  mri@1.1.4: {}
 
   ms@2.1.3: {}
 
