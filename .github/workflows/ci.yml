@@ -8,6 +8,11 @@ on:
     branches:
       - main
 
+# Cancel any in-progress runs of the same workflow for a given PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
