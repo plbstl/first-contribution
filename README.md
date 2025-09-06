@@ -85,7 +85,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v3
+      - uses: plbstl/first-contribution@v4
         with:
           labels: first-contribution
           issue-opened-msg: |
@@ -116,7 +116,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v3
+      - uses: plbstl/first-contribution@v4
         with:
           contribution-mode: once
           issue-opened-msg: >
@@ -146,7 +146,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v3
+      - uses: plbstl/first-contribution@v4
         with:
           pr-merged-msg: >
             @all-contributors please add @{fc-author} for ${{ join(github.event.pull_request.labels.*.name, ', ') }}
@@ -174,7 +174,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v3
+      - uses: plbstl/first-contribution@v4
         with:
           issue-labels: first-issue, needs-triage
           pr-labels: first-pr, needs-review
