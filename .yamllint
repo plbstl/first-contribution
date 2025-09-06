@@ -1,3 +1,7 @@
+extends: default
+
+ignore: [pnpm-lock.yaml]
+
 rules:
   line-length:
     level: warning
