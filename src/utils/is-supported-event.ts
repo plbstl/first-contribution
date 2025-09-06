@@ -4,7 +4,7 @@
  * @param [action] Action that caused the event to trigger.
  * @returns
  */
-export function isSupportedEvent(eventName: string, action?: string): boolean {
+export function isSupportedEvent(eventName: string, action?: string): action is 'opened' | 'closed' {
   const eventCode = `${eventName}.${action}`
   const supportedEventCodes = [
     'issues.opened',

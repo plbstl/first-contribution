@@ -20,16 +20,17 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
   try {
     core.debug('Retrieving webhook payload')
     const payload = github.context.payload
+    const payload_action = payload.action
     core.debug('Retrieved webhook payload')
 
     // check if event is supported
     core.debug('Checking if triggered event is supported')
-    const supportedEvent = isSupportedEvent(github.context.eventName, payload.action)
+    const supportedEvent = isSupportedEvent(github.context.eventName, payload_action)
     if (!supportedEvent) {
-      core.info(`\`${github.context.eventName}.${payload.action}\` event is NOT supported. Exiting..`)
+      core.info(`\`${github.context.eventName}.${payload_action}\` event is NOT supported. Exiting..`)
       return
     }
-    core.debug(`Supported event: \`${github.context.eventName}.${payload.action}\``)
+    core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)
 
     // create octokit client
     core.debug('Retrieving `token` input')
@@ -47,7 +48,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     const firstTimeContributor = await isFirstTimeContributor(octokit, {
       ...github.context.repo,
       creator: issueOrPullRequest.user.login,
-      payload_action: payload.action
+      payload_action: payload_action
     })
     if (!firstTimeContributor) {
       return core.info(`\`${issueOrPullRequest.user.login}\` is NOT a first-time contributor. Exiting..`)
@@ -55,7 +56,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.debug('Author is a first-time contributor')
 
     // retrieve inputs
-    const fcEvent = getFCEvent(payload)
+    const fcEvent = getFCEvent(payload_action, payload)
     core.debug('Retrieving relevant message and labels inputs')
     const actionInputs = getActionInputs(fcEvent)
     core.debug('Message and labels inputs retrieved')
@@ -72,7 +73,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
 
     // add labels
     core.debug('Attempting to add labels to issue or pull request')
-    const didAddLabels = await addLabels(octokit, payload.action || '', {
+    const didAddLabels = await addLabels(octokit, payload_action, {
       ...github.context.repo,
       labels: actionInputs.labels,
       issue_number: issueOrPullRequest.number

@@ -8,7 +8,7 @@ import type { GitHub } from '@actions/github/lib/utils'
  */
 export async function addLabels(
   octokit: InstanceType<typeof GitHub>,
-  payloadAction: string,
+  payloadAction: 'opened' | 'closed',
   opts: AddLabelsOpts
 ): Promise<boolean> {
   // Only add labels for new issues/PRs when the list of labels is NOT empty.

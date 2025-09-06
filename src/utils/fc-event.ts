@@ -4,10 +4,10 @@ import type { WebhookPayload } from '@actions/github/lib/interfaces'
  * Creates and returns a new `first-contribution` event.
  * @param payload Webhook payload of the triggered event.
  */
-export function getFCEvent(payload: WebhookPayload): FCEvent {
+export function getFCEvent(payload_action: 'opened' | 'closed', payload: WebhookPayload): FCEvent {
   let actionType: FCEvent['state'] = 'opened'
 
-  if (payload.action !== 'opened') {
+  if (payload_action === 'closed') {
     if (payload.pull_request) {
       // This is a pull request.
       actionType = payload.pull_request?.merged ? 'merged' : 'closed'

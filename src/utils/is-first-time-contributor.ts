@@ -22,10 +22,6 @@ export async function isFirstTimeContributor(
 ): Promise<boolean> {
   const { payload_action, ...listForRepoOpts } = opts
 
-  if (!payload_action) {
-    return false
-  }
-
   const { data } = await octokit.rest.issues.listForRepo({
     ...listForRepoOpts,
     state: payload_action === 'opened' ? 'open' : 'closed'
@@ -73,7 +69,7 @@ interface IsFirstTimeContributorOpts {
    * The action that triggered the workflow run (e.g., 'opened', 'closed').
    * Typically from `github.context.payload.action`.
    */
-  payload_action?: string
+  payload_action: 'opened' | 'closed'
   /** Username of the repository's owner. */
   owner: string
   /** Name of the repository. */
