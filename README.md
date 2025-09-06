@@ -2,7 +2,8 @@
 
 [![first-contribution CI](https://github.com/plbstl/first-contribution/actions/workflows/ci.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql)
-[![Coverage](./badges/coverage.svg)](./badges/coverage.svg) [![jscpd](./badges/jscpd.svg)](./badges/jscpd.svg)
+[![Coverage](./assets/coverage-badge.svg)](./assets/coverage-badge.svg)
+[![jscpd](./assets/jscpd-badge.svg)](./assets/jscpd-badge.svg)
 [![GitHub License](https://img.shields.io/github/license/plbstl/first-contribution)](./LICENSE)
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution?ref=badge_shield&issueType=license)

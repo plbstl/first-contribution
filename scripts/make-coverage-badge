@@ -7,8 +7,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 // --- Configuration ---
-const DEFAULT_INPUT_PATH = './coverage/coverage-summary.json'
-const DEFAULT_OUTPUT_PATH = 'badges/coverage.svg'
+const DEFAULT_INPUT_PATH = 'coverage/coverage-summary.json'
+const DEFAULT_OUTPUT_PATH = 'assets/coverage-badge.svg'
 const LABEL = 'coverage'
 // ---------------------
 
