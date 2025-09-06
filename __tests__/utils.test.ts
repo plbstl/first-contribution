@@ -5,6 +5,7 @@
 import * as core from '@actions/core'
 import type { WebhookPayload } from '@actions/github/lib/interfaces.d.ts'
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
+import * as utils from '../src/utils/index.ts'
 import {
   addLabels,
   createComment,
@@ -290,6 +291,8 @@ describe('utils', () => {
       repo: 'repo'
     }
 
+    const isFirstTimeContributorSpy = vitest.spyOn(utils, 'isFirstTimeContributor')
+
     describe('contribution-mode = once', () => {
       beforeEach(() => {
         getInputSpy.mockReturnValue('once')
@@ -297,34 +300,56 @@ describe('utils', () => {
 
       it('returns true if the user has only one contribution (issue or PR)', async () => {
         octokitListForRepoMock.mockReturnValue({ data: [{}] })
-        await expect(isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })).resolves.toBe(true)
+
+        await isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })
+
+        expect(isFirstTimeContributorSpy).toHaveResolvedWith(true)
       })
 
       it('returns false if the user has multiple contributions', async () => {
         octokitListForRepoMock.mockReturnValue({ data: [{}, { pull_request: {} }] })
-        await expect(isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })).resolves.toBe(false)
+
+        await isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })
+
+        expect(isFirstTimeContributorSpy).toHaveResolvedWith(false)
       })
     })
 
     describe('contribution-mode = (default)', () => {
+      beforeEach(() => {
+        getInputSpy.mockReturnValue('')
+      })
+
       it('returns true for a first issue, even with a prior PR', async () => {
         octokitListForRepoMock.mockReturnValue({ data: [{}, { pull_request: {} }] })
-        await expect(isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })).resolves.toBe(true)
+
+        await isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })
+
+        expect(isFirstTimeContributorSpy).toHaveResolvedWith(true)
       })
 
       it('returns false for a subsequent issue', async () => {
         octokitListForRepoMock.mockReturnValue({ data: [{}, {}] })
-        await expect(isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })).resolves.toBe(false)
+
+        await isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })
+
+        expect(isFirstTimeContributorSpy).toHaveResolvedWith(false)
       })
 
       it('returns true for a first PR, even with a prior issue', async () => {
         octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: {} }, {}] })
-        await expect(isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: true })).resolves.toBe(true)
+
+        await isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })
+
+        expect(isFirstTimeContributorSpy).toHaveResolvedWith(true)
       })
 
       it('returns false for a subsequent PR', async () => {
         octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: {} }, { pull_request: {} }] })
-        await expect(isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: true })).resolves.toBe(false)
+
+        await isFirstTimeContributor(octokit, { ...defaultOpts, is_pull_request: false })
+
+        expect(isFirstTimeContributorSpy).toHaveResolvedWith(false)
       })
     })
   })
