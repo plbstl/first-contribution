@@ -63,9 +63,6 @@ importers:
       eslint-plugin-import-x:
         specifier: 4.16.1
         version: 4.16.1(@typescript-eslint/utils@8.42.0(eslint@9.35.0)(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint@9.35.0)
-      eslint-plugin-no-only-tests:
-        specifier: 3.3.0
-        version: 3.3.0
       globals:
         specifier: 16.3.0
         version: 16.3.0
