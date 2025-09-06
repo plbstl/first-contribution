@@ -40,12 +40,10 @@
     "lint": "eslint .",
     "mdlint": "markdownlint .",
     "test": "vitest --run",
-    "coverage": "vitest --run --coverage",
-    "coverage-badge": "pnpm run coverage && ./scripts/make-coverage-badge",
-    "jscpd": "jscpd",
-    "jscpd-badge": "pnpm run jscpd --reporters badge",
+    "coverage": "vitest --run --coverage && ./scripts/make-coverage-badge",
+    "jscpd": "jscpd --reporters badge",
     "bundle": "rollup --config rollup.config.js",
-    "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage-badge && pnpm jscpd-badge && pnpm bundle"
+    "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage && pnpm jscpd && pnpm bundle"
   },
   "license": "MIT",
   "dependencies": {
