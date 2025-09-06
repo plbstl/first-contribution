@@ -39,9 +39,9 @@
     "jscpd-badge": "pnpm run jscpd --reporters badge",
     "format:write": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint . -c .github/linters/eslint.config.mjs",
+    "lint": "eslint .",
     "test": "vitest --run",
-    "jscpd": "jscpd --config .github/linters/.jscpd.json",
+    "jscpd": "jscpd",
     "all": "pnpm format:write && pnpm lint && pnpm test && pnpm coverage && pnpm coverage-badge && pnpm jscpd-badge"
   },
   "license": "MIT",

@@ -1,5 +1,0 @@
-{
-  "eslint.lintTask.enable": true,
-  "eslint.options": { "overrideConfigFile": ".github/linters/eslint.config.mjs" },
-  "markdownlint.configFile": ".github/linters/.markdown-lint.yml"
-}
