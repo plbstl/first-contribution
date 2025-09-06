@@ -24,7 +24,6 @@ const isFirstTimeContributorSpy = vitest.spyOn(utils, 'isFirstTimeContributor')
 const isSupportedEventSpy = vitest.spyOn(utils, 'isSupportedEvent')
 
 describe('action', () => {
-  // Reset the context to a default state for each test
   beforeEach(() => {
     resetMockGithubContext()
   })
