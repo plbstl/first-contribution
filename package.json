@@ -42,7 +42,7 @@
     "package:watch": "pnpm package --watch",
     "test": "vitest --run",
     "jscpd": "jscpd --config .github/linters/.jscpd.json",
-    "all": "pnpm format:write && pnpm lint && pnpm test && pnpm coverage && pnpm package"
+    "all": "pnpm format:write && pnpm lint && pnpm test && pnpm coverage && pnpm coverage-badge && pnpm jscpd-badge && pnpm package"
   },
   "license": "MIT",
   "dependencies": {
