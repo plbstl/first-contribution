@@ -9,27 +9,26 @@ branding:
 inputs:
   token:
     description:
-      'The GitHub access token (e.g. secrets.GITHUB_TOKEN) used to add comments and labels. Defaults to `github.token`.'
+      The GitHub access token (e.g. secrets.GITHUB_TOKEN) used to add comments and labels. Defaults to `github.token`.
     default: ${{ github.token }}
   issue-opened-msg:
-    description: 'Message for a first-time contributor when they open a new issue.'
+    description: Message for a first-time contributor when they open a new issue.
   pr-opened-msg:
-    description: 'Message for a first-time contributor when they open a new pull request.'
+    description: Message for a first-time contributor when they open a new pull request.
   issue-completed-msg:
-    description: 'Message for a first-time contributor when their issue is closed as completed.'
+    description: Message for a first-time contributor when their issue is closed as completed.
   issue-not-planned-msg:
-    description: 'Message for a first-time contributor when their issue is closed as not planned.'
+    description: Message for a first-time contributor when their issue is closed as not planned.
   pr-merged-msg:
-    description: 'Message for a first-time contributor when their pull request is merged.'
+    description: Message for a first-time contributor when their pull request is merged.
   pr-closed-msg:
-    description: 'Message for a first-time contributor when their pull request is closed without being merged.'
+    description: Message for a first-time contributor when their pull request is closed without being merged.
   labels:
-    description: 'Comma-separated list of labels to add to an issue or PR from a first-time contributor.'
+    description: Comma-separated list of labels to add to an issue or PR from a first-time contributor.
   issue-labels:
-    description: 'Comma-separated list of labels for a first-time issue. Takes precedence over the `labels` input.'
+    description: Comma-separated list of labels for a first-time issue. Takes precedence over the `labels` input.
   pr-labels:
-    description:
-      'Comma-separated list of labels for a first-time pull request. Takes precedence over the `labels` input.'
+    description: Comma-separated list of labels for a first-time pull request. Takes precedence over the `labels` input.
   contribution-mode:
     description: |
       Controls how first contributions are tracked.
@@ -39,13 +38,13 @@ inputs:
 
 outputs:
   type:
-    description: 'Where the first contribution was made. `issue` or `pr`.'
+    description: Where the first contribution was made. `issue` or `pr`.
   number:
-    description: 'The number of the issue or pull request.'
+    description: The number of the issue or pull request.
   username:
-    description: 'The GitHub username of the first-time contributor.'
+    description: The GitHub username of the first-time contributor.
   comment-url:
-    description: "URL of the comment posted in response to the user's first contribution."
+    description: URL of the comment posted in response to the user's first contribution.
 
 runs:
   using: node24
