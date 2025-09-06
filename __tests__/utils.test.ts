@@ -4,7 +4,6 @@
 
 import * as core from '@actions/core'
 import type { WebhookPayload } from '@actions/github/lib/interfaces.d.ts'
-import type { GitHub } from '@actions/github/lib/utils.d.ts'
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
 import {
   addLabels,
@@ -14,30 +13,13 @@ import {
   isFirstTimeContributor,
   isSupportedEvent
 } from '../src/utils/index.ts'
+import { getOctokitMock, octokitAddLabelsMock, octokitCreateCommentMock, octokitListForRepoMock } from './setup.ts'
 
 // Spy on the GitHub Actions core library
 const getInputSpy = vitest.spyOn(core, 'getInput')
 
-// Mock listing repository issues using REST API
-const octokitListForRepoMock = vitest.fn()
-
-// Mock creating a comment using REST API
-const createdCommentUrl = 'https://example.com'
-const octokitCreateCommentMock = vitest.fn(() => ({ data: { html_url: createdCommentUrl } }))
-
-// Mock adding labels using REST API
-const octokitAddLabelsMock = vitest.fn()
-
 // Mock the GitHub Actions octokit client library
-const octokit = {
-  rest: {
-    issues: {
-      addLabels: octokitAddLabelsMock,
-      createComment: octokitCreateCommentMock,
-      listForRepo: octokitListForRepoMock
-    }
-  }
-} as unknown as InstanceType<typeof GitHub>
+const octokit = getOctokitMock()
 
 describe('utils', () => {
   describe('getActionInputs()', () => {
@@ -232,6 +214,8 @@ describe('utils', () => {
 
   describe('createComment()', () => {
     it('comments on an issue or pull request', async () => {
+      const createdCommentUrl = 'https://gh.repo/comment'
+      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
       const createCommentOpts = {
         body: 'Message body',
         issue_number: 1,
