@@ -27,7 +27,7 @@ export async function run(): Promise<ErrorOccurred> {
     core.debug('Checking if triggered event is supported')
     const supportedEvent = isSupportedEvent(github.context.eventName, payload_action)
     if (!supportedEvent) {
-      core.info(`\`${github.context.eventName}.${String(payload_action)}\` event is NOT supported. Exiting..`)
+      core.info(`\`${github.context.eventName}.${JSON.stringify(payload_action)}\` event is NOT supported. Exiting..`)
       return false
     }
     core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)
@@ -90,7 +90,7 @@ export async function run(): Promise<ErrorOccurred> {
     return false
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
-    else core.setFailed(`Action failed with error ${String(error)}`)
+    else core.setFailed(`Action failed with error ${JSON.stringify(error)}`)
     return true
   }
 }
