@@ -40,7 +40,7 @@
     "lint": "eslint .",
     "mdlint": "markdownlint .",
     "test": "vitest --run",
-    "coverage": "vitest run --coverage",
+    "coverage": "vitest --run --coverage",
     "coverage-badge": "pnpm run coverage && ./scripts/coverage-badge",
     "jscpd": "jscpd",
     "jscpd-badge": "pnpm run jscpd --reporters badge",

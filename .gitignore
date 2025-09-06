@@ -106,3 +106,6 @@ tests/runner/*
 
 # Rollup
 .rollup.cache
+
+# Vitest
+.vitest-reports
