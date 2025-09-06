@@ -27,6 +27,12 @@
   "engines": {
     "node": ">=24"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "unrs-resolver"
+    ]
+  },
   "scripts": {
     "coverage": "vitest run --coverage",
     "coverage-badge": "./scripts/coverage-badge",
