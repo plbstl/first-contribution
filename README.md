@@ -4,6 +4,7 @@
 ![Tests](https://github.com/plbstl/first-contribution/actions/workflows/tests.yml/badge.svg)
 [![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/codeql.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg) [![jscpd](./badges/jscpd.svg)](./badges/jscpd.svg)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution?ref=badge_shield)
 
 Automatically respond to a user's first issue or pull request in your repository.
 
@@ -209,3 +210,7 @@ jobs:
 
             Thank you for taking the time to contribute. While this wasn't merged, we value your effort and encourage you to contribute again in the future.
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fplbstl%2Ffirst-contribution?ref=badge_large)
