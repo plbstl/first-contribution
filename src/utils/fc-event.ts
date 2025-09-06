@@ -1,4 +1,4 @@
-import type { WebhookPayload } from '@actions/github/lib/interfaces'
+import type { WebhookPayload } from '@actions/github/lib/interfaces.d.ts'
 
 /**
  * Creates and returns a new `first-contribution` event.

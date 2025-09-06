@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, expect, it } from 'vitest'
-import * as main from '../src/main'
+import * as main from '../src/main.ts'
 import {
   generalAssertions,
   getActionInputsSpy,
@@ -15,7 +15,7 @@ import {
   issueNotPlannedMsg,
   issueOpenedMsg,
   listForRepoMock
-} from './helpers'
+} from './helpers.ts'
 
 describe('issues', () => {
   beforeEach(() => {

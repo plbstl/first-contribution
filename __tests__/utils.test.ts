@@ -3,9 +3,15 @@
  */
 
 import * as core from '@actions/core'
-import type { GitHub } from '@actions/github/lib/utils'
+import type { GitHub } from '@actions/github/lib/utils.d.ts'
 import { describe, expect, it, vitest } from 'vitest'
-import { addLabels, createComment, getActionInputs, isFirstTimeContributor, isSupportedEvent } from '../src/utils'
+import {
+  addLabels,
+  createComment,
+  getActionInputs,
+  isFirstTimeContributor,
+  isSupportedEvent
+} from '../src/utils/index.ts'
 
 // Spy on the GitHub Actions core library
 const getInputSpy = vitest.spyOn(core, 'getInput')

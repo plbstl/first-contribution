@@ -8,7 +8,7 @@ import {
   getFCEvent,
   isFirstTimeContributor,
   isSupportedEvent
-} from '../src/utils'
+} from '../src/utils/index.ts'
 
 /**
  * The main function for the action.

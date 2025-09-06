@@ -1,4 +1,4 @@
-import type { GitHub } from '@actions/github/lib/utils'
+import type { GitHub } from '@actions/github/lib/utils.d.ts'
 
 /**
  * Creates a comment in the specified issue or pull request.

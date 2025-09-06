@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, expect, it } from 'vitest'
-import * as main from '../src/main'
+import * as main from '../src/main.ts'
 import {
   generalAssertions,
   getActionInputsSpy,
@@ -15,7 +15,7 @@ import {
   prLabels,
   prMergedMsg,
   prOpenedMsg
-} from './helpers'
+} from './helpers.ts'
 
 describe('pull_request', () => {
   beforeEach(() => {

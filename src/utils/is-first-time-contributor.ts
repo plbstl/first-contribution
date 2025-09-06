@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import type { GitHub } from '@actions/github/lib/utils.ts'
+import type { GitHub } from '@actions/github/lib/utils.d.ts'
 
 /**
  * Checks if an issue or pull request author is a first-time contributor based on the specified contribution mode.

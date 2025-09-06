@@ -8,8 +8,8 @@
 
 import * as core from '@actions/core'
 import { describe, expect, it, vitest } from 'vitest'
-import * as main from '../src/main'
-import * as utils from '../src/utils'
+import * as main from '../src/main.ts'
+import * as utils from '../src/utils/index.ts'
 
 // Spy on the action's main function
 const runSpy = vitest.spyOn(main, 'run')
