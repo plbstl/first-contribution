@@ -70,14 +70,14 @@ export const getInputSpyMock = vitest.spyOn(core, 'getInput').mockImplementation
 })
 
 // Functions
-export async function generalAssertions({ addedLabel }: { addedLabel: boolean }): Promise<void> {
+export function generalAssertions({ addedLabel }: { addedLabel: boolean }): void {
   expect(isSupportedEventSpy).toHaveReturnedWith(true)
 
-  expect(await isFirstTimeContributorSpy.mock.results[0].value)./* resolved value */ toBe(true)
-  expect(await createCommentSpy.mock.results[0].value)./* resolved value */ toBe(createdCommentUrl)
-  expect(await addLabelsSpy.mock.results[0].value)./* resolved value */ toBe(addedLabel)
+  expect(isFirstTimeContributorSpy).toHaveResolvedWith(true)
+  expect(createCommentSpy).toHaveResolvedWith(createdCommentUrl)
+  expect(addLabelsSpy).toHaveResolvedWith(addedLabel)
 
-  expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg'].length)
+  expect(getInputSpyMock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
   expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_ACTION_OUTPUTS)
 
   expect(runSpy).toHaveReturned()
