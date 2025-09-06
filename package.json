@@ -42,6 +42,7 @@
     "lint": "eslint .",
     "test": "vitest --run",
     "jscpd": "jscpd",
+    "mdlint": "markdownlint .",
     "all": "pnpm format:write && pnpm lint && pnpm test && pnpm coverage && pnpm coverage-badge && pnpm jscpd-badge"
   },
   "license": "MIT",
@@ -64,6 +65,7 @@
     "eslint-plugin-no-only-tests": "^3.3.0",
     "globals": "^16.3.0",
     "jscpd": "^4.0.5",
+    "markdownlint-cli": "^0.45.0",
     "prettier": "^3.6.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.40.0",
