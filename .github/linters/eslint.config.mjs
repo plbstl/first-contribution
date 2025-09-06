@@ -1,8 +1,7 @@
 import js from '@eslint/js'
+import vitest from '@vitest/eslint-plugin'
 import github from 'eslint-plugin-github'
 import { importX } from 'eslint-plugin-import-x'
-import jest from 'eslint-plugin-jest'
-import noOnlyTestsPlugin from 'eslint-plugin-no-only-tests'
 import { globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import * as tseslint from 'typescript-eslint'
@@ -11,10 +10,7 @@ export default tseslint.config([
   globalIgnores(['node_modules', 'dist', 'coverage', 'eslint.config.mjs']),
 
   {
-    plugins: {
-      'no-only-tests': noOnlyTestsPlugin,
-      github
-    }
+    plugins: { github }
   },
 
   {
@@ -54,8 +50,7 @@ export default tseslint.config([
   // Tests
   {
     files: ['**/*.test.ts'],
-    ...jest.configs['flat/recommended'],
-    ...jest.configs['flat/style']
+    ...vitest.configs.recommended
   },
 
   // js files

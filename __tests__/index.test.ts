@@ -2,10 +2,11 @@
  * Unit tests for the action's entrypoint, src/index.ts
  */
 
+import { describe, expect, it, vitest } from 'vitest'
 import * as main from '../src/main'
 
 // Mock the action's entrypoint
-const runMock = jest.spyOn(main, 'run').mockImplementation()
+const runMock = vitest.spyOn(main, 'run').mockReturnValue(Promise.resolve())
 
 describe('index', () => {
   it('calls run when imported', () => {
