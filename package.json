@@ -34,16 +34,15 @@
     ]
   },
   "scripts": {
-    "coverage": "vitest run --coverage",
-    "coverage-badge": "./scripts/coverage-badge",
-    "jscpd-badge": "pnpm run jscpd --reporters badge",
-    "format:write": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write .",
     "lint": "eslint .",
-    "test": "vitest --run",
-    "jscpd": "jscpd",
     "mdlint": "markdownlint .",
-    "all": "pnpm format:write && pnpm lint && pnpm test && pnpm coverage && pnpm coverage-badge && pnpm jscpd-badge"
+    "test": "vitest --run",
+    "coverage": "vitest run --coverage",
+    "coverage-badge": "pnpm run coverage && ./scripts/coverage-badge",
+    "jscpd": "jscpd",
+    "jscpd-badge": "pnpm run jscpd --reporters badge",
+    "all": "pnpm format && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage-badge && pnpm jscpd-badge"
   },
   "license": "MIT",
   "dependencies": {
