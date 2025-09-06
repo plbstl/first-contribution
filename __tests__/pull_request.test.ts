@@ -2,6 +2,7 @@
  * Unit tests for the `pull_request` and `pull_request_target` events.
  */
 
+import { beforeEach, describe, expect, it } from 'vitest'
 import * as main from '../src/main'
 import {
   generalAssertions,

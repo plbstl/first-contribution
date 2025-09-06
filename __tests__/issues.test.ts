@@ -2,6 +2,7 @@
  * Unit tests for the `issues` event.
  */
 
+import { beforeEach, describe, expect, it } from 'vitest'
 import * as main from '../src/main'
 import {
   generalAssertions,

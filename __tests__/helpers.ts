@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import { expect, vitest } from 'vitest'
 import * as main from '../src/main'
 import * as utils from '../src/utils'
 
@@ -9,27 +10,27 @@ export const createdCommentUrl = 'html_url.com'
 export const NUMBER_OF_ACTION_OUTPUTS = 4
 
 // Spy on the action's main function
-export const runSpy = jest.spyOn(main, 'run')
+export const runSpy = vitest.spyOn(main, 'run')
 
 // Spy on the acton's utils
-export const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
-export const isSupportedEventSpy = jest.spyOn(utils, 'isSupportedEvent')
-export const getFCEventSpy = jest.spyOn(utils, 'getFCEvent')
-export const getActionInputsSpy = jest.spyOn(utils, 'getActionInputs')
-export const createCommentSpy = jest.spyOn(utils, 'createComment')
-export const addLabelsSpy = jest.spyOn(utils, 'addLabels')
+export const isFirstTimeContributorSpy = vitest.spyOn(utils, 'isFirstTimeContributor')
+export const isSupportedEventSpy = vitest.spyOn(utils, 'isSupportedEvent')
+export const getFCEventSpy = vitest.spyOn(utils, 'getFCEvent')
+export const getActionInputsSpy = vitest.spyOn(utils, 'getActionInputs')
+export const createCommentSpy = vitest.spyOn(utils, 'createComment')
+export const addLabelsSpy = vitest.spyOn(utils, 'addLabels')
 
 // Mock the GitHub Actions octokit client
-export const listForRepoMock = jest.fn()
-export const getOctokitMock = jest.fn().mockReturnValue({
+export const listForRepoMock = vitest.fn()
+export const getOctokitMock = vitest.fn(() => ({
   rest: {
     issues: {
-      addLabels: jest.fn(),
-      createComment: jest.fn().mockReturnValue({ data: { html_url: 'html_url.com' } }),
+      addLabels: vitest.fn(),
+      createComment: vitest.fn(() => ({ data: { html_url: 'html_url.com' } })),
       listForRepo: listForRepoMock
     }
   }
-})
+}))
 
 // Mock action inputs
 export const issueLabels = 'first timer'
@@ -42,8 +43,8 @@ export const prMergedMsg = 'This PR has been successfully merged!'
 export const prClosedMsg = 'PR was closed. Will not be merged'
 
 // Spy on and mock the GitHub Actions core library
-export const setOutputSpyMock = jest.spyOn(core, 'setOutput').mockImplementation()
-export const getInputSpyMock = jest.spyOn(core, 'getInput').mockImplementation(name => {
+export const setOutputSpyMock = vitest.spyOn(core, 'setOutput').mockReturnValue()
+export const getInputSpyMock = vitest.spyOn(core, 'getInput').mockImplementation(name => {
   switch (name) {
     case 'token':
       return '***'

@@ -4,19 +4,20 @@
 
 import * as core from '@actions/core'
 import type { GitHub } from '@actions/github/lib/utils'
+import { describe, expect, it, vitest } from 'vitest'
 import { addLabels, createComment, getActionInputs, isFirstTimeContributor, isSupportedEvent } from '../src/utils'
 
 // Spy on the GitHub Actions core library
-const getInputSpy = jest.spyOn(core, 'getInput')
+const getInputSpy = vitest.spyOn(core, 'getInput')
 
 // Mock listing repository issues using REST API
-const octokitListForRepoMock = jest.fn()
+const octokitListForRepoMock = vitest.fn()
 
 // Mock creating a comment using REST API
-const octokitCreateCommentMock = jest.fn().mockReturnValue({ data: { html_url: 'https://example.com' } })
+const octokitCreateCommentMock = vitest.fn(() => ({ data: { html_url: 'https://example.com' } }))
 
 // Mock adding labels using REST API
-const octokitAddLabelsMock = jest.fn()
+const octokitAddLabelsMock = vitest.fn()
 
 // Mock the GitHub Actions octokit client library
 const octokit = {

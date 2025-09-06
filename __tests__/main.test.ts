@@ -7,20 +7,21 @@
  */
 
 import * as core from '@actions/core'
+import { describe, expect, it, vitest } from 'vitest'
 import * as main from '../src/main'
 import * as utils from '../src/utils'
 
 // Spy on the action's main function
-const runSpy = jest.spyOn(main, 'run')
+const runSpy = vitest.spyOn(main, 'run')
 
 // Spy on the GitHub Actions core library
-const getInputSpy = jest.spyOn(core, 'getInput')
-const setOutputSpy = jest.spyOn(core, 'setOutput')
+const getInputSpy = vitest.spyOn(core, 'getInput')
+const setOutputSpy = vitest.spyOn(core, 'setOutput')
 
 // Spy on the acton's utils
-const getActionInputsSpy = jest.spyOn(utils, 'getActionInputs')
-const isFirstTimeContributorSpy = jest.spyOn(utils, 'isFirstTimeContributor')
-const isSupportedEventSpy = jest.spyOn(utils, 'isSupportedEvent')
+const getActionInputsSpy = vitest.spyOn(utils, 'getActionInputs')
+const isFirstTimeContributorSpy = vitest.spyOn(utils, 'isFirstTimeContributor')
+const isSupportedEventSpy = vitest.spyOn(utils, 'isSupportedEvent')
 
 describe('action', () => {
   it('exit action when the triggered event is NOT supported', async () => {
@@ -52,14 +53,14 @@ describe('action', () => {
     isSupportedEventSpy.mockReturnValue(true)
     isFirstTimeContributorSpy.mockResolvedValue(true)
     getActionInputsSpy.mockReturnValue({ labels: [], msg: 'Random message' })
-    setOutputSpy.mockImplementation()
+    setOutputSpy.mockReturnValue()
 
     // Mock the GitHub Actions github library
     const github = {
-      getOctokit: jest.fn().mockReturnValue({
+      getOctokit: vitest.fn().mockReturnValue({
         rest: {
           issues: {
-            createComment: jest.fn().mockReturnValue({ data: { html_url: 'commentUrl' } })
+            createComment: vitest.fn().mockReturnValue({ data: { html_url: 'commentUrl' } })
           }
         }
       }),
@@ -84,8 +85,8 @@ describe('action', () => {
   })
 
   it('set a failed status', async () => {
-    const errorSpyMock = jest.spyOn(core, 'error').mockImplementation()
-    const setFailedSpyMock = jest.spyOn(core, 'setFailed').mockImplementation()
+    const errorSpyMock = vitest.spyOn(core, 'error').mockReturnValue()
+    const setFailedSpyMock = vitest.spyOn(core, 'setFailed').mockReturnValue()
 
     // Generic throw
     isSupportedEventSpy.mockImplementation(() => {
