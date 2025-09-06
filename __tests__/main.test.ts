@@ -38,6 +38,7 @@ describe('action', () => {
   it('exits action when the issue or pull request author is NOT a first-time contributor', async () => {
     mockGithubContext.eventName = 'issues'
     mockGithubContext.payload.action = 'opened'
+    mockGithubContext.payload.issue = { number: 123, user: { login: 'ghosty' } }
     octokitListForRepoMock.mockReturnValue({ data: [{}, {}] })
 
     await main.run()

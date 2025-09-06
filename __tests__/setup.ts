@@ -16,7 +16,7 @@ export const mockGithubContext = {
   repo: { owner: 'owner', repo: 'repo' },
   payload: {
     action: 'action',
-    issue: { number: 123, user: { login: 'ghosty' } } as IssueOrPullRequestStub,
+    issue: undefined as IssueOrPullRequestStub,
     pull_request: undefined as IssueOrPullRequestStub
   }
 }
@@ -25,7 +25,7 @@ export const resetMockGithubContext = (): void => {
   mockGithubContext.eventName = 'eventName'
   mockGithubContext.repo = { owner: 'owner', repo: 'repo' }
   mockGithubContext.payload.action = 'action'
-  mockGithubContext.payload.issue = { number: 123, user: { login: 'ghosty' } }
+  mockGithubContext.payload.issue = undefined
   mockGithubContext.payload.pull_request = undefined
 }
 
