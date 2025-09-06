@@ -5,27 +5,33 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import * as main from '../src/main.ts'
 import {
+  createdCommentUrl,
   generalAssertions,
   getActionInputsSpy,
   getFCEventSpy,
-  githubIssueClosed,
-  githubIssueOpened,
-  listForRepoMock,
   prClosedMsg,
   prLabels,
   prMergedMsg,
   prOpenedMsg
 } from './helpers.ts'
+import { mockGithubContext, octokitCreateCommentMock, octokitListForRepoMock, resetMockGithubContext } from './setup.ts'
 
 describe('pull_request', () => {
   beforeEach(() => {
-    listForRepoMock.mockReset()
+    resetMockGithubContext()
   })
 
   describe('.opened', () => {
-    it('handle when a new pull request is opened', async () => {
-      const github = githubIssueOpened({ isPullRequest: true })
-      await main.run(github)
+    it('handles when a new pull request is opened', async () => {
+      // Supported event
+      mockGithubContext.eventName = 'pull_request_target'
+      mockGithubContext.payload.action = 'opened'
+      mockGithubContext.payload.pull_request = { number: 4, user: { login: 'randy' } }
+      // Mock requests
+      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: [{}] }] })
+      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
+      await main.run()
 
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'pr', state: 'opened' })
       expect(getActionInputsSpy).toHaveReturnedWith({
@@ -33,14 +39,21 @@ describe('pull_request', () => {
         msg: prOpenedMsg
       })
 
-      await generalAssertions({ addedLabel: true })
+      generalAssertions({ addedLabel: true })
     })
   })
 
   describe('.closed', () => {
-    it('handle when a pull request is merged', async () => {
-      const github = githubIssueClosed({ isPullRequest: true, merged: true })
-      await main.run(github)
+    it('handles when a pull request is merged', async () => {
+      // Supported event
+      mockGithubContext.eventName = 'pull_request_target'
+      mockGithubContext.payload.action = 'closed'
+      mockGithubContext.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: true }
+      // Mock requests
+      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: [{}] }] })
+      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
+      await main.run()
 
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'pr', state: 'merged' })
       expect(getActionInputsSpy).toHaveReturnedWith({
@@ -48,12 +61,19 @@ describe('pull_request', () => {
         msg: prMergedMsg
       })
 
-      await generalAssertions({ addedLabel: false })
+      generalAssertions({ addedLabel: false })
     })
 
-    it('handle when a pull request is closed WITHOUT being merged', async () => {
-      const github = githubIssueClosed({ isPullRequest: true, merged: false })
-      await main.run(github)
+    it('handles when a pull request is closed WITHOUT being merged', async () => {
+      // Supported event
+      mockGithubContext.eventName = 'pull_request_target'
+      mockGithubContext.payload.action = 'closed'
+      mockGithubContext.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: false }
+      // Mock requests
+      octokitListForRepoMock.mockReturnValue({ data: [{ pull_request: [{}] }] })
+      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
+      await main.run()
 
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'pr', state: 'closed' })
       expect(getActionInputsSpy).toHaveReturnedWith({
@@ -61,7 +81,7 @@ describe('pull_request', () => {
         msg: prClosedMsg
       })
 
-      await generalAssertions({ addedLabel: false })
+      generalAssertions({ addedLabel: false })
     })
   })
 })
