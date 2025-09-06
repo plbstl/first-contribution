@@ -2,7 +2,6 @@
  * Unit tests for the action's utilities, src/utils/*.ts
  */
 
-import * as core from '@actions/core'
 import type { WebhookPayload } from '@actions/github/lib/interfaces.d.ts'
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
 import * as utils from '../src/utils/index.ts'
@@ -14,10 +13,8 @@ import {
   isFirstTimeContributor,
   isSupportedEvent
 } from '../src/utils/index.ts'
+import { getInputSpyMock } from './helpers.ts'
 import { getOctokitMock, octokitAddLabelsMock, octokitCreateCommentMock, octokitListForRepoMock } from './setup.ts'
-
-// Spy on the GitHub Actions core library
-const getInputSpy = vitest.spyOn(core, 'getInput')
 
 // Mock the GitHub Actions octokit client library
 const octokit = getOctokitMock()
@@ -27,7 +24,7 @@ describe('utils', () => {
     describe('.labels', () => {
       it('returns the correct labels for `-labels` inputs', () => {
         // Mock return values from core.getInput()
-        getInputSpy.mockImplementation(name => {
+        getInputSpyMock.mockImplementation(name => {
           switch (name) {
             case 'labels':
               return 'first-time contributor'
@@ -51,7 +48,7 @@ describe('utils', () => {
 
       it('returns fallback (if any) when a specific `-labels` input is unavailable', () => {
         // Mock return values from core.getInput()
-        getInputSpy.mockImplementation(name => {
+        getInputSpyMock.mockImplementation(name => {
           return name === 'labels' ? 'first-time contributor, first-interaction' : ''
         })
 
@@ -66,7 +63,7 @@ describe('utils', () => {
 
       it('returns an empty array when no `-labels` input is provided', () => {
         // Mock return values from core.getInput()
-        getInputSpy.mockReturnValue('')
+        getInputSpyMock.mockReturnValue('')
 
         // Issue
         const { labels: issueLabels } = getActionInputs({ name: 'issue', state: 'opened' })
@@ -81,7 +78,7 @@ describe('utils', () => {
     describe('.msg', () => {
       it('returns the correct messages for all `-msg` inputs', () => {
         // Mock return values from core.getInput()
-        getInputSpy.mockImplementation(name => {
+        getInputSpyMock.mockImplementation(name => {
           switch (name) {
             // Issues
             case 'issue-opened-msg':
@@ -126,7 +123,7 @@ describe('utils', () => {
 
       it("returns a correct message when `-msg` input is 'symlinked'", () => {
         // Mock return values from core.getInput()
-        getInputSpy.mockImplementation(name => {
+        getInputSpyMock.mockImplementation(name => {
           switch (name) {
             case 'issue-completed-msg':
               return 'Issue completed message'
@@ -143,7 +140,7 @@ describe('utils', () => {
 
       it('trims leading/trailing whitespace and line terminator characters in `-msg` inputs', () => {
         // Mock return values from core.getInput()
-        getInputSpy.mockImplementation(name => {
+        getInputSpyMock.mockImplementation(name => {
           switch (name) {
             case 'issue-opened-msg':
               return '      '
@@ -295,7 +292,7 @@ describe('utils', () => {
 
     describe('contribution-mode = once', () => {
       beforeEach(() => {
-        getInputSpy.mockReturnValue('once')
+        getInputSpyMock.mockReturnValue('once')
       })
 
       it('returns true if the user has only one contribution (issue or PR)', async () => {
@@ -317,7 +314,7 @@ describe('utils', () => {
 
     describe('contribution-mode = (default)', () => {
       beforeEach(() => {
-        getInputSpy.mockReturnValue('')
+        getInputSpyMock.mockReturnValue('')
       })
 
       it('returns true for a first issue, even with a prior PR', async () => {

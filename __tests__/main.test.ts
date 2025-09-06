@@ -9,19 +9,17 @@
 import * as core from '@actions/core'
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
 import * as main from '../src/main.ts'
-import * as utils from '../src/utils/index.ts'
+import {
+  isFirstTimeContributorSpy,
+  isSupportedEventSpy,
+  runSpy,
+  setFailedSpyMock,
+  setOutputSpyMock
+} from './helpers.ts'
 import { getOctokitMock, mockGithubContext, octokitListForRepoMock, resetMockGithubContext } from './setup.ts'
-
-// Spy on the action's main function
-const runSpy = vitest.spyOn(main, 'run')
 
 // Spy on (and mock) the GitHub Actions core library
 vitest.spyOn(core, 'getInput').mockReturnValue('')
-const setOutputSpy = vitest.spyOn(core, 'setOutput').mockReturnValue()
-
-// Spy on the acton's utils
-const isFirstTimeContributorSpy = vitest.spyOn(utils, 'isFirstTimeContributor')
-const isSupportedEventSpy = vitest.spyOn(utils, 'isSupportedEvent')
 
 describe('action', () => {
   beforeEach(() => {
@@ -57,10 +55,10 @@ describe('action', () => {
 
     await main.run()
 
-    expect(setOutputSpy).toHaveBeenCalledWith('comment-url', '')
-    expect(setOutputSpy).toHaveBeenCalledWith('number', 16)
-    expect(setOutputSpy).toHaveBeenCalledWith('type', 'issue')
-    expect(setOutputSpy).toHaveBeenCalledWith('username', 'issue-ghosty')
+    expect(setOutputSpyMock).toHaveBeenCalledWith('comment-url', '')
+    expect(setOutputSpyMock).toHaveBeenCalledWith('number', 16)
+    expect(setOutputSpyMock).toHaveBeenCalledWith('type', 'issue')
+    expect(setOutputSpyMock).toHaveBeenCalledWith('username', 'issue-ghosty')
     expect(runSpy).toHaveReturned()
   })
 
@@ -75,16 +73,14 @@ describe('action', () => {
 
     await main.run()
 
-    expect(setOutputSpy).toHaveBeenCalledWith('comment-url', '')
-    expect(setOutputSpy).toHaveBeenCalledWith('number', 19)
-    expect(setOutputSpy).toHaveBeenCalledWith('type', 'pr')
-    expect(setOutputSpy).toHaveBeenCalledWith('username', 'pr-ghosty')
+    expect(setOutputSpyMock).toHaveBeenCalledWith('comment-url', '')
+    expect(setOutputSpyMock).toHaveBeenCalledWith('number', 19)
+    expect(setOutputSpyMock).toHaveBeenCalledWith('type', 'pr')
+    expect(setOutputSpyMock).toHaveBeenCalledWith('username', 'pr-ghosty')
     expect(runSpy).toHaveReturned()
   })
 
   it('sets a failed status when an Error is thrown', async () => {
-    const setFailedSpyMock = vitest.spyOn(core, 'setFailed').mockReturnValue()
-
     isSupportedEventSpy.mockImplementation(() => {
       throw new Error('error message')
     })
@@ -96,8 +92,6 @@ describe('action', () => {
   })
 
   it('sets a failed status when something other than an Error is thrown', async () => {
-    const setFailedSpyMock = vitest.spyOn(core, 'setFailed').mockReturnValue()
-
     isSupportedEventSpy.mockImplementation(() => {
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw 234

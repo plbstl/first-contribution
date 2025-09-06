@@ -20,18 +20,6 @@ export const getActionInputsSpy = vitest.spyOn(utils, 'getActionInputs')
 export const createCommentSpy = vitest.spyOn(utils, 'createComment')
 export const addLabelsSpy = vitest.spyOn(utils, 'addLabels')
 
-// Mock the GitHub Actions octokit client
-export const listForRepoMock = vitest.fn()
-export const getOctokitMock = vitest.fn(() => ({
-  rest: {
-    issues: {
-      addLabels: vitest.fn(),
-      createComment: vitest.fn(() => ({ data: { html_url: 'html_url.com' } })),
-      listForRepo: listForRepoMock
-    }
-  }
-}))
-
 // Mock action inputs
 export const issueLabels = 'first timer'
 export const issueOpenedMsg = 'Thank you for reporting this issue.'
@@ -43,6 +31,7 @@ export const prMergedMsg = 'This PR has been successfully merged!'
 export const prClosedMsg = 'PR was closed. Will not be merged'
 
 // Spy on and mock the GitHub Actions core library
+export const setFailedSpyMock = vitest.spyOn(core, 'setFailed').mockReturnValue()
 export const setOutputSpyMock = vitest.spyOn(core, 'setOutput').mockReturnValue()
 export const getInputSpyMock = vitest.spyOn(core, 'getInput').mockImplementation(name => {
   switch (name) {
@@ -81,51 +70,4 @@ export function generalAssertions({ addedLabel }: { addedLabel: boolean }): void
   expect(setOutputSpyMock).toHaveBeenCalledTimes(NUMBER_OF_ACTION_OUTPUTS)
 
   expect(runSpy).toHaveReturned()
-}
-
-export function githubIssueOpened({ isPullRequest }: { isPullRequest: boolean }): never {
-  listForRepoMock.mockReturnValue({ data: [{}] })
-
-  const event = isPullRequest ? 'pull_request' : 'issue'
-
-  return {
-    getOctokit: getOctokitMock,
-    context: {
-      eventName: isPullRequest ? 'pull_request' : 'issues',
-      repo: { owner: 'owner', repo: 'repo' },
-      payload: {
-        action: 'opened',
-        [event]: { number: 8, user: { login: 'ghosty' } }
-      }
-    }
-  } as never
-}
-
-export function githubIssueClosed(
-  opts:
-    | {
-        isPullRequest: false
-        state_reason: 'completed' | 'not_planned'
-      }
-    | {
-        isPullRequest: true
-        merged: boolean
-      }
-): never {
-  listForRepoMock.mockReturnValue({ data: [{ state: 'closed' }] })
-
-  const event = opts.isPullRequest ? 'pull_request' : 'issue'
-  const eventPayload = opts.isPullRequest ? { merged: opts.merged } : { state_reason: opts.state_reason }
-
-  return {
-    getOctokit: getOctokitMock,
-    context: {
-      eventName: opts.isPullRequest ? 'pull_request' : 'issues',
-      repo: { owner: 'owner', repo: 'repo' },
-      payload: {
-        action: 'closed',
-        [event]: { number: 8, user: { login: 'ghosty' }, ...eventPayload }
-      }
-    }
-  } as never
 }
