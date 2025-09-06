@@ -2,11 +2,11 @@ import js from '@eslint/js'
 import vitest from '@vitest/eslint-plugin'
 import github from 'eslint-plugin-github'
 import { importX } from 'eslint-plugin-import-x'
-import { globalIgnores } from 'eslint/config'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import * as tseslint from 'typescript-eslint'
 
-export default tseslint.config([
+export default defineConfig([
   globalIgnores(['node_modules', 'dist', 'coverage', 'eslint.config.mjs']),
 
   {
