@@ -48,5 +48,5 @@ outputs:
     description: "URL of the comment posted in response to the user's first contribution."
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js
