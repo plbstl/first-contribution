@@ -13,5 +13,5 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true
   },
-  "exclude": ["./node_modules", "./coverage"]
+  "exclude": ["dist", "node_modules", "coverage"]
 }

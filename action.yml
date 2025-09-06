@@ -49,4 +49,4 @@ outputs:
 
 runs:
   using: node24
-  main: src/index.ts
+  main: dist/index.js

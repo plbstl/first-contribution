@@ -11,6 +11,56 @@ on:
 permissions: {}
 
 jobs:
+  check-dist:
+    name: Check Transpiled JavaScript
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      - name: Setup PNPM
+        id: setup-pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+
+      - name: Setup Node.js
+        id: setup-node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+
+      - name: Install Dependencies
+        id: install
+        run: pnpm install
+
+      - name: Build dist/ Directory
+        id: build
+        run: pnpm run bundle
+
+      - name: Check for Uncommitted Changes
+        id: diff
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "❌ Detected uncommitted changes after build. Please run 'pnpm run bundle' and commit the changes."
+            git status
+            git diff
+            exit 1
+          else
+            echo "✅ The dist/ directory is up-to-date."
+          fi
+
+      - if: ${{ failure() && steps.diff.outcome == 'failure' }}
+        name: Upload Artifact
+        id: upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: dist
+          path: dist/
+
   vitest:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -77,6 +127,7 @@ jobs:
         id: super-linter
         uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6 # v8.1.0
         env:
+          FILTER_REGEX_EXCLUDE: ^dist/
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IGNORE_GITIGNORED_FILES: true

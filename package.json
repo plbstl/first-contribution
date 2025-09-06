@@ -42,9 +42,9 @@
     "coverage": "vitest run --coverage",
     "coverage-badge": "pnpm run coverage && ./scripts/coverage-badge",
     "jscpd": "jscpd",
-    "bundle": "rollup --config rollup.config.js",
     "jscpd-badge": "pnpm run jscpd --reporters badge",
-    "all": "pnpm format && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage-badge && pnpm jscpd-badge"
+    "bundle": "rollup --config rollup.config.js",
+    "all": "pnpm format && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage-badge && pnpm jscpd-badge && pnpm bundle"
   },
   "license": "MIT",
   "dependencies": {
