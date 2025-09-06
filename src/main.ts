@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import * as githubLib from '@actions/github'
+import * as github from '@actions/github'
 import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import {
   addLabels,
@@ -16,9 +16,7 @@ type ErrorOccurred = boolean
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-export async function run(githubParam?: typeof import('@actions/github')): Promise<ErrorOccurred> {
-  const github = githubParam ?? githubLib
-
+export async function run(): Promise<ErrorOccurred> {
   try {
     core.debug('Retrieving webhook payload')
     const payload = github.context.payload
@@ -40,7 +38,7 @@ export async function run(githubParam?: typeof import('@actions/github')): Promi
     core.debug('`token` input retrieved')
     core.debug('Creating octokit client')
     const octokit = github.getOctokit(token)
-    core.debug('octokit client created')
+    core.debug('Octokit client created')
 
     // helper variables
     const issueOrPullRequest = (payload.issue ?? payload.pull_request) as Issue | PullRequest
