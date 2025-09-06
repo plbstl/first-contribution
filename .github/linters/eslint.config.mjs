@@ -7,7 +7,7 @@ import globals from 'globals'
 import * as tseslint from 'typescript-eslint'
 
 export default tseslint.config([
-  globalIgnores(['node_modules', 'dist', 'coverage', 'eslint.config.mjs']),
+  globalIgnores(['node_modules', 'coverage', 'eslint.config.mjs']),
 
   {
     plugins: { github }

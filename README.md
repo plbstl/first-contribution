@@ -2,7 +2,6 @@
 
 [![GitHub Super-Linter](https://github.com/plbstl/first-contribution/actions/workflows/linter.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/linter.yml)
 ![Tests](https://github.com/plbstl/first-contribution/actions/workflows/tests.yml/badge.svg)
-[![Check dist/](https://github.com/plbstl/first-contribution/actions/workflows/check-dist.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/check-dist.yml)
 [![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/codeql.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg) [![jscpd](./badges/jscpd.svg)](./badges/jscpd.svg)
 
