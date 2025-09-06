@@ -6,7 +6,7 @@ import { describe, expect, it, vitest } from 'vitest'
 import * as main from '../src/main.ts'
 
 // Mock the action's entrypoint
-const runMock = vitest.spyOn(main, 'run').mockReturnValue(Promise.resolve())
+const runMock = vitest.spyOn(main, 'run').mockReturnValue(Promise.resolve(false))
 
 describe('index', () => {
   it('calls run when imported', async () => {
