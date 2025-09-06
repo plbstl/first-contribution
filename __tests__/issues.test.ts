@@ -5,27 +5,33 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import * as main from '../src/main.ts'
 import {
+  createdCommentUrl,
   generalAssertions,
   getActionInputsSpy,
   getFCEventSpy,
-  githubIssueClosed,
-  githubIssueOpened,
   issueCompletedMsg,
   issueLabels,
   issueNotPlannedMsg,
-  issueOpenedMsg,
-  listForRepoMock
+  issueOpenedMsg
 } from './helpers.ts'
+import { mockGithubContext, octokitCreateCommentMock, octokitListForRepoMock, resetMockGithubContext } from './setup.ts'
 
 describe('issues', () => {
   beforeEach(() => {
-    listForRepoMock.mockReset()
+    resetMockGithubContext()
   })
 
   describe('.opened', () => {
-    it('handle when a new issue is opened', async () => {
-      const github = githubIssueOpened({ isPullRequest: false })
-      await main.run(github)
+    it('handles when a new issue is opened', async () => {
+      // Supported event
+      mockGithubContext.eventName = 'issues'
+      mockGithubContext.payload.action = 'opened'
+      mockGithubContext.payload.issue = { number: 8, user: { login: 'ghosty' } }
+      // Mock requests
+      octokitListForRepoMock.mockReturnValue({ data: [{}] })
+      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
+      await main.run()
 
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'issue', state: 'opened' })
       expect(getActionInputsSpy).toHaveReturnedWith({
@@ -33,14 +39,21 @@ describe('issues', () => {
         msg: issueOpenedMsg
       })
 
-      await generalAssertions({ addedLabel: true })
+      generalAssertions({ addedLabel: true })
     })
   })
 
   describe('.closed', () => {
-    it('handle when an issue is closed as completed', async () => {
-      const github = githubIssueClosed({ isPullRequest: false, state_reason: 'completed' })
-      await main.run(github)
+    it('handles when an issue is closed as completed', async () => {
+      // Supported event
+      mockGithubContext.eventName = 'issues'
+      mockGithubContext.payload.action = 'closed'
+      mockGithubContext.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'completed' }
+      // Mock requests
+      octokitListForRepoMock.mockReturnValue({ data: [{}] })
+      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
+      await main.run()
 
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'issue', state: 'completed' })
       expect(getActionInputsSpy).toHaveReturnedWith({
@@ -48,12 +61,19 @@ describe('issues', () => {
         msg: issueCompletedMsg
       })
 
-      await generalAssertions({ addedLabel: false })
+      generalAssertions({ addedLabel: false })
     })
 
     it('handle when an issue is closed as not planned', async () => {
-      const github = githubIssueClosed({ isPullRequest: false, state_reason: 'not_planned' })
-      await main.run(github)
+      // Supported event
+      mockGithubContext.eventName = 'issues'
+      mockGithubContext.payload.action = 'closed'
+      mockGithubContext.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'not_planned' }
+      // Mock requests
+      octokitListForRepoMock.mockReturnValue({ data: [{}] })
+      octokitCreateCommentMock.mockReturnValue({ data: { html_url: createdCommentUrl } })
+
+      await main.run()
 
       expect(getFCEventSpy).toHaveReturnedWith({ name: 'issue', state: 'not-planned' })
       expect(getActionInputsSpy).toHaveReturnedWith({
@@ -61,7 +81,7 @@ describe('issues', () => {
         msg: issueNotPlannedMsg
       })
 
-      await generalAssertions({ addedLabel: false })
+      generalAssertions({ addedLabel: false })
     })
   })
 })
