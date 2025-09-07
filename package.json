@@ -35,15 +35,15 @@
     ]
   },
   "scripts": {
+    "test": "vitest --run",
+    "jscpd": "jscpd",
     "format": "prettier --write .",
     "typecheck": "tsc --build",
     "lint": "eslint .",
     "mdlint": "markdownlint .",
-    "test": "vitest --run",
-    "coverage": "vitest --run --coverage && ./scripts/gen-coverage-badge",
-    "jscpd": "jscpd --reporters 'badge,markdown'",
+    "report": "./scripts/gen-reports",
     "bundle": "rollup --config rollup.config.js",
-    "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage && pnpm jscpd && pnpm bundle"
+    "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm report && pnpm bundle"
   },
   "license": "MIT",
   "dependencies": {
@@ -69,6 +69,7 @@
     "eslint-plugin-import-x": "4.16.1",
     "globals": "16.3.0",
     "jscpd": "4.0.5",
+    "markdown-table": "3.0.4",
     "markdownlint-cli": "0.45.0",
     "prettier": "3.6.2",
     "rollup": "4.50.0",

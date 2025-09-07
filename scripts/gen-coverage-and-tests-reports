@@ -1,0 +1,252 @@
+#!/usr/bin/env node
+
+// @ts-check
+
+import { makeBadge } from 'badge-maker'
+import { markdownTable } from 'markdown-table'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+
+const projectRoot = process.cwd()
+
+try {
+  await fs.mkdir('assets', { recursive: true })
+} catch (error) {
+  console.error("❌ Error creating 'assets' folder")
+  process.exit(1)
+}
+
+try {
+  const { default: testsReport } = await import('../.vitest-reports/report.json', { with: { type: 'json' } })
+  await generateTestsReport(testsReport)
+} catch (error) {
+  console.error(`❌ Failed to load or process the 'tests' report. Please ensure ".vitest-reports/report.json" exists.`)
+  process.exit(1)
+}
+
+try {
+  // @ts-ignore - File may not exist to infer from
+  const coverageSummary = await import('../coverage/coverage-summary.json', {
+    with: { type: 'json' }
+  }).catch(() => console.warn('⚠️  Could not load coverage summary, most likely because some tests failed.'))
+
+  await generateCoverageReport(coverageSummary?.default)
+} catch (error) {
+  console.error(`❌ Error processing coverage report: ${error.message}`)
+  process.exit(1)
+}
+
+/** @param {import('../.vitest-reports/report.json')} testsReport */
+async function generateTestsReport(testsReport) {
+  const ICONS = /** @type {const} */ ({ passed: '✅', failed: '❌', skipped: '⏭️', todo: '📝' })
+  const {
+    numFailedTests,
+    numPassedTests,
+    numPendingTests,
+    numTodoTests,
+    numTotalTests,
+    numTotalTestSuites,
+    testResults,
+    startTime
+  } = testsReport
+
+  // -- Generate and save tests badge --
+  const totalSkipped = numPendingTests + numTodoTests
+  const badgeMessage = `${numPassedTests} passed, ${numFailedTests} failed, ${totalSkipped} skipped`
+  const testsBadgeSvg = makeBadge({
+    label: 'tests',
+    message: badgeMessage,
+    color: numFailedTests > 0 ? 'red' : 'brightgreen'
+  })
+  await fs.writeFile('assets/tests-badge.svg', testsBadgeSvg)
+
+  // -- Generate and save tests report --
+
+  // Title and badge
+  const markdown = ['# Tests Report\n', `![Tests badge](assets/tests-badge.svg)\n`]
+
+  // Summary
+  markdown.push('## Summary\n')
+  markdown.push(`- **Total Tests**: ${numTotalTests}`)
+  markdown.push(`- **Test Suites**: ${numTotalTestSuites}`)
+  const maxEndTime = Math.max(...testResults.map(suite => suite.endTime))
+  markdown.push(`- **Duration**: ${formatDuration(maxEndTime - startTime)}`)
+  markdown.push('')
+
+  // Suites table
+  const tableHeader = ['Status', 'File', 'Tests', '✅', '❌', '⏭️', '⏳']
+  const tableRows = testResults.map(suite => {
+    const testCounts = suite.assertionResults.reduce(
+      (acc, test) => {
+        acc[test.status]++
+        return acc
+      },
+      { passed: 0, failed: 0, skipped: 0, todo: 0 }
+    )
+    const statusIcon = suite.status === 'passed' ? ICONS.passed : ICONS.failed
+    const suiteName = path.relative(projectRoot, suite.name)
+    const numberOfTestSuites = suite.assertionResults.length.toString()
+    const skippedTests = (testCounts.skipped + testCounts.todo).toString()
+    const duration = formatDuration(suite.endTime - suite.startTime)
+    return [
+      statusIcon,
+      `\`${suiteName}\``,
+      numberOfTestSuites,
+      testCounts.passed.toString(),
+      testCounts.failed.toString(),
+      skippedTests,
+      duration
+    ]
+  })
+  markdown.push('## Test Suites\n')
+  markdown.push(markdownTable([tableHeader, ...tableRows], { align: ['c', 'l', 'c', 'c', 'c', 'c', 'c'] }))
+  markdown.push('')
+
+  // Failed tests details
+  const failedTests = testResults.flatMap(suite =>
+    suite.assertionResults.filter(test => test.status === 'failed').map(a => ({ ...a, suiteName: suite.name }))
+  )
+  if (failedTests.length > 0) {
+    markdown.push(`### ${ICONS.failed} Failed Tests (${failedTests.length})\n`)
+    failedTests.forEach(test => {
+      const testPath = [...test.ancestorTitles, test.title].join(' ‣ ')
+      const relativeSuiteName = path.relative(projectRoot, test.suiteName)
+      const rawError = stripAnsi(test.failureMessages.join('\n\n'))
+      const redactedError = rawError.replace(new RegExp(projectRoot, 'g'), '')
+      markdown.push(`<details>\n<summary>\n<b>\n${testPath}\n</b>\n</summary>\n`)
+      markdown.push(`- **File**: \`${relativeSuiteName}\``)
+      markdown.push(`- **Duration**: ${formatDuration(test.duration)}\n`)
+      markdown.push('```bash')
+      markdown.push(redactedError.trim())
+      markdown.push('```')
+      markdown.push('\n</details>\n')
+    })
+  }
+
+  // Skipped and todo tests details
+  const skippedTests = testResults.flatMap(suite =>
+    suite.assertionResults
+      .filter(test => test.status === 'skipped' || test.status === 'todo')
+      .map(test => ({ ...test, suiteName: suite.name }))
+  )
+  if (skippedTests.length > 0) {
+    markdown.push(`### ${ICONS.skipped} Skipped Tests (${skippedTests.length})\n`)
+    skippedTests.forEach(test => {
+      const testPath = [...test.ancestorTitles, test.title].join(' ‣ ')
+      const icon = test.status === 'todo' ? ICONS.todo : ICONS.skipped
+      markdown.push(`- ${icon} ${testPath} (\`${path.relative(projectRoot, test.suiteName)}\`)`)
+    })
+    markdown.push('')
+  }
+
+  // Save tests report
+  await fs.writeFile('assets/tests-report.md', markdown.join('\n'))
+  console.log(`✅ Tests report generated at: 'assets/tests-report.md'`)
+}
+
+// @ts-ignore - File may not exist to infer from
+/** @param {import('../coverage/coverage-summary.json')} [coverageReport] */
+async function generateCoverageReport(coverageReport) {
+  // -- Generate and save coverage badge --
+  const totalStatementsCoverage = coverageReport?.total.statements.pct
+  const coverageBadgeSvg = makeBadge({
+    label: 'coverage',
+    message: totalStatementsCoverage ? `${totalStatementsCoverage}%` : 'unavailable',
+    color: totalStatementsCoverage ? getCoverageColor(totalStatementsCoverage) : 'lightgrey'
+  })
+  await fs.writeFile('assets/coverage-badge.svg', coverageBadgeSvg)
+
+  // -- Generate and save coverage report --
+
+  // Title and badge
+  const markdown = ['# Code Coverage Report\n', `![Coverage badge](assets/coverage-badge.svg)\n`]
+
+  if (!coverageReport) {
+    markdown.push('---\n')
+    markdown.push('⚠️ **Coverage Data Unavailable**\n')
+    markdown.push('The coverage report could not be generated because the test run failed.')
+    markdown.push('Please fix all failing tests to see the coverage report.\n')
+  } else {
+    // Overall summary table
+    const summaryHeader = ['Category', 'Percentage', 'Covered/Total']
+    const { statements, branches, functions, lines } = coverageReport.total
+    const summaryRows = [
+      ['Statements', `${statements.pct}%`, `${statements.covered}/${statements.total}`],
+      ['Branches', `${branches.pct}%`, `${branches.covered}/${branches.total}`],
+      ['Functions', `${functions.pct}%`, `${functions.covered}/${functions.total}`],
+      ['Lines', `${lines.pct}%`, `${lines.covered}/${lines.total}`]
+    ]
+    markdown.push('## Overall Coverage\n')
+    markdown.push(markdownTable([summaryHeader, ...summaryRows], { align: ['l', 'c', 'c'] }))
+    markdown.push('')
+
+    // Per-file details table
+    const fileTableHeader = ['File', 'Lines', '% Lines']
+    const filePaths = Object.keys(coverageReport).filter(key => key !== 'total')
+    const fileTableRows = filePaths.map(filePath => {
+      const relativePath = path.relative(projectRoot, filePath)
+      const linePct = coverageReport[filePath].lines.pct
+      return [`\`${relativePath}\``, createProgressBar(linePct), `${linePct}%`]
+    })
+    markdown.push('## Coverage by File\n')
+    markdown.push(
+      markdownTable([fileTableRows.length > 0 ? fileTableHeader : ['File'], ...fileTableRows], {
+        align: ['l', 'l', 'r']
+      })
+    )
+    markdown.push('')
+  }
+
+  // Save coverage report
+  await fs.writeFile('assets/coverage-report.md', markdown.join('\n'))
+  console.log(`✅ Coverage report generated at: 'assets/coverage-report.md'`)
+}
+
+// --- Helpers ---
+
+/**
+ * Returns a color based on coverage percentage.
+ * @param {number} coverage - The coverage percentage.
+ */
+function getCoverageColor(coverage) {
+  const rounded = Math.round(coverage)
+  if (rounded < 70) return 'red'
+  if (rounded < 80) return 'orange'
+  if (rounded < 90) return 'yellow'
+  return 'brightgreen'
+}
+
+/**
+ * Creates a text-based progress bar.
+ * @param {number} pct - The percentage to represent.
+ */
+function createProgressBar(pct) {
+  const rounded = Math.round(pct)
+  const barLength = 20
+  const filledBlocks = Math.round((rounded / 100) * barLength)
+  const emptyBlocks = barLength - filledBlocks
+  return '`' + '█'.repeat(filledBlocks) + '░'.repeat(emptyBlocks) + '`'
+}
+
+/**
+ * Strips ANSI color codes from a string.
+ * @param {string} str The string to strip.
+ * @returns {string} The stripped string.
+ */
+function stripAnsi(str) {
+  return str.replace(
+    // eslint-disable-next-line no-control-regex
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    ''
+  )
+}
+
+/**
+ * Formats a duration in milliseconds to a more readable string.
+ * @param {number} [durationMs] - The duration in milliseconds.
+ */
+function formatDuration(durationMs) {
+  if (!durationMs) return '-'
+  if (durationMs < 1000) return `${Math.round(durationMs)}ms`
+  return `${(durationMs / 1000).toFixed(2)}s`
+}
