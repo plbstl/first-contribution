@@ -51,12 +51,24 @@ async function generateTestsReport(testsReport) {
 
   // -- Generate and save tests badge --
   const totalSkipped = numPendingTests + numTodoTests
-  const badgeMessage = `${numPassedTests} passed, ${numFailedTests} failed, ${totalSkipped} skipped`
+
+  const badgeMessageParts = [
+    { count: numPassedTests, label: 'passed' },
+    { count: numFailedTests, label: 'failed' },
+    { count: totalSkipped, label: 'skipped' }
+  ]
+
+  const badgeMessage = badgeMessageParts
+    .filter(part => part.count > 0)
+    .map(part => `${part.count} ${part.label}`)
+    .join(', ')
+
   const testsBadgeSvg = makeBadge({
     label: 'tests',
     message: badgeMessage,
     color: numFailedTests > 0 ? 'red' : 'brightgreen'
   })
+
   await fs.writeFile('assets/tests-badge.svg', testsBadgeSvg)
 
   // -- Generate and save tests report --
