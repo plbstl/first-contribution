@@ -5,18 +5,9 @@
 import { makeBadge } from 'badge-maker'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import report from '../coverage/coverage-summary.json' with { type: 'json' }
 
-// --- Configuration ---
-const DEFAULT_INPUT_PATH = 'coverage/coverage-summary.json'
-const DEFAULT_OUTPUT_PATH = 'assets/coverage-badge.svg'
-const LABEL = 'coverage'
-// ---------------------
-
-/**
- * Determines the badge color based on coverage percentage.
- * @param {number} coverage - The coverage percentage.
- * @returns {string} A color name for the badge.
- */
+/** @param {number} coverage - The coverage percentage. */
 const getCoverageColor = coverage => {
   if (coverage < 70) return 'red'
   if (coverage < 80) return 'orange'
@@ -24,51 +15,25 @@ const getCoverageColor = coverage => {
   return 'brightgreen'
 }
 
-/**
- * Parses command-line arguments to find a specific flag's value.
- * @param {string} flag - The flag to look for (e.g., '--output-path').
- * @returns {string | undefined} The value of the flag or undefined if not found.
- */
-const getArgValue = flag => {
-  const argIndex = process.argv.indexOf(flag)
-  return argIndex !== -1 ? process.argv[argIndex + 1] : undefined
-}
-
-/**
- * Main function to generate the coverage badge.
- */
+/** Main function to generate the coverage badge. */
 async function generateBadge() {
   try {
-    // 1. Determine input and output paths from arguments or defaults
-    const reportPath = getArgValue('--report-path') || DEFAULT_INPUT_PATH
-    const outputPath = getArgValue('--output-path') || DEFAULT_OUTPUT_PATH
-    const absoluteOutputPath = path.resolve(process.cwd(), outputPath)
-
-    // 2. Read and parse the coverage summary file
-    const reportContent = await fs.readFile(reportPath, 'utf8')
-    const report = JSON.parse(reportContent)
-
-    // 3. Extract coverage percentage (uses statements coverage)
-    const coverage = report?.total?.statements?.pct
-    if (typeof coverage !== 'number') {
-      throw new Error(`Could not find 'total.statements.pct' in ${reportPath}. Is the coverage report valid?`)
-    }
+    const coverage = report.total.statements.pct
     const roundedCoverage = Math.round(coverage)
 
-    // 4. Create the SVG badge using badge-maker
     const svg = makeBadge({
-      label: LABEL,
+      label: 'coverage',
       message: `${roundedCoverage}%`,
       color: getCoverageColor(roundedCoverage)
     })
 
-    // 5. Ensure the output directory exists
+    // Ensure the output directory exists
+    const absoluteOutputPath = path.resolve(process.cwd(), 'assets/coverage-badge.svg')
     await fs.mkdir(path.dirname(absoluteOutputPath), { recursive: true })
 
-    // 6. Write the SVG file to the specified output path
     await fs.writeFile(absoluteOutputPath, svg)
 
-    console.log(`✅ Coverage badge written to: ${outputPath}`)
+    console.log(`✅ Coverage badge written to: ${absoluteOutputPath}`)
   } catch (error) {
     console.error(`❌ Error generating coverage badge: ${error.message}`)
     process.exit(1)
