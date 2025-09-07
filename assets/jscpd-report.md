@@ -1,3 +1,4 @@
+<!-- textlint-disable -->
 
 # Copy/paste detection report
 
