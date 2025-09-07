@@ -25,7 +25,6 @@ try {
 }
 
 try {
-  // @ts-ignore - File may not exist to infer from
   const coverageSummary = await import('../coverage/coverage-summary.json', {
     with: { type: 'json' }
   }).catch(() => console.warn('⚠️  Could not load coverage summary, most likely because some tests failed.'))
@@ -144,7 +143,6 @@ async function generateTestsReport(testsReport) {
   console.log(`✅ Tests report generated at: 'assets/tests-report.md'`)
 }
 
-// @ts-ignore - File may not exist to infer from
 /** @param {import('../coverage/coverage-summary.json')} [coverageReport] */
 async function generateCoverageReport(coverageReport) {
   // -- Generate and save coverage badge --
