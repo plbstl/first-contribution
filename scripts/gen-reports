@@ -4,13 +4,8 @@
 pnpm exec jscpd --reporters 'badge,markdown'
 
 # Ignore super-linter NATURAL_LANGUAGE error for "typescript" word
-ex assets/jscpd-report.md <<eof
-1 insert
-<!-- textlint-disable -->
-.
-xit
-eof
-
+echo "<!-- textlint-disable -->
+$(cat assets/jscpd-report.md)" > assets/jscpd-report.md
 
 # generate coverage & vitest reports
 pnpm exec vitest --run --coverage --reporter=json --outputFile.json=.vitest-reports/report.json
