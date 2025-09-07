@@ -11,7 +11,6 @@ ex assets/jscpd-report.md <<eof
 xit
 eof
 
-
 # generate coverage & vitest reports
 pnpm exec vitest --run --coverage --reporter=json --outputFile.json=.vitest-reports/report.json
 ./scripts/gen-coverage-and-tests-reports
