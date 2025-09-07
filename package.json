@@ -41,7 +41,7 @@
     "mdlint": "markdownlint .",
     "test": "vitest --run",
     "coverage": "vitest --run --coverage && ./scripts/gen-coverage-badge",
-    "jscpd": "jscpd --reporters badge",
+    "jscpd": "jscpd --reporters 'badge,markdown'",
     "bundle": "rollup --config rollup.config.js",
     "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm test && pnpm coverage && pnpm jscpd && pnpm bundle"
   },
