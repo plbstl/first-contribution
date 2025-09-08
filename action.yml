@@ -39,6 +39,10 @@ inputs:
       If `true`, the action will fail the workflow step if an error occurs. If `false`, it will log the error without
       failing.
     default: 'false'
+  reactions:
+    description: >
+      A comma-separated list of emoji reactions to add to the issue or PR body. Must be one of: `+1`, `-1`, `laugh`,
+      `confused`, `heart`, `hooray`, `rocket`, `eyes`.
 
 outputs:
   type:

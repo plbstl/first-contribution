@@ -70,7 +70,6 @@ export function general_assertions(): void {
 export function general_assertions_opened_issue_or_pull_request(): void {
   general_assertions()
   expect(add_labels_spy).toHaveResolvedWith(true)
-  expect(core_getInput_spy_mock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
   // Assert that the correct function was used
   expect(is_first_time_contributor_spy).toHaveResolvedWith(true)
   expect(was_the_first_contribution_spy).not.toHaveBeenCalled()

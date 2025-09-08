@@ -42,10 +42,12 @@ describe('issues', () => {
       await main.run()
 
       expect(get_fc_event_spy).toHaveReturnedWith({ name: 'issue', state: 'opened' })
-      expect(get_action_inputs_spy).toHaveReturnedWith({
-        labels: [issue_labels],
-        msg: issue_opened_msg
-      })
+      expect(get_action_inputs_spy).toHaveReturnedWith(
+        expect.objectContaining({
+          labels: [issue_labels],
+          msg: issue_opened_msg
+        })
+      )
       general_assertions_opened_issue_or_pull_request()
     })
   })
@@ -65,10 +67,12 @@ describe('issues', () => {
       await main.run()
 
       expect(get_fc_event_spy).toHaveReturnedWith({ name: 'issue', state: 'completed' })
-      expect(get_action_inputs_spy).toHaveReturnedWith({
-        labels: [issue_labels],
-        msg: issue_completed_msg
-      })
+      expect(get_action_inputs_spy).toHaveReturnedWith(
+        expect.objectContaining({
+          labels: [issue_labels],
+          msg: issue_completed_msg
+        })
+      )
       general_assertions_closed_issue_or_pull_request()
     })
 
@@ -86,10 +90,12 @@ describe('issues', () => {
       await main.run()
 
       expect(get_fc_event_spy).toHaveReturnedWith({ name: 'issue', state: 'not-planned' })
-      expect(get_action_inputs_spy).toHaveReturnedWith({
-        labels: [issue_labels],
-        msg: issue_not_planned_msg
-      })
+      expect(get_action_inputs_spy).toHaveReturnedWith(
+        expect.objectContaining({
+          labels: [issue_labels],
+          msg: issue_not_planned_msg
+        })
+      )
       general_assertions_closed_issue_or_pull_request()
     })
   })

@@ -3,6 +3,7 @@ import * as github from '@actions/github'
 import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import {
   add_labels,
+  add_reactions,
   create_comment,
   get_action_inputs,
   get_fc_event,
@@ -78,6 +79,14 @@ export async function run(): Promise<ErrorOccurred> {
     core.debug('Retrieving relevant message and labels inputs')
     const action_inputs = get_action_inputs(fc_event)
     core.debug('Message and labels inputs retrieved')
+
+    // add reactions
+    core.debug(`Attempting to react with: ${action_inputs.reactions.toString()}`)
+    await add_reactions(octokit, {
+      ...github.context.repo,
+      issue_number: issue_or_pull_request.number,
+      reactions: action_inputs.reactions
+    })
 
     // create comment
     core.debug('Attempting to create comment on GitHub')

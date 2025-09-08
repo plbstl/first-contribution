@@ -7,6 +7,7 @@ import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
   add_labels,
+  add_reactions,
   create_comment,
   get_action_inputs,
   get_fc_event,
@@ -19,6 +20,7 @@ import {
   getOctokit_mock,
   octokit_addLabels_mock,
   octokit_createComment_mock,
+  octokit_createReactionForIssue_mock,
   octokit_listCommits_mock,
   octokit_listForRepo_mock
 } from './setup.ts'
@@ -214,6 +216,52 @@ describe('utils', () => {
 
       await add_labels(octokit, 'closed', add_labels_opts)
       expect(octokit_addLabels_mock).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('add_reactions()', () => {
+    const default_opts = {
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 101
+    }
+
+    beforeEach(() => {
+      octokit_createReactionForIssue_mock.mockResolvedValue({})
+    })
+
+    it('does nothing if the reactions array is empty', async () => {
+      await add_reactions(octokit, { ...default_opts, reactions: [] })
+      expect(octokit_createReactionForIssue_mock).not.toHaveBeenCalled()
+    })
+
+    it('adds a single, valid reaction', async () => {
+      await add_reactions(octokit, { ...default_opts, reactions: ['heart'] })
+
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(1)
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith({
+        ...default_opts,
+        content: 'heart'
+      })
+    })
+
+    it('adds multiple, valid reactions', async () => {
+      await add_reactions(octokit, { ...default_opts, reactions: ['hooray', 'rocket', '+1'] })
+
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(3)
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: 'hooray' }))
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: 'rocket' }))
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: '+1' }))
+    })
+
+    it('warns but continues if one of multiple reactions is invalid', async () => {
+      // Make the first call fail, but subsequent calls succeed
+      octokit_createReactionForIssue_mock.mockRejectedValueOnce(new Error('Invalid reaction')).mockResolvedValue({})
+
+      await add_reactions(octokit, { ...default_opts, reactions: ['invalid_emoji', 'heart'] })
+
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(2)
+      expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: 'heart' }))
     })
   })
 

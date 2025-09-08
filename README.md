@@ -64,6 +64,7 @@ those contributions are closed.
 | `pr-labels`             | Comma-separated list of labels for a first-time pull request **when opened**. Takes precedence over `labels`.                                                                                                                    | `''`                  |
 | `contribution-mode`     | Controls how first contributions are tracked.<br/>- (default): Triggers for a user's first issue AND their first PR separately.<br/>- `once`: Triggers only on the user's absolute first contribution (either an issue OR a PR). | `''`                  |
 | `fail-on-error`         | If `true`, the action will fail the workflow step if an error occurs. If `false`, it will log the error without failing the step.                                                                                                | `false`               |
+| `reaction`              | A comma-separated list of emoji reactions to add to the issue or PR body.<br/>**Valid options**: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.                                                           | `''`                  |
 
 ### Outputs 📤
 
@@ -101,6 +102,7 @@ messages are reserved exclusively for the lifecycle of the user's _actual_ first
 - [Welcome a Contributor Only Once](#welcome-a-contributor-only-once)
 - [Add New Contributor After Merge](#add-new-contributor-after-merge)
 - [Detailed Configuration](#detailed-configuration)
+- [Add Reactions to a First Contribution](#add-reactions-to-a-first-contribution)
 
 ### Welcome First-Time Contributors (Issues & PRs)
 
@@ -247,6 +249,35 @@ jobs:
             ### Hey @{fc-author}!
 
             Thank you for taking the time to contribute. While this wasn't merged, we value your effort and encourage you to contribute again in the future.
+```
+
+### Add Reactions to a First Contribution
+
+Automatically react to a new issue or PR with an emoji.
+
+```yaml
+name: Welcome with Reactions
+
+on:
+  issues:
+    types: opened
+  pull_request_target:
+    types: opened
+
+permissions: {}
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: plbstl/first-contribution@v4-beta-1
+        with:
+          issue-opened-msg: Welcome, @{fc-author}! Thanks for opening your first issue.
+          pr-opened-msg: Thanks for your first PR, @{fc-author}!
+          reaction: heart, rocket
 ```
 
 ## Security

@@ -6,10 +6,10 @@
 
 | Category   | Percentage | Covered/Total |
 | :--------- | :--------: | :-----------: |
-| Statements |    100%    |    214/214    |
-| Branches   |    100%    |     64/64     |
-| Functions  |    100%    |     10/10     |
-| Lines      |    100%    |    214/214    |
+| Statements |    100%    |    254/254    |
+| Branches   |    100%    |     73/73     |
+| Functions  |    100%    |     11/11     |
+| Lines      |    100%    |    254/254    |
 
 ## Coverage by File
 
@@ -19,6 +19,7 @@
 | `src/main.ts`                             | `████████████████████` |    100% |
 | `src/utils/action-inputs.ts`              | `████████████████████` |    100% |
 | `src/utils/add-labels.ts`                 | `████████████████████` |    100% |
+| `src/utils/add-reactions.ts`              | `████████████████████` |    100% |
 | `src/utils/create-comment.ts`             | `████████████████████` |    100% |
 | `src/utils/fc-event.ts`                   | `████████████████████` |    100% |
 | `src/utils/index.ts`                      | `████████████████████` |    100% |

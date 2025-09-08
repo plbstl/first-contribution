@@ -34,6 +34,7 @@ export const octokit_addLabels_mock = vitest.fn()
 export const octokit_createComment_mock = vitest.fn()
 export const octokit_listForRepo_mock = vitest.fn()
 export const octokit_listCommits_mock = vitest.fn()
+export const octokit_createReactionForIssue_mock = vitest.fn()
 
 export const getOctokit_mock = vitest.fn(
   () =>
@@ -46,6 +47,9 @@ export const getOctokit_mock = vitest.fn(
           addLabels: octokit_addLabels_mock,
           createComment: octokit_createComment_mock,
           listForRepo: octokit_listForRepo_mock
+        },
+        reactions: {
+          createForIssue: octokit_createReactionForIssue_mock
         }
       }
     }) as unknown as InstanceType<typeof GitHub>

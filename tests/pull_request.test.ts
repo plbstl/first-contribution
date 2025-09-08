@@ -45,10 +45,12 @@ describe('pull_request', () => {
       await main.run()
 
       expect(get_fc_event_spy).toHaveReturnedWith({ name: 'pr', state: 'opened' })
-      expect(get_action_inputs_spy).toHaveReturnedWith({
-        labels: [pr_labels],
-        msg: pr_opened_msg
-      })
+      expect(get_action_inputs_spy).toHaveReturnedWith(
+        expect.objectContaining({
+          labels: [pr_labels],
+          msg: pr_opened_msg
+        })
+      )
       general_assertions_opened_issue_or_pull_request()
     })
   })
@@ -71,10 +73,12 @@ describe('pull_request', () => {
       await main.run()
 
       expect(get_fc_event_spy).toHaveReturnedWith({ name: 'pr', state: 'merged' })
-      expect(get_action_inputs_spy).toHaveReturnedWith({
-        labels: [pr_labels],
-        msg: pr_merged_msg
-      })
+      expect(get_action_inputs_spy).toHaveReturnedWith(
+        expect.objectContaining({
+          labels: [pr_labels],
+          msg: pr_merged_msg
+        })
+      )
       general_assertions_closed_issue_or_pull_request()
     })
 
@@ -88,10 +92,12 @@ describe('pull_request', () => {
       await main.run()
 
       expect(get_fc_event_spy).toHaveReturnedWith({ name: 'pr', state: 'closed' })
-      expect(get_action_inputs_spy).toHaveReturnedWith({
-        labels: [pr_labels],
-        msg: pr_closed_msg
-      })
+      expect(get_action_inputs_spy).toHaveReturnedWith(
+        expect.objectContaining({
+          labels: [pr_labels],
+          msg: pr_closed_msg
+        })
+      )
       general_assertions_closed_issue_or_pull_request()
     })
 

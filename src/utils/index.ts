@@ -1,5 +1,6 @@
 export { get_action_inputs } from './action-inputs.ts'
 export { add_labels } from './add-labels.ts'
+export { add_reactions } from './add-reactions.ts'
 export { create_comment } from './create-comment.ts'
 export { get_fc_event } from './fc-event.ts'
 export { is_first_time_contributor } from './is-first-time-contributor.ts'

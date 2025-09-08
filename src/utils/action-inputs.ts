@@ -9,7 +9,11 @@ import type { FCEvent } from './fc-event.ts'
 export function get_action_inputs(event: FCEvent): ActionInputs {
   return {
     labels: get_labels_input(event.name),
-    msg: get_msg_input(event)
+    msg: get_msg_input(event),
+    reactions: core
+      .getInput('reactions')
+      .split(',')
+      .map(r => r.trim())
   }
 }
 
@@ -19,6 +23,12 @@ interface ActionInputs {
   labels: string[]
   /** Relevant `-msg` input. */
   msg: string
+  /**
+   * List of emoji names to react with.
+   *
+   * Should be one of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
+   */
+  reactions: string[]
 }
 
 /**
