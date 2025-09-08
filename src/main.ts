@@ -83,7 +83,7 @@ export async function run(): Promise<ErrorOccurred> {
 
     // add reactions
     core.debug(`Attempting to react with: ${action_inputs.reactions.toString()}`)
-    await add_reactions(octokit, {
+    await add_reactions(octokit, payload_action, {
       ...github.context.repo,
       issue_number: issue_or_pull_request.number,
       reactions: action_inputs.reactions

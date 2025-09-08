@@ -15,10 +15,15 @@ interface AddReactionsOpts {
 /**
  * Adds reactions to the main body of an issue or pull request and logs the outcome.
  * @param octokit An authenticated Octokit client.
- * @param opts Options for adding the reactions.
+ * @param payload_action Action that triggered the event.
+ * @param opts {@link AddReactionsOpts}
  */
-export async function add_reactions(octokit: InstanceType<typeof GitHub>, opts: AddReactionsOpts): Promise<void> {
-  if (opts.reactions.length === 0) {
+export async function add_reactions(
+  octokit: InstanceType<typeof GitHub>,
+  payload_action: 'opened' | 'closed',
+  opts: AddReactionsOpts
+): Promise<void> {
+  if (payload_action !== 'opened' || opts.reactions.length === 0) {
     core.info('No reaction was added')
     return
   }

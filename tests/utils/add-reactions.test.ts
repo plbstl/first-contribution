@@ -19,12 +19,17 @@ describe('add_reactions()', () => {
   })
 
   it('does nothing if the reactions array is empty', async () => {
-    await add_reactions(octokit, { ...default_opts, reactions: [] })
+    await add_reactions(octokit, 'opened', { ...default_opts, reactions: [] })
+    expect(octokit_createReactionForIssue_mock).not.toHaveBeenCalled()
+  })
+
+  it("does NOT add reactions on 'closed' events", async () => {
+    await add_reactions(octokit, 'closed', { ...default_opts, reactions: ['rocket'] })
     expect(octokit_createReactionForIssue_mock).not.toHaveBeenCalled()
   })
 
   it('adds a single, valid reaction', async () => {
-    await add_reactions(octokit, { ...default_opts, reactions: ['heart'] })
+    await add_reactions(octokit, 'opened', { ...default_opts, reactions: ['heart'] })
 
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(1)
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith({
@@ -34,7 +39,7 @@ describe('add_reactions()', () => {
   })
 
   it('adds multiple, valid reactions', async () => {
-    await add_reactions(octokit, { ...default_opts, reactions: ['hooray', 'rocket', '+1'] })
+    await add_reactions(octokit, 'opened', { ...default_opts, reactions: ['hooray', 'rocket', '+1'] })
 
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(3)
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: 'hooray' }))
@@ -46,7 +51,7 @@ describe('add_reactions()', () => {
     // Make the first call fail, but subsequent calls succeed
     octokit_createReactionForIssue_mock.mockRejectedValueOnce(new Error('Invalid reaction')).mockResolvedValue({})
 
-    await add_reactions(octokit, { ...default_opts, reactions: ['invalid_emoji', 'heart'] })
+    await add_reactions(octokit, 'opened', { ...default_opts, reactions: ['invalid_emoji', 'heart'] })
 
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(2)
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: 'heart' }))
