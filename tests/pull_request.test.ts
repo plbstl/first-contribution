@@ -15,7 +15,7 @@ import {
   pr_opened_msg
 } from './helpers.ts'
 import {
-  mock_github_context,
+  github_context_mock,
   octokit_createComment_mock,
   octokit_listForRepo_mock,
   reset_mock_github_context
@@ -33,9 +33,9 @@ describe('pull_request', () => {
 
     it('handles when a new pull request is opened', async () => {
       // Supported event
-      mock_github_context.eventName = 'pull_request_target'
-      mock_github_context.payload.action = 'opened'
-      mock_github_context.payload.pull_request = { number: 4, user: { login: 'randy' } }
+      github_context_mock.eventName = 'pull_request_target'
+      github_context_mock.payload.action = 'opened'
+      github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' } }
 
       await main.run()
 
@@ -52,9 +52,9 @@ describe('pull_request', () => {
   describe('.closed', () => {
     it('handles when a pull request is merged', async () => {
       // Supported event
-      mock_github_context.eventName = 'pull_request_target'
-      mock_github_context.payload.action = 'closed'
-      mock_github_context.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: true }
+      github_context_mock.eventName = 'pull_request_target'
+      github_context_mock.payload.action = 'closed'
+      github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: true }
 
       await main.run()
 
@@ -69,9 +69,9 @@ describe('pull_request', () => {
 
     it('handles when a pull request is closed WITHOUT being merged', async () => {
       // Supported event
-      mock_github_context.eventName = 'pull_request_target'
-      mock_github_context.payload.action = 'closed'
-      mock_github_context.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: false }
+      github_context_mock.eventName = 'pull_request_target'
+      github_context_mock.payload.action = 'closed'
+      github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: false }
       // Mock requests
       octokit_listForRepo_mock.mockReturnValue({ data: [{ pull_request: [{}] }] })
       octokit_createComment_mock.mockReturnValue({ data: { html_url: created_comment_url } })

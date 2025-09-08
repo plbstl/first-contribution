@@ -15,7 +15,7 @@ import {
   issue_opened_msg
 } from './helpers.ts'
 import {
-  mock_github_context,
+  github_context_mock,
   octokit_createComment_mock,
   octokit_listForRepo_mock,
   reset_mock_github_context
@@ -33,9 +33,9 @@ describe('issues', () => {
 
     it('handles when a new issue is opened', async () => {
       // Supported event
-      mock_github_context.eventName = 'issues'
-      mock_github_context.payload.action = 'opened'
-      mock_github_context.payload.issue = { number: 8, user: { login: 'ghosty' } }
+      github_context_mock.eventName = 'issues'
+      github_context_mock.payload.action = 'opened'
+      github_context_mock.payload.issue = { number: 8, user: { login: 'ghosty' } }
 
       await main.run()
 
@@ -52,9 +52,9 @@ describe('issues', () => {
   describe('.closed', () => {
     it('handles when an issue is closed as completed', async () => {
       // Supported event
-      mock_github_context.eventName = 'issues'
-      mock_github_context.payload.action = 'closed'
-      mock_github_context.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'completed' }
+      github_context_mock.eventName = 'issues'
+      github_context_mock.payload.action = 'closed'
+      github_context_mock.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'completed' }
 
       await main.run()
 
@@ -69,9 +69,9 @@ describe('issues', () => {
 
     it('handle when an issue is closed as not planned', async () => {
       // Supported event
-      mock_github_context.eventName = 'issues'
-      mock_github_context.payload.action = 'closed'
-      mock_github_context.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'not_planned' }
+      github_context_mock.eventName = 'issues'
+      github_context_mock.payload.action = 'closed'
+      github_context_mock.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'not_planned' }
       // Mock requests
       octokit_listForRepo_mock.mockReturnValue({ data: [{}] })
       octokit_createComment_mock.mockReturnValue({ data: { html_url: created_comment_url } })

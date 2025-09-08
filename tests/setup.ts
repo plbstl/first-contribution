@@ -3,7 +3,7 @@ import { vitest } from 'vitest'
 
 vitest.mock('@actions/github', () => {
   return {
-    context: mock_github_context,
+    context: github_context_mock,
     getOctokit: getOctokit_mock
   }
 })
@@ -11,7 +11,7 @@ vitest.mock('@actions/github', () => {
 type IssueOrPullRequestStub = { number: number; user: { login: string }; [key: string]: unknown } | undefined
 
 /** `'@actions/github'.context` */
-export const mock_github_context = {
+export const github_context_mock = {
   eventName: 'eventName',
   repo: { owner: 'owner', repo: 'repo' },
   payload: {
@@ -22,11 +22,11 @@ export const mock_github_context = {
 }
 
 export const reset_mock_github_context = (): void => {
-  mock_github_context.eventName = 'eventName'
-  mock_github_context.repo = { owner: 'owner', repo: 'repo' }
-  mock_github_context.payload.action = 'action'
-  mock_github_context.payload.issue = undefined
-  mock_github_context.payload.pull_request = undefined
+  github_context_mock.eventName = 'eventName'
+  github_context_mock.repo = { owner: 'owner', repo: 'repo' }
+  github_context_mock.payload.action = 'action'
+  github_context_mock.payload.issue = undefined
+  github_context_mock.payload.pull_request = undefined
 }
 
 // Mock octokit client

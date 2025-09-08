@@ -16,7 +16,7 @@ import {
   set_failed_spy_mock,
   set_output_spy_mock
 } from './helpers.ts'
-import { getOctokit_mock, mock_github_context, octokit_listForRepo_mock, reset_mock_github_context } from './setup.ts'
+import { getOctokit_mock, github_context_mock, octokit_listForRepo_mock, reset_mock_github_context } from './setup.ts'
 
 // Spy on (and mock) the GitHub Actions core library
 vitest.spyOn(core, 'getInput').mockReturnValue('')
@@ -34,9 +34,9 @@ describe('action', () => {
   })
 
   it('exits action when the issue or pull request author is NOT a first-time contributor', async () => {
-    mock_github_context.eventName = 'issues'
-    mock_github_context.payload.action = 'opened'
-    mock_github_context.payload.issue = { number: 123, user: { login: 'ghosty' } }
+    github_context_mock.eventName = 'issues'
+    github_context_mock.payload.action = 'opened'
+    github_context_mock.payload.issue = { number: 123, user: { login: 'ghosty' } }
     octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
 
     await main.run()
@@ -47,9 +47,9 @@ describe('action', () => {
 
   it("sets the correct action's outputs for issues", async () => {
     // Supported event
-    mock_github_context.eventName = 'issues'
-    mock_github_context.payload.action = 'closed'
-    mock_github_context.payload.issue = { number: 16, user: { login: 'issue-ghosty' } }
+    github_context_mock.eventName = 'issues'
+    github_context_mock.payload.action = 'closed'
+    github_context_mock.payload.issue = { number: 16, user: { login: 'issue-ghosty' } }
     // Is first-time contributor
     octokit_listForRepo_mock.mockReturnValue({ data: [{ event: { state: 'opened' } }] })
 
@@ -64,10 +64,10 @@ describe('action', () => {
 
   it("sets the correct action's outputs for pull requests", async () => {
     // Supported event
-    mock_github_context.eventName = 'pull_request_target'
-    mock_github_context.payload.action = 'opened'
-    mock_github_context.payload.issue = undefined
-    mock_github_context.payload.pull_request = { number: 19, user: { login: 'pr-ghosty' } }
+    github_context_mock.eventName = 'pull_request_target'
+    github_context_mock.payload.action = 'opened'
+    github_context_mock.payload.issue = undefined
+    github_context_mock.payload.pull_request = { number: 19, user: { login: 'pr-ghosty' } }
     // Is first-time contributor
     octokit_listForRepo_mock.mockReturnValue({ data: [{ event: { state: 'opened' }, pull_request: [{}] }] })
 
