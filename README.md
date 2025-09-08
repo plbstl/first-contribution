@@ -118,7 +118,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4
+      - uses: plbstl/first-contribution@v4-beta-1
         with:
           labels: first-contribution
           issue-opened-msg: |
@@ -151,7 +151,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4
+      - uses: plbstl/first-contribution@v4-beta-1
         with:
           contribution-mode: once
           issue-opened-msg: >
@@ -183,7 +183,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4
+      - uses: plbstl/first-contribution@v4-beta-1
         with:
           pr-merged-msg: >
             @all-contributors please add @{fc-author} for ${{ join(github.event.pull_request.labels.*.name, ', ') }}
@@ -213,7 +213,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4
+      - uses: plbstl/first-contribution@v4-beta-1
         with:
           issue-labels: first-issue, needs-triage
           pr-labels: first-pr, needs-review
@@ -272,7 +272,7 @@ on:
 
 steps:
   # This checks out YOUR trusted code.
-  - uses: actions/checkout@v4
+  - uses: actions/checkout@v4-beta-1
 
   # This runs a script you trust because it's already in your repo.
   - run: ./scripts/my-trusted-script.sh
@@ -289,7 +289,7 @@ on:
 
 steps:
   # DANGEROUS: Checks out untrusted code from the PR.
-  - uses: actions/checkout@v4
+  - uses: actions/checkout@v4-beta-1
     with:
       ref: ${{ github.event.pull_request.head.sha }}
 
