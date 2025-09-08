@@ -64,7 +64,7 @@ those contributions are closed.
 | `pr-labels`             | Comma-separated list of labels for a first-time pull request **when opened**. Takes precedence over `labels`.                                                                                                                    | `''`                  |
 | `contribution-mode`     | Controls how first contributions are tracked.<br/>- (default): Triggers for a user's first issue AND their first PR separately.<br/>- `once`: Triggers only on the user's absolute first contribution (either an issue OR a PR). | `''`                  |
 | `fail-on-error`         | If `true`, the action will fail the workflow step if an error occurs. If `false`, it will log the error without failing the step.                                                                                                | `false`               |
-| `reaction`              | A comma-separated list of emoji reactions to add to the issue or PR body.<br/>**Valid options**: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.                                                           | `''`                  |
+| `reactions`             | A comma-separated list of emoji reactions to add to the issue or PR body.<br/>**Valid options**: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.                                                           | `''`                  |
 
 ### Outputs 📤
 
@@ -277,7 +277,7 @@ jobs:
         with:
           issue-opened-msg: Welcome, @{fc-author}! Thanks for opening your first issue.
           pr-opened-msg: Thanks for your first PR, @{fc-author}!
-          reaction: heart, rocket
+          reactions: heart, rocket
 ```
 
 ## Security
