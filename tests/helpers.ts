@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import { expect, vitest } from 'vitest'
 import * as main from '~src/main.ts'
 import * as utils from '~src/utils/index.ts'
+import { getOctokit_mock } from './setup.ts'
 
 /** URL of the comment made to first timer */
 export const created_comment_url = 'html_url.com'
@@ -30,6 +31,9 @@ export const pr_labels = 'first-contrib'
 export const pr_opened_msg = 'Thank you for opening this pull request.'
 export const pr_merged_msg = 'This PR has been successfully merged!'
 export const pr_closed_msg = 'PR was closed. Will not be merged'
+
+// Mock the GitHub Actions octokit client
+export const octokit = getOctokit_mock()
 
 // Spy on and mock the GitHub Actions core library
 export const core_getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput')
