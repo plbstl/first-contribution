@@ -74,7 +74,7 @@ async function generateTestsReport(testsReport) {
   // -- Generate and save tests report --
 
   // Title and badge
-  const markdown = ['# Tests Report\n', `![Tests badge](assets/tests-badge.svg)\n`]
+  const markdown = ['# Tests Report\n', `![Tests badge](tests-badge.svg)\n`]
 
   // Summary
   markdown.push('## Summary\n')
@@ -169,7 +169,7 @@ async function generateCoverageReport(coverageReport) {
   // -- Generate and save coverage report --
 
   // Title and badge
-  const markdown = ['# Code Coverage Report\n', `![Coverage badge](assets/coverage-badge.svg)\n`]
+  const markdown = ['# Code Coverage Report\n', `![Coverage badge](coverage-badge.svg)\n`]
 
   if (!coverageReport) {
     markdown.push('---\n')

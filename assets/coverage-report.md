@@ -1,6 +1,6 @@
 # Code Coverage Report
 
-![Coverage badge](assets/coverage-badge.svg)
+![Coverage badge](coverage-badge.svg)
 
 ## Overall Coverage
 

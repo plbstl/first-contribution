@@ -1,6 +1,6 @@
 # Tests Report
 
-![Tests badge](assets/tests-badge.svg)
+![Tests badge](tests-badge.svg)
 
 ## Summary
 
