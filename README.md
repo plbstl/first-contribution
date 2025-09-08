@@ -11,6 +11,8 @@
 
 Automatically respond to a user's first issue or pull request in your repository.
 
+![Example reply for when a first-timer opens an issue](./assets/issue-opened.jpg)
+
 - **Flexible Tracking**: Greet users on their first issue and first pull request separately, or just once on their very
   first interaction.
 - **Smart Contributor Detection**: Avoids misidentifying existing repository committers as new by checking their commit
@@ -25,6 +27,8 @@ Automatically respond to a user's first issue or pull request in your repository
 
 This action identifies a "first-time contributor" by checking for prior issues, pull requests, and commits from a user.
 This prevents existing maintainers who may not have opened a PR before from being incorrectly greeted.
+
+![Example reply for when a first-timer closes an issue as completed](./assets/issue-completed.jpg)
 
 You can respond to first-time contributors when they open new issues and pull requests, and you can also respond when
 those contributions are closed.
