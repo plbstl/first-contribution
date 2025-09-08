@@ -6,16 +6,14 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import * as main from '../src/main.ts'
 import {
   created_comment_url,
-  general_assertions,
+  general_assertions_closed_issue_or_pull_request,
+  general_assertions_opened_issue_or_pull_request,
   get_action_inputs_spy,
   get_fc_event_spy,
-  get_input_spy_mock,
-  is_first_time_contributor_spy,
   issue_completed_msg,
   issue_labels,
   issue_not_planned_msg,
-  issue_opened_msg,
-  was_the_first_contribution_spy
+  issue_opened_msg
 } from './helpers.ts'
 import {
   github_context_mock,
@@ -46,11 +44,7 @@ describe('issues', () => {
         labels: [issue_labels],
         msg: issue_opened_msg
       })
-      general_assertions({ added_labels: true })
-      expect(get_input_spy_mock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
-      // Assert that the correct function was used
-      expect(is_first_time_contributor_spy).toHaveResolvedWith(true)
-      expect(was_the_first_contribution_spy).not.toHaveBeenCalled()
+      general_assertions_opened_issue_or_pull_request()
     })
   })
 
@@ -58,13 +52,13 @@ describe('issues', () => {
     it('handles when an issue is closed as completed', async () => {
       // This was the user's first and only issue
       octokit_listForRepo_mock.mockResolvedValue({
-        data: [{ number: 8, created_at: '2025-01-01T12:00:00Z' }]
+        data: [{ number: 23, created_at: '2025-06-24T12:00:00Z' }]
       })
       octokit_createComment_mock.mockResolvedValue({ data: { html_url: created_comment_url } })
       // Supported event
       github_context_mock.eventName = 'issues'
       github_context_mock.payload.action = 'closed'
-      github_context_mock.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'completed' }
+      github_context_mock.payload.issue = { number: 23, user: { login: 'ghosty' }, state_reason: 'completed' }
 
       await main.run()
 
@@ -73,16 +67,13 @@ describe('issues', () => {
         labels: [issue_labels],
         msg: issue_completed_msg
       })
-      general_assertions({ added_labels: false })
-      // Assert that the correct function was used
-      expect(was_the_first_contribution_spy).toHaveResolvedWith(true)
-      expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
+      general_assertions_closed_issue_or_pull_request()
     })
 
     it('handles when an issue is closed as not planned', async () => {
       // This was the user's first and only issue
       octokit_listForRepo_mock.mockResolvedValue({
-        data: [{ number: 8, created_at: '2025-01-01T12:00:00Z' }]
+        data: [{ number: 8, created_at: '2025-11-09T12:00:00Z' }]
       })
       octokit_createComment_mock.mockResolvedValue({ data: { html_url: created_comment_url } })
       // Supported event
@@ -97,10 +88,7 @@ describe('issues', () => {
         labels: [issue_labels],
         msg: issue_not_planned_msg
       })
-      general_assertions({ added_labels: false })
-      // Assert that the correct function was used
-      expect(was_the_first_contribution_spy).toHaveResolvedWith(true)
-      expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
+      general_assertions_closed_issue_or_pull_request()
     })
   })
 })

@@ -60,10 +60,24 @@ export const get_input_spy_mock = vitest.spyOn(core, 'getInput').mockImplementat
 })
 
 // Functions
-export function general_assertions(opts?: { added_labels: boolean }): void {
-  if (opts) {
-    expect(add_labels_spy).toHaveResolvedWith(opts.added_labels)
-  }
+export function general_assertions(): void {
   expect(is_supported_event_spy).toHaveReturnedWith(true)
   expect(run_spy).toHaveReturned()
+}
+
+export function general_assertions_opened_issue_or_pull_request(): void {
+  general_assertions()
+  expect(add_labels_spy).toHaveResolvedWith(true)
+  expect(get_input_spy_mock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
+  // Assert that the correct function was used
+  expect(is_first_time_contributor_spy).toHaveResolvedWith(true)
+  expect(was_the_first_contribution_spy).not.toHaveBeenCalled()
+}
+
+export function general_assertions_closed_issue_or_pull_request(): void {
+  general_assertions()
+  expect(add_labels_spy).toHaveResolvedWith(false)
+  // Assert that the correct function was used
+  expect(was_the_first_contribution_spy).toHaveResolvedWith(true)
+  expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
 }

@@ -8,10 +8,10 @@ import {
   create_comment_spy,
   created_comment_url,
   general_assertions,
+  general_assertions_closed_issue_or_pull_request,
+  general_assertions_opened_issue_or_pull_request,
   get_action_inputs_spy,
   get_fc_event_spy,
-  get_input_spy_mock,
-  is_first_time_contributor_spy,
   pr_closed_msg,
   pr_labels,
   pr_merged_msg,
@@ -47,25 +47,24 @@ describe('pull_request', () => {
         labels: [pr_labels],
         msg: pr_opened_msg
       })
-      general_assertions({ added_labels: true })
-      expect(get_input_spy_mock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
-      // Assert that the correct function was used
-      expect(is_first_time_contributor_spy).toHaveResolvedWith(true)
-      expect(was_the_first_contribution_spy).not.toHaveBeenCalled()
+      general_assertions_opened_issue_or_pull_request()
     })
   })
 
   describe('.closed', () => {
-    it('handles when a pull request is merged', async () => {
-      // This was the user's first and only PR
-      octokit_listForRepo_mock.mockResolvedValue({
-        data: [{ number: 4, pull_request: {}, created_at: '2025-01-01T12:00:00Z' }]
-      })
+    beforeEach(() => {
       octokit_createComment_mock.mockResolvedValue({ data: { html_url: created_comment_url } })
       // Supported event
       github_context_mock.eventName = 'pull_request_target'
       github_context_mock.payload.action = 'closed'
-      github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: true }
+    })
+
+    it('handles when a pull request is merged', async () => {
+      // This was the user's first and only PR
+      octokit_listForRepo_mock.mockResolvedValue({
+        data: [{ number: 7, pull_request: {}, created_at: '2025-05-31T12:00:00Z' }]
+      })
+      github_context_mock.payload.pull_request = { number: 7, user: { login: 'randy' }, merged: true }
 
       await main.run()
 
@@ -74,21 +73,14 @@ describe('pull_request', () => {
         labels: [pr_labels],
         msg: pr_merged_msg
       })
-      general_assertions({ added_labels: false })
-      // Assert that the correct function was used
-      expect(was_the_first_contribution_spy).toHaveResolvedWith(true)
-      expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
+      general_assertions_closed_issue_or_pull_request()
     })
 
     it('handles when a pull request is closed WITHOUT being merged', async () => {
       // This was the user's first and only PR
       octokit_listForRepo_mock.mockResolvedValue({
-        data: [{ number: 4, pull_request: {}, created_at: '2025-01-01T12:00:00Z' }]
+        data: [{ number: 4, pull_request: {}, created_at: '2025-04-20T12:00:00Z' }]
       })
-      octokit_createComment_mock.mockResolvedValue({ data: { html_url: created_comment_url } })
-      // Supported event
-      github_context_mock.eventName = 'pull_request_target'
-      github_context_mock.payload.action = 'closed'
       github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: false }
 
       await main.run()
@@ -98,10 +90,7 @@ describe('pull_request', () => {
         labels: [pr_labels],
         msg: pr_closed_msg
       })
-      general_assertions({ added_labels: false })
-      // Assert that the correct function was used
-      expect(was_the_first_contribution_spy).toHaveResolvedWith(true)
-      expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
+      general_assertions_closed_issue_or_pull_request()
     })
 
     it('comments when the FIRST of two PRs is closed', async () => {
@@ -112,18 +101,14 @@ describe('pull_request', () => {
           { number: 5, pull_request: {}, created_at: '2025-01-01T11:00:00Z' } // Second PR
         ]
       })
-      octokit_createComment_mock.mockResolvedValue({ data: { html_url: created_comment_url } })
-      github_context_mock.eventName = 'pull_request_target'
-      github_context_mock.payload.action = 'closed'
       // The event is for PR #4, which is the historically first one
       github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: true }
 
       await main.run()
 
-      general_assertions({ added_labels: false })
+      general_assertions_closed_issue_or_pull_request()
       // The action should proceed and create a comment
       expect(create_comment_spy).toHaveBeenCalled()
-      expect(was_the_first_contribution_spy).toHaveResolvedWith(true)
     })
 
     it('does NOT comment when a NON-FIRST PR is closed', async () => {
@@ -134,8 +119,6 @@ describe('pull_request', () => {
           { number: 5, pull_request: {}, created_at: '2025-01-01T11:00:00Z' } // Second PR
         ]
       })
-      github_context_mock.eventName = 'pull_request_target'
-      github_context_mock.payload.action = 'closed'
       // The event is for PR #5, which is NOT the first one
       github_context_mock.payload.pull_request = { number: 5, user: { login: 'randy' }, merged: true }
 
