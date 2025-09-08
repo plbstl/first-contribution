@@ -68,6 +68,27 @@ those contributions are closed.
 | `username`    | string  | The GitHub username of the first-time contributor.                                 |
 | `comment-url` | string  | The URL of the comment posted by the action. This is empty if no comment was made. |
 
+## How It Works
+
+This action's logic is designed to be specific and predictable, especially in complex scenarios.
+
+### Responding to a Closed First Contribution
+
+The action can respond to both the `opened` and `closed` events of a user's first-ever contribution. This provides a
+complete feedback loop: a "welcome" message when the contribution is opened, and a "thank you" message when it is
+eventually closed or merged, no matter how much time has passed.
+
+### Stale or Abandoned First Contributions
+
+The action is tied to the **historically first** contribution. Consider this scenario:
+
+1. A new user opens their first PR (PR #1). The action welcomes them.
+1. PR #1 is abandoned and never closed.
+1. The same user later opens and merges a second PR (PR #2).
+
+In this case, the action will **not** post a "thank you" message when PR #2 is closed. The special `closed` and `merged`
+messages are reserved exclusively for the lifecycle of the user's _actual_ first contribution (PR #1).
+
 ## Examples
 
 - [Welcome First-Time Contributors (Issues & PRs)](#welcome-first-time-contributors-issues--prs)
