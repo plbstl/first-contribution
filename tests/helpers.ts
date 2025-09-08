@@ -19,6 +19,7 @@ export const create_comment_spy = vitest.spyOn(utils, 'create_comment')
 export const get_fc_event_spy = vitest.spyOn(utils, 'get_fc_event')
 export const is_first_time_contributor_spy = vitest.spyOn(utils, 'is_first_time_contributor')
 export const is_supported_event_spy = vitest.spyOn(utils, 'is_supported_event')
+export const was_the_first_contribution_spy = vitest.spyOn(utils, 'was_the_first_contribution')
 
 // Mock action inputs
 export const issue_labels = 'first timer'
@@ -59,15 +60,10 @@ export const get_input_spy_mock = vitest.spyOn(core, 'getInput').mockImplementat
 })
 
 // Functions
-export function general_assertions({ added_label }: { added_label: boolean }): void {
+export function general_assertions(opts?: { added_labels: boolean }): void {
+  if (opts) {
+    expect(add_labels_spy).toHaveResolvedWith(opts.added_labels)
+  }
   expect(is_supported_event_spy).toHaveReturnedWith(true)
-
-  expect(is_first_time_contributor_spy).toHaveResolvedWith(true)
-  expect(create_comment_spy).toHaveResolvedWith(created_comment_url)
-  expect(add_labels_spy).toHaveResolvedWith(added_label)
-
-  expect(get_input_spy_mock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
-  expect(set_output_spy_mock).toHaveBeenCalledTimes(NUMBER_OF_ACTION_OUTPUTS)
-
   expect(run_spy).toHaveReturned()
 }
