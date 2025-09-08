@@ -70,7 +70,7 @@ export async function run(): Promise<ErrorOccurred> {
     }
 
     if (!is_relevant_first_timer) {
-      core.info(`\`${first_timer_username}\` does not meet the criteria for this event. Exiting..`)
+      core.info(`\`${first_timer_username}\` does not meet the criteria for being a first timer. Exiting..`)
       return false
     }
 
