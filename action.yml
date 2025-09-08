@@ -34,7 +34,6 @@ inputs:
       Controls how first contributions are tracked.
       - (default): Issues and pull requests are tracked separately. The action triggers for a user's first issue AND their first pull request.
       - `once`: The action triggers only on the user's very first contribution to the repository, whether it's an issue OR a pull request.
-    required: false
 
 outputs:
   type:
