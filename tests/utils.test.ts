@@ -19,6 +19,7 @@ import {
   getOctokit_mock,
   octokit_addLabels_mock,
   octokit_createComment_mock,
+  octokit_listCommits_mock,
   octokit_listForRepo_mock
 } from './setup.ts'
 
@@ -294,8 +295,41 @@ describe('utils', () => {
       repo: 'repo'
     }
 
+    describe('when checking for prior commits', () => {
+      it('returns false immediately if the user has a commit history', async () => {
+        octokit_listCommits_mock.mockResolvedValue({ data: [{ sha: 'commit-sha-123' }] })
+
+        const result = await is_first_time_contributor(octokit, {
+          ...default_opts,
+          is_pull_request: false
+        })
+
+        expect(result).toBe(false)
+        expect(octokit_listCommits_mock).toHaveBeenCalledWith(expect.objectContaining({ author: default_opts.creator }))
+        expect(octokit_listForRepo_mock).not.toHaveBeenCalled()
+      })
+
+      it('proceeds to check issues/PRs if the user has no commit history', async () => {
+        octokit_listCommits_mock.mockResolvedValue({ data: [] })
+        octokit_listForRepo_mock.mockResolvedValue({ data: [{}] })
+
+        const result = await is_first_time_contributor(octokit, {
+          ...default_opts,
+          is_pull_request: false
+        })
+
+        expect(result).toBe(true)
+        expect(octokit_listCommits_mock).toHaveBeenCalled()
+        expect(octokit_listForRepo_mock).toHaveBeenCalledWith(
+          expect.objectContaining({ creator: default_opts.creator })
+        )
+      })
+    })
+
     describe('contribution-mode = once', () => {
       beforeEach(() => {
+        // Ensure no commits are found for these tests
+        octokit_listCommits_mock.mockResolvedValue({ data: [] })
         get_input_spy_mock.mockReturnValue('once')
       })
 
@@ -318,6 +352,8 @@ describe('utils', () => {
 
     describe('contribution-mode = (default)', () => {
       beforeEach(() => {
+        // Ensure no commits are found for these tests
+        octokit_listCommits_mock.mockResolvedValue({ data: [] })
         get_input_spy_mock.mockReturnValue('')
       })
 

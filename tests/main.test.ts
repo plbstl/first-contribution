@@ -16,7 +16,13 @@ import {
   set_failed_spy_mock,
   set_output_spy_mock
 } from './helpers.ts'
-import { getOctokit_mock, github_context_mock, octokit_listForRepo_mock, reset_mock_github_context } from './setup.ts'
+import {
+  getOctokit_mock,
+  github_context_mock,
+  octokit_listCommits_mock,
+  octokit_listForRepo_mock,
+  reset_mock_github_context
+} from './setup.ts'
 
 // Spy on (and mock) the GitHub Actions core library
 vitest.spyOn(core, 'getInput').mockReturnValue('')
@@ -37,6 +43,7 @@ describe('action', () => {
     github_context_mock.eventName = 'issues'
     github_context_mock.payload.action = 'opened'
     github_context_mock.payload.issue = { number: 123, user: { login: 'ghosty' } }
+    octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
 
     await main.run()

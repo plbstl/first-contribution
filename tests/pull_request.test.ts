@@ -21,6 +21,7 @@ import {
 import {
   github_context_mock,
   octokit_createComment_mock,
+  octokit_listCommits_mock,
   octokit_listForRepo_mock,
   reset_mock_github_context
 } from './setup.ts'
@@ -32,6 +33,7 @@ describe('pull_request', () => {
 
   describe('.opened', () => {
     it('handles when a new pull request is opened', async () => {
+      octokit_listCommits_mock.mockResolvedValue({ data: [] })
       // The user's first contribution
       octokit_listForRepo_mock.mockResolvedValue({ data: [{ pull_request: {} }] })
       octokit_createComment_mock.mockResolvedValue({ data: { html_url: created_comment_url } })

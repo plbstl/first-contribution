@@ -33,11 +33,15 @@ export const reset_mock_github_context = (): void => {
 export const octokit_addLabels_mock = vitest.fn()
 export const octokit_createComment_mock = vitest.fn()
 export const octokit_listForRepo_mock = vitest.fn()
+export const octokit_listCommits_mock = vitest.fn()
 
 export const getOctokit_mock = vitest.fn(
   () =>
     ({
       rest: {
+        repos: {
+          listCommits: octokit_listCommits_mock
+        },
         issues: {
           addLabels: octokit_addLabels_mock,
           createComment: octokit_createComment_mock,

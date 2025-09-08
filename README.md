@@ -13,6 +13,8 @@ Automatically respond to a user's first issue or pull request in your repository
 
 - **Flexible Tracking**: Greet users on their first issue and first pull request separately, or just once on their very
   first interaction.
+- **Smart Contributor Detection**: Avoids misidentifying existing repository committers as new by checking their commit
+  history in addition to their issue and pull request activity.
 - **Custom Messages**: Define unique messages for different events like opening an issue, merging a PR, or closing a
   contribution.
 - **Automatic Labeling**: Apply labels to issues and PRs from new contributors to help with triage.
@@ -20,6 +22,9 @@ Automatically respond to a user's first issue or pull request in your repository
 - **Message Reuse**: Avoid repetition by reusing message content from other inputs.
 
 ## Usage
+
+This action identifies a "first-time contributor" by checking for prior issues, pull requests, and commits from a user.
+This prevents existing maintainers who may not have opened a PR before from being incorrectly greeted.
 
 You can respond to first-time contributors when they open new issues and pull requests, and you can also respond when
 those contributions are closed.

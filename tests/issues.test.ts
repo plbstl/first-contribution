@@ -18,6 +18,7 @@ import {
 import {
   github_context_mock,
   octokit_createComment_mock,
+  octokit_listCommits_mock,
   octokit_listForRepo_mock,
   reset_mock_github_context
 } from './setup.ts'
@@ -29,6 +30,7 @@ describe('issues', () => {
 
   describe('.opened', () => {
     it('handles when a new issue is opened', async () => {
+      octokit_listCommits_mock.mockResolvedValue({ data: [] })
       // The user's first contribution
       octokit_listForRepo_mock.mockResolvedValue({ data: [{}] })
       octokit_createComment_mock.mockResolvedValue({ data: { html_url: created_comment_url } })
