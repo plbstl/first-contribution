@@ -20,6 +20,7 @@ Automatically respond to a user's first issue or pull request in your repository
 - **Custom Messages**: Define unique messages for different events like opening an issue, merging a PR, or closing a
   contribution.
 - **Automatic Labeling**: Apply labels to issues and PRs from new contributors to help with triage.
+- **Automatic Emoji Reactions**: Add one or more emoji reactions to the contributor's issue or pull request.
 - **Placeholder Support**: Use `{fc-author}` in any message to mention the contributor by their GitHub username.
 - **Message Reuse**: Avoid repetition by reusing message content from other inputs.
 
@@ -78,6 +79,11 @@ those contributions are closed.
 | `number`      | integer | The number of the issue or pull request.                                           |
 | `username`    | string  | The GitHub username of the first-time contributor.                                 |
 | `comment-url` | string  | The URL of the comment posted by the action. This is empty if no comment was made. |
+
+> [!TIP]
+>
+> You can react to the newly opened issue or pull request with emojis. See the
+> [reactions example below](#add-reactions-to-a-first-contribution).
 
 ## How It Works
 
