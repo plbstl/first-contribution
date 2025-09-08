@@ -21,7 +21,7 @@ MD030:
 
 # Inline HTML
 MD033:
-  allowed_elements: [b, br, details, summary]
+  allowed_elements: [b, br, details, img, p, summary]
 
 # Code block style
 MD046:
