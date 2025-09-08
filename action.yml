@@ -36,8 +36,8 @@ inputs:
       - `once`: The action triggers only on the user's very first contribution to the repository, whether it's an issue OR a pull request.
   fail-on-error:
     description:
-      'If `true`, the action will fail the workflow step if an error occurs. If `false`, it will log the error without
-      failing.'
+      If `true`, the action will fail the workflow step if an error occurs. If `false`, it will log the error without
+      failing.
     default: 'false'
 
 outputs:
