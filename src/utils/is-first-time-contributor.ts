@@ -8,7 +8,7 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
  * in the repository and analyzing the count based on the action's configuration.
  *
  * @param octokit A GitHub Octokit client.
- * @param opts Options for checking the contributor's status. See {@link IsFirstTimeContributorOpts}.
+ * @param opts {@link IsFirstTimeContributorOpts}
  * @returns `true` if the author meets the "first-time contributor" criteria for the given event, otherwise `false`.
  */
 export async function is_first_time_contributor(

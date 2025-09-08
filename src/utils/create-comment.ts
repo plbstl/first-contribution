@@ -2,7 +2,7 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
 
 /**
  * Creates a comment in the specified issue or pull request.
- * @param octokit - A GitHub Octokit client.
+ * @param octokit A GitHub Octokit client.
  * @param opts {@link CreateCommentOpts}
  * @returns A link to the created comment on GitHub.
  */

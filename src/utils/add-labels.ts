@@ -2,8 +2,8 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
 
 /**
  * Adds labels to the specified issue or pull request.
- * @param octokit - A GitHub Octokit client.
- * @param payload_action - Action that triggered the event.
+ * @param octokit A GitHub Octokit client.
+ * @param payload_action Action that triggered the event.
  * @param opts {@link AddLabelsOpts}
  */
 export async function add_labels(

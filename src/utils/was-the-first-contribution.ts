@@ -5,7 +5,7 @@ import type { Issue, PullRequest } from '@octokit/webhooks-types'
  * Checks if the specific issue or pull request that triggered the workflow
  * was the author's very first contribution of that type.
  * @param octokit A GitHub Octokit client.
- * @param opts Options for checking the contributor's status.
+ * @param opts {@link WasTheFirstContributionOpts}
  * @returns `true` if the event's payload was the user's first contribution.
  */
 export async function was_the_first_contribution(
