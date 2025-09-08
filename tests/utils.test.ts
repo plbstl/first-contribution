@@ -3,8 +3,7 @@
  */
 
 import type { WebhookPayload } from '@actions/github/lib/interfaces.d.ts'
-import { beforeEach, describe, expect, it, vitest } from 'vitest'
-import * as utils from '../src/utils/index.ts'
+import { beforeEach, describe, expect, it } from 'vitest'
 import {
   add_labels,
   create_comment,
@@ -13,7 +12,7 @@ import {
   is_first_time_contributor,
   is_supported_event
 } from '../src/utils/index.ts'
-import { get_input_spy_mock } from './helpers.ts'
+import { get_input_spy_mock, is_first_time_contributor_spy } from './helpers.ts'
 import {
   getOctokit_mock,
   octokit_addLabels_mock,
@@ -292,8 +291,6 @@ describe('utils', () => {
       owner: 'owner',
       repo: 'repo'
     }
-
-    const is_first_time_contributor_spy = vitest.spyOn(utils, 'is_first_time_contributor')
 
     describe('contribution-mode = once', () => {
       beforeEach(() => {
