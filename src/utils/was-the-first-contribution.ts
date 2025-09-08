@@ -26,6 +26,9 @@ export async function was_the_first_contribution(
     is_pull_request ? !!item.pull_request : !item.pull_request
   )
 
+  // Re-sort the filtered list just to be sure
+  relevant_contributions.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+
   // Check if the number of the issue/PR from the event payload
   // matches the number of the very first item in the sorted list.
   const first_ever_contribution = relevant_contributions.at(0)
