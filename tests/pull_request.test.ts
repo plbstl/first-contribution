@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, expect, it } from 'vitest'
-import * as main from '../src/main.ts'
+import * as main from '~src/main.ts'
 import {
   create_comment_spy,
   created_comment_url,

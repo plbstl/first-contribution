@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, expect, it } from 'vitest'
-import * as main from '../src/main.ts'
+import * as main from '~src/main.ts'
 import {
   created_comment_url,
   general_assertions_closed_issue_or_pull_request,

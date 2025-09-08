@@ -8,7 +8,7 @@
 
 import * as core from '@actions/core'
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
-import * as main from '../src/main.ts'
+import * as main from '~src/main.ts'
 import {
   core_error_spy_mock,
   core_getBooleanInput_spy,

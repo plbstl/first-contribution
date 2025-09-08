@@ -14,7 +14,7 @@ import {
   is_first_time_contributor,
   is_supported_event,
   was_the_first_contribution
-} from '../src/utils/index.ts'
+} from '~src/utils/index.ts'
 import { core_getInput_spy_mock, is_first_time_contributor_spy } from './helpers.ts'
 import {
   getOctokit_mock,

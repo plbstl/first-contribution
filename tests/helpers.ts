@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { expect, vitest } from 'vitest'
-import * as main from '../src/main.ts'
-import * as utils from '../src/utils/index.ts'
+import * as main from '~src/main.ts'
+import * as utils from '~src/utils/index.ts'
 
 /** URL of the comment made to first timer */
 export const created_comment_url = 'html_url.com'

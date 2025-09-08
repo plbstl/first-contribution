@@ -10,7 +10,7 @@ import {
   is_first_time_contributor,
   is_supported_event,
   was_the_first_contribution
-} from '../src/utils/index.ts'
+} from './utils/index.ts'
 
 type ErrorOccurred = boolean
 
