@@ -50,7 +50,7 @@ jobs:
       issues: write # Required to post comments and labels on issues
       pull-requests: write # Required to post comments and labels on PRs
     steps:
-      - uses: plbstl/first-contribution@v4-beta-1
+      - uses: plbstl/first-contribution@v4
         with:
           labels: first-contribution
           issue-opened-msg: |
@@ -130,7 +130,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4-beta-1
+      - uses: plbstl/first-contribution@v4
         with:
           issue-opened-msg: Welcome, @{fc-author}! Thanks for opening your first issue.
           pr-opened-msg: Thanks for your first PR, @{fc-author}!
@@ -159,7 +159,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4-beta-1
+      - uses: plbstl/first-contribution@v4
         with:
           contribution-mode: once
           issue-opened-msg: >
@@ -191,7 +191,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4-beta-1
+      - uses: plbstl/first-contribution@v4
         with:
           pr-merged-msg: >
             @all-contributors please add @{fc-author} for ${{ join(github.event.pull_request.labels.*.name, ', ') }}
@@ -219,7 +219,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@v4-beta-1
+      - uses: plbstl/first-contribution@v4
         with:
           reactions: heart, rocket
           issue-labels: first-issue, needs-triage
