@@ -6,10 +6,10 @@
 
 | Category   | Percentage | Covered/Total |
 | :--------- | :--------: | :-----------: |
-| Statements |    100%    |    254/254    |
-| Branches   |    100%    |     73/73     |
+| Statements |    100%    |    255/255    |
+| Branches   |    100%    |     76/76     |
 | Functions  |    100%    |     11/11     |
-| Lines      |    100%    |    254/254    |
+| Lines      |    100%    |    255/255    |
 
 ## Coverage by File
 

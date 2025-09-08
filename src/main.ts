@@ -46,9 +46,11 @@ export async function run(): Promise<ErrorOccurred> {
     const is_pull_request = !!payload.pull_request
     const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
     const first_timer_username = issue_or_pull_request.user.login
+    const fc_event = get_fc_event(payload_action, payload)
+    const interaction = fc_event.name === 'issue' ? 'issue' : 'pull request'
 
     // check if author is first-timer
-    core.debug('Checking if issue or pull request is a first-time contribution from its author')
+    core.debug(`Checking if ${interaction} is a first-time contribution from its author`)
     let is_relevant_first_timer = false
     if (payload_action === 'opened') {
       core.debug('Event is "opened". Checking for first-time contributor.')
@@ -75,7 +77,6 @@ export async function run(): Promise<ErrorOccurred> {
     core.debug('Author meets the criteria for this event.')
 
     // retrieve inputs
-    const fc_event = get_fc_event(payload_action, payload)
     core.debug('Retrieving relevant message and labels inputs')
     const action_inputs = get_action_inputs(fc_event)
     core.debug('Message and labels inputs retrieved')
@@ -99,7 +100,7 @@ export async function run(): Promise<ErrorOccurred> {
     core.info(comment_url ? `Comment created: ${comment_url}` : 'No comment was added')
 
     // add labels
-    core.debug('Attempting to add labels to issue or pull request')
+    core.debug(`Attempting to add labels to ${interaction}`)
     const did_add_labels = await add_labels(octokit, payload_action, {
       ...github.context.repo,
       labels: action_inputs.labels,
