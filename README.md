@@ -264,13 +264,13 @@ workflow.
 ✅ **Safe:** Checking out your own trusted code.
 
 ```yaml
-- uses: actions/checkout@v4 # Checks out your default branch
+- uses: actions/checkout@v5 # Checks out your default branch
 ```
 
 ❌ **Unsafe:** Checking out untrusted code from the PR.
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v5
   with:
     ref: ${{ github.event.pull_request.head.sha }} # DANGEROUS
 ```
