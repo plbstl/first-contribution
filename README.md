@@ -246,14 +246,13 @@ jobs:
 ## Security
 
 To work correctly on pull requests from forks, this action requires the `pull_request_target` event. This is because the
-`GITHUB_TOKEN` provided to this event has the necessary **write permissions** to add comments and labels to your
-repository. A token from the standard `pull_request` event is **read-only** for security reasons and would cause this
-action to fail.
+`GITHUB_TOKEN` provided to this event has the necessary write permissions to add comments and labels to your repository.
+A token from the standard `pull_request` event is read-only for security reasons and would cause this action to fail.
 
 Using `pull_request_target` grants the workflow a powerful token. A security risk exists if a workflow uses this token
 to check out and run untrusted code from a pull request, as that code could steal your secrets.
 
-**This action is safe because it avoids this risk entirely.** It **does not check out or run any code** from the pull
+This action is safe because it avoids this risk entirely. It does **not** check out or run any code from the pull
 request. It only interacts with trusted event metadata provided by GitHub (like the PR author's username) to post
 comments and labels.
 
@@ -272,7 +271,7 @@ on:
 
 steps:
   # This checks out YOUR trusted code.
-  - uses: actions/checkout@v4-beta-1
+  - uses: actions/checkout@v5
 
   # This runs a script you trust because it's already in your repo.
   - run: ./scripts/my-trusted-script.sh
@@ -280,7 +279,7 @@ steps:
 
 #### ❌ Dangerous Pattern
 
-This is dangerous because it explicitly checks out the **untrusted code** submitted in the pull request using the `ref`
+This is dangerous because it explicitly checks out the untrusted code submitted in the pull request using the `ref`
 property.
 
 ```yaml
@@ -289,7 +288,7 @@ on:
 
 steps:
   # DANGEROUS: Checks out untrusted code from the PR.
-  - uses: actions/checkout@v4-beta-1
+  - uses: actions/checkout@v5
     with:
       ref: ${{ github.event.pull_request.head.sha }}
 
