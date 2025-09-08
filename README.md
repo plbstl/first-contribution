@@ -109,6 +109,8 @@ on:
   pull_request_target:
     types: opened
 
+permissions: {}
+
 jobs:
   welcome:
     runs-on: ubuntu-latest
@@ -140,6 +142,8 @@ on:
   pull_request_target:
     types: opened
 
+permissions: {}
+
 jobs:
   welcome:
     runs-on: ubuntu-latest
@@ -169,6 +173,8 @@ on:
   pull_request_target:
     types: closed
 
+permissions: {}
+
 jobs:
   add-contributor:
     # This job only runs for merged PRs
@@ -197,6 +203,8 @@ on:
     types: [opened, closed]
   pull_request_target:
     types: [opened, closed]
+
+permissions: {}
 
 jobs:
   process-contribution:
