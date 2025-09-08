@@ -7,7 +7,8 @@ import {
   get_action_inputs,
   get_fc_event,
   is_first_time_contributor,
-  is_supported_event
+  is_supported_event,
+  was_the_first_contribution
 } from '../src/utils/index.ts'
 
 type ErrorOccurred = boolean
@@ -41,21 +42,36 @@ export async function run(): Promise<ErrorOccurred> {
     core.debug('Octokit client created')
 
     // helper variables
+    const is_pull_request = !!payload.pull_request
     const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
     const first_timer_username = issue_or_pull_request.user.login
 
     // check if author is first-timer
-    core.debug('Checking if issue or pull request author is a first-time contributor')
-    const first_time_contributor = await is_first_time_contributor(octokit, {
-      ...github.context.repo,
-      creator: first_timer_username,
-      is_pull_request: !!payload.pull_request
-    })
-    if (!first_time_contributor) {
-      core.info(`\`${first_timer_username}\` is NOT a first-time contributor. Exiting..`)
+    core.debug('Checking if issue or pull request is a first-time contribution from its author')
+    let is_relevant_first_timer = false
+    if (payload_action === 'opened') {
+      core.debug('Event is "opened". Checking for first-time contributor.')
+      is_relevant_first_timer = await is_first_time_contributor(octokit, {
+        ...github.context.repo,
+        creator: first_timer_username,
+        is_pull_request
+      })
+    } else {
+      core.debug('Event is "closed". Checking if this was their first contribution.')
+      is_relevant_first_timer = await was_the_first_contribution(octokit, {
+        ...github.context.repo,
+        creator: first_timer_username,
+        is_pull_request,
+        issue_or_pull_request
+      })
+    }
+
+    if (!is_relevant_first_timer) {
+      core.info(`\`${first_timer_username}\` does not meet the criteria for this event. Exiting..`)
       return false
     }
-    core.debug('Author is a first-time contributor')
+
+    core.debug('Author meets the criteria for this event.')
 
     // retrieve inputs
     const fc_event = get_fc_event(payload_action, payload)
