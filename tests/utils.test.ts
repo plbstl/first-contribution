@@ -14,7 +14,7 @@ import {
   is_supported_event,
   was_the_first_contribution
 } from '../src/utils/index.ts'
-import { get_input_spy_mock, is_first_time_contributor_spy } from './helpers.ts'
+import { core_getInput_spy_mock, is_first_time_contributor_spy } from './helpers.ts'
 import {
   getOctokit_mock,
   octokit_addLabels_mock,
@@ -31,7 +31,7 @@ describe('utils', () => {
     describe('.labels', () => {
       it('returns the correct labels for `-labels` inputs', () => {
         // Mock return values from core.getInput()
-        get_input_spy_mock.mockImplementation(name => {
+        core_getInput_spy_mock.mockImplementation(name => {
           switch (name) {
             case 'labels':
               return 'first-time contributor'
@@ -55,7 +55,7 @@ describe('utils', () => {
 
       it('returns fallback (if any) when a specific `-labels` input is unavailable', () => {
         // Mock return values from core.getInput()
-        get_input_spy_mock.mockImplementation(name => {
+        core_getInput_spy_mock.mockImplementation(name => {
           return name === 'labels' ? 'first-time contributor, first-interaction' : ''
         })
 
@@ -70,7 +70,7 @@ describe('utils', () => {
 
       it('returns an empty array when no `-labels` input is provided', () => {
         // Mock return values from core.getInput()
-        get_input_spy_mock.mockReturnValue('')
+        core_getInput_spy_mock.mockReturnValue('')
 
         // Issue
         const { labels: issue_labels } = get_action_inputs({ name: 'issue', state: 'opened' })
@@ -85,7 +85,7 @@ describe('utils', () => {
     describe('.msg', () => {
       it('returns the correct messages for all `-msg` inputs', () => {
         // Mock return values from core.getInput()
-        get_input_spy_mock.mockImplementation(name => {
+        core_getInput_spy_mock.mockImplementation(name => {
           switch (name) {
             // Issues
             case 'issue-opened-msg':
@@ -130,7 +130,7 @@ describe('utils', () => {
 
       it("returns a correct message when `-msg` input is 'symlinked'", () => {
         // Mock return values from core.getInput()
-        get_input_spy_mock.mockImplementation(name => {
+        core_getInput_spy_mock.mockImplementation(name => {
           switch (name) {
             case 'issue-completed-msg':
               return 'Issue completed message'
@@ -147,7 +147,7 @@ describe('utils', () => {
 
       it('trims leading/trailing whitespace and line terminator characters in `-msg` inputs', () => {
         // Mock return values from core.getInput()
-        get_input_spy_mock.mockImplementation(name => {
+        core_getInput_spy_mock.mockImplementation(name => {
           switch (name) {
             case 'issue-opened-msg':
               return '      '
@@ -330,7 +330,7 @@ describe('utils', () => {
       beforeEach(() => {
         // Ensure no commits are found for these tests
         octokit_listCommits_mock.mockResolvedValue({ data: [] })
-        get_input_spy_mock.mockReturnValue('once')
+        core_getInput_spy_mock.mockReturnValue('once')
       })
 
       it('returns true if the user has only one contribution (issue or PR)', async () => {
@@ -354,7 +354,7 @@ describe('utils', () => {
       beforeEach(() => {
         // Ensure no commits are found for these tests
         octokit_listCommits_mock.mockResolvedValue({ data: [] })
-        get_input_spy_mock.mockReturnValue('')
+        core_getInput_spy_mock.mockReturnValue('')
       })
 
       it('returns true for a first issue, even with a prior PR', async () => {

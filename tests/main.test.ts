@@ -11,12 +11,12 @@ import { beforeEach, describe, expect, it, vitest } from 'vitest'
 import * as main from '../src/main.ts'
 import {
   core_error_spy_mock,
-  getBooleanInput_spy,
+  core_getBooleanInput_spy,
+  core_setFailed_spy_mock,
+  core_setOutput_spy_mock,
   is_first_time_contributor_spy,
   is_supported_event_spy,
-  run_spy,
-  set_failed_spy_mock,
-  set_output_spy_mock
+  run_spy
 } from './helpers.ts'
 import {
   getOctokit_mock,
@@ -66,10 +66,10 @@ describe('action', () => {
 
     await main.run()
 
-    expect(set_output_spy_mock).toHaveBeenCalledWith('comment-url', '')
-    expect(set_output_spy_mock).toHaveBeenCalledWith('number', 16)
-    expect(set_output_spy_mock).toHaveBeenCalledWith('type', 'issue')
-    expect(set_output_spy_mock).toHaveBeenCalledWith('username', 'issue-ghosty')
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('comment-url', '')
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('number', 16)
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('type', 'issue')
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('username', 'issue-ghosty')
     expect(run_spy).toHaveReturned()
   })
 
@@ -84,10 +84,10 @@ describe('action', () => {
 
     await main.run()
 
-    expect(set_output_spy_mock).toHaveBeenCalledWith('comment-url', '')
-    expect(set_output_spy_mock).toHaveBeenCalledWith('number', 19)
-    expect(set_output_spy_mock).toHaveBeenCalledWith('type', 'pr')
-    expect(set_output_spy_mock).toHaveBeenCalledWith('username', 'pr-ghosty')
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('comment-url', '')
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('number', 19)
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('type', 'pr')
+    expect(core_setOutput_spy_mock).toHaveBeenCalledWith('username', 'pr-ghosty')
     expect(run_spy).toHaveReturned()
   })
 
@@ -101,27 +101,27 @@ describe('action', () => {
     })
 
     it('fails the action when `fail-on-error` is true', async () => {
-      getBooleanInput_spy.mockReturnValue(true)
+      core_getBooleanInput_spy.mockReturnValue(true)
 
       await main.run()
 
-      expect(set_failed_spy_mock).toHaveBeenCalledWith(error.message)
+      expect(core_setFailed_spy_mock).toHaveBeenCalledWith(error.message)
       expect(core_error_spy_mock).not.toHaveBeenCalled()
       expect(run_spy).toHaveResolvedWith(true)
     })
 
     it('logs an error without failing when `fail-on-error` is false', async () => {
-      getBooleanInput_spy.mockReturnValue(false)
+      core_getBooleanInput_spy.mockReturnValue(false)
 
       await main.run()
 
-      expect(set_failed_spy_mock).not.toHaveBeenCalled()
+      expect(core_setFailed_spy_mock).not.toHaveBeenCalled()
       expect(core_error_spy_mock).toHaveBeenCalledWith(error.message)
       expect(run_spy).toHaveResolvedWith(true)
     })
 
     it('logs an error when something other than an Error is thrown', async () => {
-      getBooleanInput_spy.mockReturnValue(false)
+      core_getBooleanInput_spy.mockReturnValue(false)
       is_supported_event_spy.mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw 234

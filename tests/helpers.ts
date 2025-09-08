@@ -32,11 +32,11 @@ export const pr_merged_msg = 'This PR has been successfully merged!'
 export const pr_closed_msg = 'PR was closed. Will not be merged'
 
 // Spy on and mock the GitHub Actions core library
-export const getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput')
+export const core_getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput')
 export const core_error_spy_mock = vitest.spyOn(core, 'error').mockReturnValue()
-export const set_failed_spy_mock = vitest.spyOn(core, 'setFailed').mockReturnValue()
-export const set_output_spy_mock = vitest.spyOn(core, 'setOutput').mockReturnValue()
-export const get_input_spy_mock = vitest.spyOn(core, 'getInput').mockImplementation(name => {
+export const core_setFailed_spy_mock = vitest.spyOn(core, 'setFailed').mockReturnValue()
+export const core_setOutput_spy_mock = vitest.spyOn(core, 'setOutput').mockReturnValue()
+export const core_getInput_spy_mock = vitest.spyOn(core, 'getInput').mockImplementation(name => {
   switch (name) {
     case 'token':
       return '***'
@@ -70,7 +70,7 @@ export function general_assertions(): void {
 export function general_assertions_opened_issue_or_pull_request(): void {
   general_assertions()
   expect(add_labels_spy).toHaveResolvedWith(true)
-  expect(get_input_spy_mock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
+  expect(core_getInput_spy_mock).toHaveBeenCalledTimes(['token', 'labels', 'msg', 'contribution-mode'].length)
   // Assert that the correct function was used
   expect(is_first_time_contributor_spy).toHaveResolvedWith(true)
   expect(was_the_first_contribution_spy).not.toHaveBeenCalled()
