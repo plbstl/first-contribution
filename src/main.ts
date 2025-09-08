@@ -2,12 +2,12 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import {
-  addLabels,
-  createComment,
-  getActionInputs,
-  getFCEvent,
-  isFirstTimeContributor,
-  isSupportedEvent
+  add_labels,
+  create_comment,
+  get_action_inputs,
+  get_fc_event,
+  is_first_time_contributor,
+  is_supported_event
 } from '../src/utils/index.ts'
 
 type ErrorOccurred = boolean
@@ -25,8 +25,8 @@ export async function run(): Promise<ErrorOccurred> {
 
     // check if event is supported
     core.debug('Checking if triggered event is supported')
-    const supportedEvent = isSupportedEvent(github.context.eventName, payload_action)
-    if (!supportedEvent) {
+    const supported_event = is_supported_event(github.context.eventName, payload_action)
+    if (!supported_event) {
       core.info(`\`${github.context.eventName}.${JSON.stringify(payload_action)}\` event is NOT supported. Exiting..`)
       return false
     }
@@ -41,51 +41,51 @@ export async function run(): Promise<ErrorOccurred> {
     core.debug('Octokit client created')
 
     // helper variables
-    const issueOrPullRequest = (payload.issue ?? payload.pull_request) as Issue | PullRequest
-    const firstTimerUsername = issueOrPullRequest.user.login
+    const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
+    const first_timer_username = issue_or_pull_request.user.login
 
     // check if author is first-timer
     core.debug('Checking if issue or pull request author is a first-time contributor')
-    const firstTimeContributor = await isFirstTimeContributor(octokit, {
+    const first_time_contributor = await is_first_time_contributor(octokit, {
       ...github.context.repo,
-      creator: firstTimerUsername,
+      creator: first_timer_username,
       is_pull_request: !!payload.pull_request
     })
-    if (!firstTimeContributor) {
-      core.info(`\`${firstTimerUsername}\` is NOT a first-time contributor. Exiting..`)
+    if (!first_time_contributor) {
+      core.info(`\`${first_timer_username}\` is NOT a first-time contributor. Exiting..`)
       return false
     }
     core.debug('Author is a first-time contributor')
 
     // retrieve inputs
-    const fcEvent = getFCEvent(payload_action, payload)
+    const fc_event = get_fc_event(payload_action, payload)
     core.debug('Retrieving relevant message and labels inputs')
-    const actionInputs = getActionInputs(fcEvent)
+    const action_inputs = get_action_inputs(fc_event)
     core.debug('Message and labels inputs retrieved')
 
     // create comment
     core.debug('Attempting to create comment on GitHub')
-    const commentUrl = await createComment(octokit, {
+    const comment_url = await create_comment(octokit, {
       ...github.context.repo,
-      body: actionInputs.msg,
-      issue_number: issueOrPullRequest.number,
-      author_username: firstTimerUsername
+      body: action_inputs.msg,
+      issue_number: issue_or_pull_request.number,
+      author_username: first_timer_username
     })
-    core.info(commentUrl ? `Comment created: ${commentUrl}` : 'No comment was added')
+    core.info(comment_url ? `Comment created: ${comment_url}` : 'No comment was added')
 
     // add labels
     core.debug('Attempting to add labels to issue or pull request')
-    const didAddLabels = await addLabels(octokit, payload_action, {
+    const did_add_labels = await add_labels(octokit, payload_action, {
       ...github.context.repo,
-      labels: actionInputs.labels,
-      issue_number: issueOrPullRequest.number
+      labels: action_inputs.labels,
+      issue_number: issue_or_pull_request.number
     })
-    core.info(didAddLabels ? `Labels added: ${actionInputs.labels.toString()}` : 'No label was added')
+    core.info(did_add_labels ? `Labels added: ${action_inputs.labels.toString()}` : 'No label was added')
 
-    core.setOutput('comment-url', commentUrl)
-    core.setOutput('number', issueOrPullRequest.number)
-    core.setOutput('type', fcEvent.name)
-    core.setOutput('username', firstTimerUsername)
+    core.setOutput('comment-url', comment_url)
+    core.setOutput('number', issue_or_pull_request.number)
+    core.setOutput('type', fc_event.name)
+    core.setOutput('username', first_timer_username)
 
     return false
   } catch (error) {

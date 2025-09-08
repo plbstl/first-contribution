@@ -11,37 +11,37 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
  * @param opts Options for checking the contributor's status. See {@link IsFirstTimeContributorOpts}.
  * @returns `true` if the author meets the "first-time contributor" criteria for the given event, otherwise `false`.
  */
-export async function isFirstTimeContributor(
+export async function is_first_time_contributor(
   octokit: InstanceType<typeof GitHub>,
   opts: IsFirstTimeContributorOpts
 ): Promise<boolean> {
-  const { is_pull_request: isPullRequest, ...listForRepoOpts } = opts
+  const { is_pull_request, ...listForRepo_opts } = opts
 
   // Fetch all issues and PRs by the author to get a complete history.
   // We set state to 'all' to ensure we don't miss any previous contributions.
   const { data: contributions } = await octokit.rest.issues.listForRepo({
-    ...listForRepoOpts,
+    ...listForRepo_opts,
     state: 'all'
   })
 
-  const contributionMode = core.getInput('contribution-mode')
+  const contribution_mode = core.getInput('contribution-mode')
 
   // --- Mode 1: Track first contribution ONCE across both issues and PRs ---
   // If the user has exactly one contribution (the one that triggered this workflow),
   // they are a first-time contributor.
-  if (contributionMode === 'once') {
+  if (contribution_mode === 'once') {
     return contributions.length === 1
   }
 
   // --- Mode 2: Track first issues and first PRs INDEPENDENTLY ---
   // This is the default behavior. A user can be a first-timer for an issue
   // and also a first-timer for a pull request.
-  if (isPullRequest) {
-    const prCount = contributions.filter(item => item.pull_request).length
-    return prCount === 1
+  if (is_pull_request) {
+    const pr_count = contributions.filter(item => item.pull_request).length
+    return pr_count === 1
   } else {
-    const issueCount = contributions.filter(item => !item.pull_request).length
-    return issueCount === 1
+    const issue_count = contributions.filter(item => !item.pull_request).length
+    return issue_count === 1
   }
 }
 

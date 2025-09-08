@@ -3,16 +3,16 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
 /**
  * Adds labels to the specified issue or pull request.
  * @param octokit - A GitHub Octokit client.
- * @param payloadAction - Action that triggered the event.
+ * @param payload_action - Action that triggered the event.
  * @param opts {@link AddLabelsOpts}
  */
-export async function addLabels(
+export async function add_labels(
   octokit: InstanceType<typeof GitHub>,
-  payloadAction: 'opened' | 'closed',
+  payload_action: 'opened' | 'closed',
   opts: AddLabelsOpts
 ): Promise<boolean> {
   // Only add labels for new issues/PRs and when the list of input labels is NOT empty.
-  if (payloadAction === 'opened' && opts.labels.length > 0) {
+  if (payload_action === 'opened' && opts.labels.length > 0) {
     // can fail when the specified label is not already created in the repository.
     await octokit.rest.issues.addLabels({ ...opts })
     return true

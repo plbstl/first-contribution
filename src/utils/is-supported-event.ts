@@ -1,12 +1,12 @@
 /**
  * Checks whether the triggered event is supported by first-contribution GitHub Action.
- * @param eventName Name of the triggered event.
+ * @param event_name Name of the triggered event.
  * @param [action] Action that caused the event to trigger.
  * @returns
  */
-export function isSupportedEvent(eventName: string, action?: string): action is 'opened' | 'closed' {
-  const eventCode = `${eventName}.${String(action)}`
-  const supportedEventCodes = [
+export function is_supported_event(event_name: string, action?: string): action is 'opened' | 'closed' {
+  const event_code = `${event_name}.${String(action)}`
+  const supported_event_codes = [
     'issues.opened',
     'issues.closed',
     'pull_request.opened',
@@ -14,5 +14,5 @@ export function isSupportedEvent(eventName: string, action?: string): action is 
     'pull_request_target.opened',
     'pull_request_target.closed'
   ]
-  return supportedEventCodes.includes(eventCode)
+  return supported_event_codes.includes(event_code)
 }

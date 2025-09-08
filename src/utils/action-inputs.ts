@@ -6,10 +6,10 @@ import type { FCEvent } from './fc-event.ts'
  * @param event A `first-contribution` event.
  * @returns Labels and a message that can be added to the issue or pull request.
  */
-export function getActionInputs(event: FCEvent): ActionInputs {
+export function get_action_inputs(event: FCEvent): ActionInputs {
   return {
-    labels: getLabelsInput(event.name),
-    msg: getMsgInput(event)
+    labels: get_labels_input(event.name),
+    msg: get_msg_input(event)
   }
 }
 
@@ -23,11 +23,11 @@ interface ActionInputs {
 
 /**
  * Retrieves the relevant `-labels` input or a fallback.
- * @param eventName A `first-contribution` event name.
+ * @param event_name A `first-contribution` event name.
  * @returns An array of labels to add to the issue or pull request.
  */
-function getLabelsInput(eventName: FCEvent['name']): string[] {
-  const labels = core.getInput(`${eventName}-labels`) || core.getInput('labels')
+function get_labels_input(event_name: FCEvent['name']): string[] {
+  const labels = core.getInput(`${event_name}-labels`) || core.getInput('labels')
   return labels ? labels.split(',').map(label => label.trim()) : []
 }
 
@@ -46,8 +46,8 @@ function getLabelsInput(eventName: FCEvent['name']): string[] {
  * @param event A `first-contribution` event.
  * @returns Text that can be used as comment.
  */
-function getMsgInput(event: FCEvent): string {
-  const messageInputs = [
+function get_msg_input(event: FCEvent): string {
+  const message_inputs = [
     'issue-opened-msg',
     'issue-completed-msg',
     'issue-not-planned-msg',
@@ -56,7 +56,7 @@ function getMsgInput(event: FCEvent): string {
     'pr-closed-msg'
   ]
   let msg = core.getInput(`${event.name}-${event.state}-msg`).trim()
-  if (messageInputs.includes(msg)) {
+  if (message_inputs.includes(msg)) {
     msg = core.getInput(msg).trim()
   }
   return msg
