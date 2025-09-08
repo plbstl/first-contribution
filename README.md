@@ -25,7 +25,7 @@ welcome by:
 - **Offering flexible modes** to greet users on their first issue and PR separately, or just once.
 
 <p align="center">
-<img src="./assets/issue-opened.jpg" width="850" alt="Example reply for when a first-timer opens an issue"/>
+<img src="./assets/issue-opened.jpg" width="650" alt="Example reply for when a first-timer opens an issue"/>
 </p>
 
 ## 🚀 Quick Start
