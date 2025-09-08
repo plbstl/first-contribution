@@ -105,8 +105,14 @@ export async function run(): Promise<ErrorOccurred> {
 
     return false
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
-    else core.setFailed(`Action failed with error ${JSON.stringify(error)}`)
+    const fail_on_error = core.getBooleanInput('fail-on-error')
+    const message = error instanceof Error ? error.message : `Unknown error: ${JSON.stringify(error)}`
+
+    if (fail_on_error) {
+      core.setFailed(message)
+    } else {
+      core.error(message)
+    }
     return true
   }
 }

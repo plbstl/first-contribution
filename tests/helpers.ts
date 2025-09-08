@@ -32,6 +32,8 @@ export const pr_merged_msg = 'This PR has been successfully merged!'
 export const pr_closed_msg = 'PR was closed. Will not be merged'
 
 // Spy on and mock the GitHub Actions core library
+export const getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput')
+export const core_error_spy_mock = vitest.spyOn(core, 'error').mockReturnValue()
 export const set_failed_spy_mock = vitest.spyOn(core, 'setFailed').mockReturnValue()
 export const set_output_spy_mock = vitest.spyOn(core, 'setOutput').mockReturnValue()
 export const get_input_spy_mock = vitest.spyOn(core, 'getInput').mockImplementation(name => {

@@ -63,6 +63,7 @@ those contributions are closed.
 | `issue-labels`          | Comma-separated list of labels for a first-time issue **when opened**. Takes precedence over `labels`.                                                                                                                           | `''`                  |
 | `pr-labels`             | Comma-separated list of labels for a first-time pull request **when opened**. Takes precedence over `labels`.                                                                                                                    | `''`                  |
 | `contribution-mode`     | Controls how first contributions are tracked.<br/>- (default): Triggers for a user's first issue AND their first PR separately.<br/>- `once`: Triggers only on the user's absolute first contribution (either an issue OR a PR). | `''`                  |
+| `fail-on-error`         | If `true`, the action will fail the workflow step if an error occurs. If `false`, it will log the error without failing the step.                                                                                                | `false`               |
 
 ### Outputs 📤
 

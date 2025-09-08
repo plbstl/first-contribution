@@ -10,6 +10,8 @@ import * as core from '@actions/core'
 import { beforeEach, describe, expect, it, vitest } from 'vitest'
 import * as main from '../src/main.ts'
 import {
+  core_error_spy_mock,
+  getBooleanInput_spy,
   is_first_time_contributor_spy,
   is_supported_event_spy,
   run_spy,
@@ -89,26 +91,46 @@ describe('action', () => {
     expect(run_spy).toHaveReturned()
   })
 
-  it('sets a failed status when an Error is thrown', async () => {
-    is_supported_event_spy.mockImplementation(() => {
-      throw new Error('error message')
+  describe('when an error is thrown', () => {
+    const error = new Error('Something went wrong!')
+
+    beforeEach(() => {
+      is_supported_event_spy.mockImplementation(() => {
+        throw error
+      })
     })
 
-    await main.run()
+    it('fails the action when `fail-on-error` is true', async () => {
+      getBooleanInput_spy.mockReturnValue(true)
 
-    expect(set_failed_spy_mock).toHaveBeenCalledWith('error message')
-    expect(run_spy).toHaveResolvedWith(true)
-  })
+      await main.run()
 
-  it('sets a failed status when something other than an Error is thrown', async () => {
-    is_supported_event_spy.mockImplementation(() => {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw 234
+      expect(set_failed_spy_mock).toHaveBeenCalledWith(error.message)
+      expect(core_error_spy_mock).not.toHaveBeenCalled()
+      expect(run_spy).toHaveResolvedWith(true)
     })
 
-    await main.run()
+    it('logs an error without failing when `fail-on-error` is false', async () => {
+      getBooleanInput_spy.mockReturnValue(false)
 
-    expect(set_failed_spy_mock).toHaveBeenCalledWith(expect.stringContaining('234'))
-    expect(run_spy).toHaveResolvedWith(true)
+      await main.run()
+
+      expect(set_failed_spy_mock).not.toHaveBeenCalled()
+      expect(core_error_spy_mock).toHaveBeenCalledWith(error.message)
+      expect(run_spy).toHaveResolvedWith(true)
+    })
+
+    it('logs an error when something other than an Error is thrown', async () => {
+      getBooleanInput_spy.mockReturnValue(false)
+      is_supported_event_spy.mockImplementation(() => {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
+        throw 234
+      })
+
+      await main.run()
+
+      expect(core_error_spy_mock).toHaveBeenCalledWith(expect.stringContaining('234'))
+      expect(run_spy).toHaveResolvedWith(true)
+    })
   })
 })
