@@ -224,7 +224,8 @@ jobs:
     steps:
       - uses: plbstl/first-contribution@v4
         with:
-          reactions: heart, rocket
+          issue-reactions: eyes
+          pr-reactions: +1
           issue-labels: first-issue, needs-triage
           pr-labels: first-pr, needs-review
 
