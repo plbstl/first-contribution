@@ -51,24 +51,20 @@ async function generateTestsReport(testsReport) {
 
   // -- Generate and save tests badge --
   const totalSkipped = numPendingTests + numTodoTests
-
   const badgeMessageParts = [
     { count: numPassedTests, label: 'passed' },
     { count: numFailedTests, label: 'failed' },
     { count: totalSkipped, label: 'skipped' }
   ]
-
   const badgeMessage = badgeMessageParts
     .filter(part => part.count > 0)
     .map(part => `${part.count} ${part.label}`)
     .join(', ')
-
   const testsBadgeSvg = makeBadge({
     label: 'tests',
     message: badgeMessage,
     color: numFailedTests > 0 ? 'red' : 'brightgreen'
   })
-
   await fs.writeFile('assets/tests-badge.svg', testsBadgeSvg)
 
   // -- Generate and save tests report --
@@ -84,7 +80,7 @@ async function generateTestsReport(testsReport) {
   markdown.push(`- **Duration**: ${formatDuration(maxEndTime - startTime)}`)
   markdown.push('')
 
-  // Suites table
+  // Suites table (High-level overview)
   const tableHeader = ['Status', 'File', 'Tests', '✅', '❌', '⏭️', '⏳']
   const tableRows = testResults.map(suite => {
     const testCounts = suite.assertionResults.reduce(
@@ -96,22 +92,53 @@ async function generateTestsReport(testsReport) {
     )
     const statusIcon = suite.status === 'passed' ? ICONS.passed : ICONS.failed
     const suiteName = path.relative(projectRoot, suite.name)
-    const numberOfTestSuites = suite.assertionResults.length.toString()
-    const skippedTests = (testCounts.skipped + testCounts.todo).toString()
+    const numberOfTests = suite.assertionResults.length.toString()
+    const totalSkippedInSuite = testCounts.skipped + testCounts.todo
+
+    const passedCount = testCounts.passed > 0 ? testCounts.passed.toString() : '-'
+    const failedCount = testCounts.failed > 0 ? testCounts.failed.toString() : '-'
+    const skippedCount = totalSkippedInSuite > 0 ? totalSkippedInSuite.toString() : '-'
+
     const duration = formatDuration(suite.endTime - suite.startTime)
-    return [
-      statusIcon,
-      `\`${suiteName}\``,
-      numberOfTestSuites,
-      testCounts.passed.toString(),
-      testCounts.failed.toString(),
-      skippedTests,
-      duration
-    ]
+    const anchor = '-' + suiteName.toLowerCase().replace(/[^a-z0-9-_]/g, '')
+    const fileLink = `[${suiteName}](#${anchor})`
+
+    return [statusIcon, fileLink, numberOfTests, passedCount, failedCount, skippedCount, duration]
   })
-  markdown.push('## Test Suites\n')
   markdown.push(markdownTable([tableHeader, ...tableRows], { align: ['c', 'l', 'c', 'c', 'c', 'c', 'c'] }))
   markdown.push('')
+
+  // Detailed tests section with individual test titles
+  markdown.push('## Details\n')
+  testResults.forEach(suite => {
+    const relativeSuiteName = path.relative(projectRoot, suite.name)
+    const suiteStatusIcon = suite.status === 'passed' ? ICONS.passed : ICONS.failed
+
+    markdown.push(`### ${suiteStatusIcon} ${relativeSuiteName}\n`)
+
+    markdown.push('```txt')
+    const groupedTitles = new Map()
+    suite.assertionResults.forEach(test => {
+      const key = test.ancestorTitles.join(' ‣ ')
+      if (!groupedTitles.has(key)) {
+        groupedTitles.set(key, [])
+      }
+      groupedTitles.get(key).push({
+        icon: ICONS[test.status] ?? '❓',
+        title: test.title
+      })
+    })
+
+    const testLines = []
+    for (const tests of groupedTitles.values()) {
+      for (const test of tests) {
+        testLines.push(`  ${test.icon} ${test.title}`)
+      }
+      testLines.push('')
+    }
+    markdown.push(...testLines)
+    markdown.push('```\n')
+  })
 
   // Failed tests details
   const failedTests = testResults.flatMap(suite =>
