@@ -4,22 +4,22 @@
 
 ## Summary
 
-- **Total Tests**: 52
-- **Test Suites**: 34
-- **Duration**: 778ms
+- **Total Tests**: 55
+- **Test Suites**: 35
+- **Duration**: 798ms
 
 | Status | File                                                                                           | Tests |  ✅  |  ❌  |  ⏭️ |   ⏳  |
 | :----: | :--------------------------------------------------------------------------------------------- | :---: | :-: | :-: | :-: | :--: |
-|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  |  6ms |
-|    ✅   | [tests/issues.test.ts](#-testsissuestestts)                                                    |   3   |  3  |  -  |  -  |  6ms |
-|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   7   |  7  |  -  |  -  |  6ms |
+|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  |  7ms |
+|    ✅   | [tests/issues.test.ts](#-testsissuestestts)                                                    |   3   |  3  |  -  |  -  |  9ms |
+|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   7   |  7  |  -  |  -  | 11ms |
 |    ✅   | [tests/pull_request.test.ts](#-testspull_requesttestts)                                        |   5   |  5  |  -  |  -  |  4ms |
-|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   6   |  6  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/add-labels.test.ts](#-testsutilsadd-labelstestts)                                 |   3   |  3  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/add-reactions.test.ts](#-testsutilsadd-reactionstestts)                           |   5   |  5  |  -  |  -  | 14ms |
+|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   9   |  9  |  -  |  -  |  3ms |
+|    ✅   | [tests/utils/add-labels.test.ts](#-testsutilsadd-labelstestts)                                 |   3   |  3  |  -  |  -  |  4ms |
+|    ✅   | [tests/utils/add-reactions.test.ts](#-testsutilsadd-reactionstestts)                           |   5   |  5  |  -  |  -  |  5ms |
 |    ✅   | [tests/utils/create-comment.test.ts](#-testsutilscreate-commenttestts)                         |   2   |  2  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/fc-event.test.ts](#-testsutilsfc-eventtestts)                                     |   6   |  6  |  -  |  -  |  1ms |
-|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  |  7ms |
+|    ✅   | [tests/utils/fc-event.test.ts](#-testsutilsfc-eventtestts)                                     |   6   |  6  |  -  |  -  |  2ms |
+|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  |  6ms |
 |    ✅   | [tests/utils/is-supported-event.test.ts](#-testsutilsis-supported-eventtestts)                 |   1   |  1  |  -  |  -  |  1ms |
 |    ✅   | [tests/utils/was-the-first-contribution.test.ts](#-testsutilswas-the-first-contributiontestts) |   5   |  5  |  -  |  -  |  1ms |
 
@@ -78,6 +78,10 @@
   ✅ returns the correct messages for all `-msg` inputs
   ✅ returns a correct message when `-msg` input is 'symlinked'
   ✅ trims leading/trailing whitespace and line terminator characters in `-msg` inputs
+
+  ✅ returns the correct values for `-reactions` inputs
+  ✅ returns fallback (if any) when a specific `-reactions` input is unavailable
+  ✅ returns an empty array when no `-reactions` input is provided
 
 ```
 
