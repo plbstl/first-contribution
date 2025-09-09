@@ -10,10 +10,7 @@ export function get_action_inputs(event: FCEvent): ActionInputs {
   return {
     labels: get_labels_input(event.name),
     msg: get_msg_input(event),
-    reactions: core
-      .getInput('reactions')
-      .split(',')
-      .map(r => r.trim())
+    reactions: get_reactions_input(event.name)
   }
 }
 
@@ -26,7 +23,7 @@ interface ActionInputs {
   /**
    * List of emoji names to react with.
    *
-   * Should be one of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
+   * Would be one of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
    */
   reactions: string[]
 }
@@ -70,4 +67,14 @@ function get_msg_input(event: FCEvent): string {
     msg = core.getInput(msg).trim()
   }
   return msg
+}
+
+/**
+ * Retrieves the relevant `-reactions` input or a fallback.
+ * @param event_name A `first-contribution` event name.
+ * @returns An array of reaction emojis to add to the issue or pull request body.
+ */
+function get_reactions_input(event_name: FCEvent['name']): string[] {
+  const reactions = core.getInput(`${event_name}-reactions`) || core.getInput('reactions')
+  return reactions ? reactions.split(',').map(reaction => reaction.trim()) : []
 }

@@ -43,6 +43,14 @@ inputs:
     description: >
       A comma-separated list of emoji reactions to add to the issue or PR body. Must be one of: `+1`, `-1`, `laugh`,
       `confused`, `heart`, `hooray`, `rocket`, `eyes`.
+  issue-reactions:
+    description: >
+      Comma-separated list of emoji reactions to add to the issue body. Takes precedence over the `reactions` input.
+      Must be one of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
+  pr-reactions:
+    description: >
+      Comma-separated list of emoji reactions to add to the pull request body. Takes precedence over the `reactions`
+      input. Must be one of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
 
 outputs:
   type:

@@ -154,4 +154,60 @@ describe('get_action_inputs()', () => {
       expect(pull_request_closed_msg).toMatch('- -     -')
     })
   })
+
+  describe('.reactions', () => {
+    //  `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`
+
+    it('returns the correct values for `-reactions` inputs', () => {
+      // Mock return values from core.getInput()
+      core_getInput_spy_mock.mockImplementation(name => {
+        switch (name) {
+          case 'reactions':
+            return '+1, -1, laugh, confused, heart, hooray'
+          case 'issue-reactions':
+            return 'eyes,      +1,       heart'
+          case 'pr-reactions':
+            return 'hooray,            rocket,   '
+          default:
+            return ''
+        }
+      })
+
+      // Issue
+      const { reactions: issue_reactions } = get_action_inputs({ name: 'issue', state: 'opened' })
+      expect(issue_reactions).toEqual(['eyes', '+1', 'heart'])
+
+      // Pull Request
+      const { reactions: pull_request_reactions } = get_action_inputs({ name: 'pr', state: 'opened' })
+      expect(pull_request_reactions).toEqual(['hooray', 'rocket', ''])
+    })
+
+    it('returns fallback (if any) when a specific `-reactions` input is unavailable', () => {
+      // Mock return values from core.getInput()
+      core_getInput_spy_mock.mockImplementation(name => {
+        return name === 'reactions' ? '+1, , laugh,  hooray' : ''
+      })
+
+      // Issue
+      const { reactions: issue_reactions } = get_action_inputs({ name: 'issue', state: 'opened' })
+      expect(issue_reactions).toEqual(['+1', '', 'laugh', 'hooray'])
+
+      // Pull Request
+      const { reactions: pull_request_reactions } = get_action_inputs({ name: 'pr', state: 'opened' })
+      expect(pull_request_reactions).toEqual(['+1', '', 'laugh', 'hooray'])
+    })
+
+    it('returns an empty array when no `-reactions` input is provided', () => {
+      // Mock return values from core.getInput()
+      core_getInput_spy_mock.mockReturnValue('')
+
+      // Issue
+      const { reactions: issue_reactions } = get_action_inputs({ name: 'issue', state: 'opened' })
+      expect(issue_reactions).toEqual([])
+
+      // Pull Request
+      const { reactions: pull_request_reactions } = get_action_inputs({ name: 'pr', state: 'opened' })
+      expect(pull_request_reactions).toEqual([])
+    })
+  })
 })
