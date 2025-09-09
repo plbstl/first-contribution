@@ -7,7 +7,7 @@
 | Category   | Percentage | Covered/Total |
 | :--------- | :--------: | :-----------: |
 | Statements |    100%    |    260/260    |
-| Branches   |    100%    |     81/81     |
+| Branches   |    100%    |     82/82     |
 | Functions  |    100%    |     12/12     |
 | Lines      |    100%    |    260/260    |
 
