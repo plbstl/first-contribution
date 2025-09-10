@@ -1,5 +1,6 @@
 # First Contribution 🤝
 
+[![GitHub Release](https://img.shields.io/github/v/release/plbstl/first-contribution)](https://github.com/marketplace/actions/first-contribution)
 [![CI](https://github.com/plbstl/first-contribution/actions/workflows/ci.yml/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/plbstl/first-contribution/actions/workflows/github-code-scanning/codeql)
 [![Tests](./assets/tests-badge.svg)](./assets/tests-report.md)
