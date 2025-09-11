@@ -12,18 +12,16 @@
 
 > A GitHub Action to automatically welcome and encourage first-time contributors.
 
-## ✨ What It Does
-
-Building a healthy open source community starts with the first interaction. This action helps you automate a warm
-welcome by:
-
-- **Posting custom messages** when someone opens their first issue or pull request.
-- **Following up with thanks** when their first contribution is closed or merged.
-- **Applying labels** to first-time issues or PRs to help maintainers spot them.
-- **Adding emoji reactions** (❤️, 🚀, 🎉) for an extra friendly touch.
-- **Mentioning authors** with `{fc-author}` to personalize the message.
-- **Detecting true first-timers** by checking commit history, avoiding false positives for maintainers.
-- **Offering flexible modes** to greet users on their first issue and PR separately, or just once.
+- **Flexible Tracking**: Greet users on their first issue and first pull request separately, or just once on their very
+  first interaction.
+- **Custom Messages**: Define unique messages for different events like opening an issue, merging a PR, or closing a
+  contribution.
+- **Message Reuse**: Avoid repetition by reusing message content from other inputs.
+- **Placeholder Support**: Use `{fc-author}` in any message to mention the contributor by their GitHub username.
+- **Automatic Labeling**: Apply labels to issues and PRs from new contributors to help with triage.
+- **Automatic Emoji Reactions**: Add one or more emoji reactions to the contributor's issue or pull request.
+- **Smart Contributor Detection**: Avoids misidentifying existing repository committers as new by checking their commit
+  history in addition to their issue and pull request activity.
 
 <p align="center">
 <img src="./assets/issue-opened.jpg" width="650" alt="Example reply for when a first-timer opens an issue"/>
