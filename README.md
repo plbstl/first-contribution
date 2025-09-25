@@ -241,8 +241,6 @@ jobs:
             Welcome and thank you for taking the time to report an issue :heart:.
 
             Please check out our [code of conduct](https://github.com/user/repo/blob/main/CODE_OF_CONDUCT.md) and [contribution guide](https://github.com/user/repo/blob/main/CONTRIBUTING.md) to learn how to interact with and contribute to the community.
-
-            Don't forget to star :star: the repo.
           issue-completed-msg: |
             ### Hey @{fc-author}!
 
