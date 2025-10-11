@@ -31,8 +31,7 @@ describe('add_reactions()', () => {
   it('adds a single, valid reaction', async () => {
     await add_reactions(octokit, 'opened', { ...default_opts, reactions: ['heart'] })
 
-    expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(1)
-    expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith({
+    expect(octokit_createReactionForIssue_mock).toHaveBeenCalledExactlyOnceWith({
       ...default_opts,
       content: 'heart'
     })

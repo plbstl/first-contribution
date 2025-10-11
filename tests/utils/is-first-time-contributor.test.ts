@@ -24,7 +24,9 @@ describe('is_first_time_contributor()', () => {
       })
 
       expect(result).toBe(false)
-      expect(octokit_listCommits_mock).toHaveBeenCalledWith(expect.objectContaining({ author: default_opts.creator }))
+      expect(octokit_listCommits_mock).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({ author: default_opts.creator })
+      )
       expect(octokit_listForRepo_mock).not.toHaveBeenCalled()
     })
 
@@ -39,7 +41,9 @@ describe('is_first_time_contributor()', () => {
 
       expect(result).toBe(true)
       expect(octokit_listCommits_mock).toHaveBeenCalled()
-      expect(octokit_listForRepo_mock).toHaveBeenCalledWith(expect.objectContaining({ creator: default_opts.creator }))
+      expect(octokit_listForRepo_mock).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({ creator: default_opts.creator })
+      )
     })
   })
 

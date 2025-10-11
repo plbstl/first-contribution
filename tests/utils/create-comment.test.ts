@@ -21,7 +21,7 @@ describe('create_comment()', () => {
     const comment_url = await create_comment(octokit, { ...create_comment_opts, author_username: 'randomUser007' })
 
     expect(comment_url).toBe(created_comment_url)
-    expect(octokit_createComment_mock).toHaveBeenCalledWith(create_comment_opts)
+    expect(octokit_createComment_mock).toHaveBeenCalledExactlyOnceWith(create_comment_opts)
   })
 
   it('does not comment when the input message is empty', async () => {
