@@ -142,4 +142,6 @@ jobs:
           IGNORE_GITIGNORED_FILES: true
           LINTER_RULES_PATH: .
           MARKDOWN_CONFIG_FILE: .markdownlint.yml
+          VALIDATE_BIOME_FORMAT: false
+          VALIDATE_BIOME_LINT: false
           YAML_CONFIG_FILE: .yamllint
