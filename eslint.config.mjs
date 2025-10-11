@@ -49,8 +49,11 @@ export default defineConfig([
 
   // Tests
   {
+    extends: [vitest.configs.recommended],
     files: ['**/*.test.ts'],
-    ...vitest.configs.recommended
+    rules: {
+      'vitest/prefer-called-exactly-once-with': 'off'
+    }
   },
 
   // js files
