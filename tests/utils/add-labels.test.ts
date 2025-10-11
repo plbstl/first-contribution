@@ -17,7 +17,7 @@ describe('add_labels()', () => {
     }
 
     const did_add_labels = await add_labels(octokit, 'opened', add_labels_opts)
-    expect(octokit_addLabels_mock).toHaveBeenCalledWith(add_labels_opts)
+    expect(octokit_addLabels_mock).toHaveBeenCalledExactlyOnceWith(add_labels_opts)
     expect(did_add_labels).toBe(true)
   })
 

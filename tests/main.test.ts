@@ -105,7 +105,7 @@ describe('action', () => {
 
       await main.run()
 
-      expect(core_setFailed_spy_mock).toHaveBeenCalledWith(error.message)
+      expect(core_setFailed_spy_mock).toHaveBeenCalledExactlyOnceWith(error.message)
       expect(core_error_spy_mock).not.toHaveBeenCalled()
       expect(run_spy).toHaveResolvedWith(true)
     })
@@ -116,7 +116,7 @@ describe('action', () => {
       await main.run()
 
       expect(core_setFailed_spy_mock).not.toHaveBeenCalled()
-      expect(core_error_spy_mock).toHaveBeenCalledWith(error.message)
+      expect(core_error_spy_mock).toHaveBeenCalledExactlyOnceWith(error.message)
       expect(run_spy).toHaveResolvedWith(true)
     })
 
@@ -129,7 +129,7 @@ describe('action', () => {
 
       await main.run()
 
-      expect(core_error_spy_mock).toHaveBeenCalledWith(expect.stringContaining('234'))
+      expect(core_error_spy_mock).toHaveBeenCalledExactlyOnceWith(expect.stringContaining('234'))
       expect(run_spy).toHaveResolvedWith(true)
     })
   })
