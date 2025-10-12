@@ -75,14 +75,14 @@ That’s it. Your repository will now automatically greet newcomers.
 | `token`                 | GitHub token for API access.                                                                                                                                             | `${{ github.token }}` |
 | `issue-opened-msg`      | Message to post on a first-time issue.                                                                                                                                   | `''`                  |
 | `pr-opened-msg`         | Message to post on a first-time PR.                                                                                                                                      | `''`                  |
-| `issue-completed-msg`   | Message to post when the first issue is closed as completed.                                                                                                             | `''`                  |
-| `issue-not-planned-msg` | Message to post when the first issue is closed as not planned.                                                                                                           | `''`                  |
-| `pr-merged-msg`         | Message to post when the first PR is merged.                                                                                                                             | `''`                  |
-| `pr-closed-msg`         | Message to post when the first PR is closed without merging.                                                                                                             | `''`                  |
+| `issue-completed-msg`   | Message to post when a first-time issue is closed as completed.                                                                                                          | `''`                  |
+| `issue-not-planned-msg` | Message to post when a first-time issue is closed as not planned.                                                                                                        | `''`                  |
+| `pr-merged-msg`         | Message to post when a first-time PR is merged.                                                                                                                          | `''`                  |
+| `pr-closed-msg`         | Message to post when a first-time PR is closed and **not** merged.                                                                                                       | `''`                  |
 | `labels`                | Comma-separated list of labels for any first contribution.                                                                                                               | `''`                  |
 | `issue-labels`          | Labels for first-time issues (overrides `labels`).                                                                                                                       | `''`                  |
 | `pr-labels`             | Labels for first-time PRs (overrides `labels`).                                                                                                                          | `''`                  |
-| `contribution-mode`     | `once`: Greet on the absolute first interaction.<br/>Default: Greet on the first issue **and** first PR.                                                                 | `''`                  |
+| `contribution-mode`     | `once`: Greet on a user's absolute first interaction.<br/>Default: Greet on a user's first-time issue **and** their first-time PR.                                       | -                     |
 | `fail-on-error`         | If `true`, fail the workflow step when an error occurs.                                                                                                                  | `false`               |
 | `reactions`             | Comma-separated list of reactions to add to the issue or pull request body.<br/>**Valid options**: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`. | `''`                  |
 | `issue-reactions`       | Comma-separated list of reactions to add **only** to the issue body.<br/>**Valid options**: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.        | `''`                  |
@@ -133,15 +133,13 @@ jobs:
     steps:
       - uses: plbstl/first-contribution@v4
         with:
-          issue-opened-msg: Welcome, @{fc-author}! Thanks for opening your first issue.
-          pr-opened-msg: Thanks for your first PR, @{fc-author}!
           issue-reactions: eyes
           pr-reactions: +1, rocket
 ```
 
 ### Welcome a Contributor Only Once
 
-Use `contribution-mode: once` to greet a user only on their absolute first interaction, whether it's an issue or a PR.
+Use `contribution-mode: once` to greet a user only on their absolute first contribution, whether it's an issue or a PR.
 
 ```yaml
 name: Welcome a Contributor (Once)
@@ -167,7 +165,7 @@ jobs:
           issue-opened-msg: >
             Welcome @{fc-author}! Thanks for your first contribution to our project. We're excited to have you here!
             :heart:
-          # Reuse the same message for PRs for a consistent welcome
+          # You can use the same message in PRs, for a consistent welcome
           pr-opened-msg: issue-opened-msg
 ```
 
@@ -248,7 +246,7 @@ jobs:
           issue-not-planned-msg: |
             ### Hey @{fc-author}!
 
-            Thank you for taking the time to contribute. While this wasn't merged, we value your effort and encourage you to contribute again in the future.
+            Thank you for taking the time to contribute. While this wasn't accepted, we value your effort and encourage you to contribute again in the future.
 ```
 
 ## 🔐 Security
