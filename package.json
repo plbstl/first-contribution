@@ -55,7 +55,7 @@
     "@jscpd/badge-reporter": "4.0.1",
     "@octokit/webhooks-types": "7.6.1",
     "@rollup/plugin-alias": "5.1.1",
-    "@rollup/plugin-commonjs": "28.0.6",
+    "@rollup/plugin-commonjs": "28.0.9",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-swc": "0.4.0",
     "@rollup/plugin-terser": "0.4.4",
@@ -73,7 +73,7 @@
     "markdown-table": "3.0.4",
     "markdownlint-cli": "0.45.0",
     "prettier": "3.6.2",
-    "rollup": "4.52.4",
+    "rollup": "4.52.5",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.2",
     "vitest": "3.2.4"
