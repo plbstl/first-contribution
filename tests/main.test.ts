@@ -23,7 +23,7 @@ import {
   github_context_mock,
   octokit_listCommits_mock,
   octokit_listForRepo_mock,
-  reset_mock_github_context
+  reset_github_context_mock
 } from './setup.ts'
 
 // Spy on (and mock) the GitHub Actions core library
@@ -31,7 +31,7 @@ vitest.spyOn(core, 'getInput').mockReturnValue('')
 
 describe('action', () => {
   beforeEach(() => {
-    reset_mock_github_context()
+    reset_github_context_mock()
   })
 
   it('exits action when the triggered event is NOT supported', async () => {

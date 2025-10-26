@@ -23,12 +23,12 @@ import {
   octokit_createComment_mock,
   octokit_listCommits_mock,
   octokit_listForRepo_mock,
-  reset_mock_github_context
+  reset_github_context_mock
 } from './setup.ts'
 
 describe('pull_request', () => {
   beforeEach(() => {
-    reset_mock_github_context()
+    reset_github_context_mock()
   })
 
   describe('.opened', () => {

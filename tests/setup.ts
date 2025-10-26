@@ -21,7 +21,7 @@ export const github_context_mock = {
   }
 }
 
-export const reset_mock_github_context = (): void => {
+export const reset_github_context_mock = (): void => {
   github_context_mock.eventName = 'eventName'
   github_context_mock.repo = { owner: 'owner', repo: 'repo' }
   github_context_mock.payload.action = 'action'
