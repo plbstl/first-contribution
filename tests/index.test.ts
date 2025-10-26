@@ -12,6 +12,6 @@ describe('index', () => {
   it('calls run when imported', async () => {
     await import('~src/index.ts')
 
-    expect(run_mock).toHaveBeenCalled()
+    expect(run_mock).toHaveBeenCalledOnce()
   })
 })
