@@ -55,14 +55,12 @@ describe('action', () => {
   })
 
   it("sets the correct action's outputs for issues", async () => {
-    // This was the user's first and only issue
-    octokit_listForRepo_mock.mockResolvedValue({
-      data: [{ number: 16, created_at: '2025-01-01T12:00:00Z' }]
-    })
     // Supported event
     github_context_mock.eventName = 'issues'
     github_context_mock.payload.action = 'closed'
     github_context_mock.payload.issue = { number: 16, user: { login: 'issue-ghosty' } }
+    // First-time contributor
+    octokit_listForRepo_mock.mockResolvedValue({ data: [{ number: 16, created_at: '2025-01-01T12:00:00Z' }] })
 
     await main.run()
 
@@ -79,7 +77,7 @@ describe('action', () => {
     github_context_mock.payload.action = 'opened'
     github_context_mock.payload.issue = undefined
     github_context_mock.payload.pull_request = { number: 19, user: { login: 'pr-ghosty' } }
-    // Is first-time contributor
+    // First-time contributor
     octokit_listForRepo_mock.mockReturnValue({ data: [{ event: { state: 'opened' }, pull_request: [{}] }] })
 
     await main.run()
