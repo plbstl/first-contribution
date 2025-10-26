@@ -46,7 +46,7 @@ describe('add_reactions()', () => {
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: '+1' }))
   })
 
-  it('warns but continues if one of multiple reactions is invalid', async () => {
+  it('warns but continues if some of the reactions are invalid', async () => {
     // Make the first call fail, but subsequent calls succeed
     octokit_createReactionForIssue_mock.mockRejectedValueOnce(new Error('Invalid reaction')).mockResolvedValue({})
 
