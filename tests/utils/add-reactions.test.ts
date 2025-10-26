@@ -55,4 +55,13 @@ describe('add_reactions()', () => {
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(2)
     expect(octokit_createReactionForIssue_mock).toHaveBeenCalledWith(expect.objectContaining({ content: 'heart' }))
   })
+
+  it('does not error if all reactions are invalid', async () => {
+    octokit_createReactionForIssue_mock.mockRejectedValue(new Error('Invalid reaction'))
+
+    await add_reactions(octokit, 'opened', { ...default_opts, reactions: ['invalid_emoji', 'invalid_rocket'] })
+
+    expect(octokit_createReactionForIssue_mock).toHaveBeenCalledTimes(2)
+    expect(add_reactions).not.toThrow(Error)
+  })
 })
