@@ -55,7 +55,7 @@
     "@jscpd/badge-reporter": "4.0.1",
     "@octokit/webhooks-types": "7.6.1",
     "@rollup/plugin-alias": "5.1.1",
-    "@rollup/plugin-commonjs": "28.0.9",
+    "@rollup/plugin-commonjs": "29.0.0",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-swc": "0.4.0",
     "@rollup/plugin-terser": "0.4.4",
