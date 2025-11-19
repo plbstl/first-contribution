@@ -40,7 +40,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --build",
     "lint": "eslint .",
-    "mdlint": "markdownlint .",
+    "mdlint": "markdownlint . --ignore-path .gitignore",
     "report": "./scripts/gen-reports",
     "bundle": "rollup --config rollup.config.js",
     "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm report && pnpm bundle"
