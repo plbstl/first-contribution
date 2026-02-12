@@ -176,6 +176,10 @@ jobs:
             Your first PR was merged. Thank you!
 ```
 
+> [!TIP]
+>
+> Action logs can help for troubleshooting
+
 ## Security
 
 This action uses `pull_request_target` so it can comment on PRs from forks.
@@ -188,6 +192,7 @@ Safe:
 - uses: actions/checkout@commit-sha # v6.x.x
 ```
 
+$$
 Unsafe:
 
 ```yaml
@@ -197,3 +202,4 @@ Unsafe:
 ```
 
 Never check out `github.event.pull_request.head.sha` inside a `pull_request_target` workflow.
+$$

@@ -2,10 +2,8 @@ import * as core from '@actions/core'
 import type { getOctokit } from '@actions/github'
 
 /**
- * Checks if an issue or pull request author is a first-time contributor based on the specified contribution mode.
- *
- * This function determines contributor status by fetching all issues and pull requests ever created by the author
- * in the repository and analyzing the count based on the action's configuration.
+ * Checks if an issue or pull request author is a first-time
+ * contributor based on the specified contribution mode.
  *
  * @param octokit A GitHub Octokit client.
  * @param opts {@link IsFirstTimeContributorOpts}
@@ -17,19 +15,23 @@ export async function is_first_time_contributor(
 ): Promise<boolean> {
   const { is_pull_request, creator, owner, repo } = opts
 
-  // Check for any prior commits by the user first, as it's a strong indicator of contribution.
+  core.debug('Retrieving commit history')
+
+  // Check for any prior commits by the user
   const { data: commits } = await octokit.rest.repos.listCommits({
     owner,
     repo,
     author: creator,
     per_page: 1
   })
+  core.info(`Author's commit_count: ${commits.length.toString()}`)
   if (commits.length > 0) {
     return false
   }
 
-  // Fetch all issues and PRs by the author to get a complete history.
-  // We set state to 'all' to ensure we don't miss any previous contributions.
+  core.debug('No prior commits. Retrieving issues and PRs')
+
+  // Fetch all issues and PRs by the author
   const { data: contributions } = await octokit.rest.issues.listForRepo({
     creator,
     owner,
@@ -39,21 +41,24 @@ export async function is_first_time_contributor(
 
   const contribution_mode = core.getInput('contribution-mode')
 
-  // Mode 1: Track first contribution ONCE across both issues and PRs
+  // Mode 1: Track first contribution ONCE across both issues and PRs.
   // If the user has exactly one contribution (the one that triggered this workflow),
-  // they are a first-time contributor.
+  // they are a first-time contributor
   if (contribution_mode === 'once') {
+    core.info("This is the author's first ever contribution to this repo")
     return contributions.length === 1
   }
 
-  // Mode 2: Track first issues and first PRs INDEPENDENTLY
-  // This is the default behavior. A user can be a first-timer for an issue
-  // and also a first-timer for a pull request.
+  // Mode 2: Track first issues and first PRs INDEPENDENTLY.
+  // This is the default behavior. A user can be a first-timer
+  // for an issue and also a first-timer for a pull request
   if (is_pull_request) {
     const pr_count = contributions.filter(item => item.pull_request).length
+    core.info(`Author's pr_count: ${pr_count.toString()}`)
     return pr_count === 1
   } else {
     const issue_count = contributions.filter(item => !item.pull_request).length
+    core.info(`Author's issue_count: ${issue_count.toString()}`)
     return issue_count === 1
   }
 }
