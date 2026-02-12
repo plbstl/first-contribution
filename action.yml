@@ -8,13 +8,12 @@ branding:
 
 inputs:
   token:
-    description:
-      The GitHub access token (e.g. secrets.GITHUB_TOKEN) used to add comments and labels. Defaults to `github.token`.
+    description: GitHub token used to post comments, labels, and reactions. Defaults to `github.token`.
     default: ${{ github.token }}
   issue-opened-msg:
-    description: Message for a first-time contributor when they open a new issue.
+    description: Message when a first-time contributor opens an issue.
   pr-opened-msg:
-    description: Message for a first-time contributor when they open a new pull request.
+    description: Message when a first-time contributor opens a pull request.
   issue-completed-msg:
     description: Message for a first-time contributor when their issue is closed as completed.
   issue-not-planned-msg:
@@ -24,43 +23,41 @@ inputs:
   pr-closed-msg:
     description: Message for a first-time contributor when their pull request is closed without being merged.
   labels:
-    description: Comma-separated list of labels to add to an issue or PR from a first-time contributor.
+    description: Comma-separated list of labels to add when an issue or PR is opened.
   issue-labels:
-    description: Comma-separated list of labels for a first-time issue. Takes precedence over the `labels` input.
+    description: Comma-separated list of labels for first-time issues. Overrides `labels`.
   pr-labels:
-    description: Comma-separated list of labels for a first-time pull request. Takes precedence over the `labels` input.
+    description: Comma-separated list of labels for first-time pull requests. Overrides `labels`.
+  reactions:
+    description: >
+      Comma-separated list of emoji reactions to add to the issue or PR body. Must be one of: `+1`, `-1`, `laugh`,
+      `confused`, `heart`, `hooray`, `rocket`, `eyes`.
+  issue-reactions:
+    description: >
+      Comma-separated list of emoji reactions to add to the issue body. Overrides `reactions` input. Must be one of:
+      `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
+  pr-reactions:
+    description: >
+      Comma-separated list of emoji reactions to add to the pull request body. Overrides `reactions` input. Must be one
+      of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
   contribution-mode:
     description: |
       Controls how first contributions are tracked.
       - (default): Issues and pull requests are tracked separately. The Action triggers for a user's first issue AND their first pull request.
       - `once`: The Action triggers only on the user's very first contribution to the repository, whether it's an issue OR a pull request.
   fail-on-error:
-    description:
-      If `true`, the Action will fail the workflow step if an error occurs. If `false`, it will log the error without
-      failing.
+    description: Fail the workflow step if an error occurs.
     default: 'false'
-  reactions:
-    description: >
-      A comma-separated list of emoji reactions to add to the issue or PR body. Must be one of: `+1`, `-1`, `laugh`,
-      `confused`, `heart`, `hooray`, `rocket`, `eyes`.
-  issue-reactions:
-    description: >
-      Comma-separated list of emoji reactions to add to the issue body. Takes precedence over the `reactions` input.
-      Must be one of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
-  pr-reactions:
-    description: >
-      Comma-separated list of emoji reactions to add to the pull request body. Takes precedence over the `reactions`
-      input. Must be one of: `+1`, `-1`, `laugh`, `confused`, `heart`, `hooray`, `rocket`, `eyes`.
 
 outputs:
   type:
-    description: Where the first contribution was made. `issue` or `pr`.
+    description: Contribution type. `issue` or `pr`.
   number:
-    description: The number of the issue or pull request.
+    description: Issue or pull request number.
   username:
-    description: The GitHub username of the first-time contributor.
+    description: GitHub username of the contributor.
   comment-url:
-    description: URL of the comment posted in response to the user's first contribution.
+    description: URL of the posted comment.
 
 runs:
   using: node24
