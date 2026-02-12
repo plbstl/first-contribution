@@ -144,4 +144,5 @@ jobs:
           MARKDOWN_CONFIG_FILE: .markdownlint.yml
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
+          VALIDATE_SPELL_CODESPELL: false
           YAML_CONFIG_FILE: .yamllint

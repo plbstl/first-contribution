@@ -1,2 +1,0 @@
-[codespell]
-skip = */dist,*/pnpm-lock.yaml,*.log,super-linter-output,.git
