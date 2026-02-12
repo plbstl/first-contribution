@@ -66,7 +66,6 @@
     "badge-maker": "5.0.2",
     "eslint": "10.0.0",
     "eslint-import-resolver-typescript": "4.4.4",
-    "eslint-plugin-github": "6.0.0",
     "eslint-plugin-import-x": "4.16.1",
     "globals": "17.3.0",
     "jscpd": "4.0.8",
