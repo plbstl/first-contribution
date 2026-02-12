@@ -26,3 +26,7 @@ MD033:
 # Code block style
 MD046:
   style: fenced
+
+# Table column style
+MD060:
+  enabled: false
