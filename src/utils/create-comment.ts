@@ -1,4 +1,4 @@
-import type { GitHub } from '@actions/github/lib/utils.d.ts'
+import type { getOctokit } from '@actions/github'
 
 /**
  * Creates a comment in the specified issue or pull request.
@@ -6,7 +6,7 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
  * @param opts {@link CreateCommentOpts}
  * @returns A link to the created comment on GitHub.
  */
-export async function create_comment(octokit: InstanceType<typeof GitHub>, opts: CreateCommentOpts): Promise<string> {
+export async function create_comment(octokit: ReturnType<typeof getOctokit>, opts: CreateCommentOpts): Promise<string> {
   // Only add comment when body is NOT empty.
   if (!opts.body) return ''
 

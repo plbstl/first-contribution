@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import type { GitHub } from '@actions/github/lib/utils.d.ts'
+import type { getOctokit } from '@actions/github'
 
 interface AddReactionsOpts {
   /** The owner of the repository. */
@@ -19,7 +19,7 @@ interface AddReactionsOpts {
  * @param opts {@link AddReactionsOpts}
  */
 export async function add_reactions(
-  octokit: InstanceType<typeof GitHub>,
+  octokit: ReturnType<typeof getOctokit>,
   payload_action: 'opened' | 'closed',
   opts: AddReactionsOpts
 ): Promise<void> {

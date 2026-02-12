@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import type { GitHub } from '@actions/github/lib/utils.d.ts'
+import type { getOctokit } from '@actions/github'
 
 /**
  * Checks if an issue or pull request author is a first-time contributor based on the specified contribution mode.
@@ -12,7 +12,7 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
  * @returns `true` if the author meets the "first-time contributor" criteria for the given event, otherwise `false`.
  */
 export async function is_first_time_contributor(
-  octokit: InstanceType<typeof GitHub>,
+  octokit: ReturnType<typeof getOctokit>,
   opts: IsFirstTimeContributorOpts
 ): Promise<boolean> {
   const { is_pull_request, creator, owner, repo } = opts

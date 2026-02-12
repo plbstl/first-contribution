@@ -1,4 +1,4 @@
-import type { GitHub } from '@actions/github/lib/utils.d.ts'
+import type { getOctokit } from '@actions/github'
 
 /**
  * Adds labels to the specified issue or pull request.
@@ -7,7 +7,7 @@ import type { GitHub } from '@actions/github/lib/utils.d.ts'
  * @param opts {@link AddLabelsOpts}
  */
 export async function add_labels(
-  octokit: InstanceType<typeof GitHub>,
+  octokit: ReturnType<typeof getOctokit>,
   payload_action: 'opened' | 'closed',
   opts: AddLabelsOpts
 ): Promise<boolean> {

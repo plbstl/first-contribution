@@ -2,9 +2,11 @@
  * Unit tests for the action's `get_fc_event` util.
  */
 
-import type { WebhookPayload } from '@actions/github/lib/interfaces.d.ts'
+import type { context } from '@actions/github'
 import { describe, expect, it } from 'vitest'
 import { get_fc_event } from '~src/utils/index.ts'
+
+type WebhookPayload = (typeof context)['payload']
 
 describe('get_fc_event()', () => {
   it('identifies an opened issue', () => {

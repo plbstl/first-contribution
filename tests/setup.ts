@@ -1,4 +1,4 @@
-import type { GitHub } from '@actions/github/lib/utils.d.ts'
+import type { getOctokit } from '@actions/github'
 import { vitest } from 'vitest'
 
 vitest.mock('@actions/github', () => {
@@ -52,5 +52,5 @@ export const getOctokit_mock = vitest.fn(
           createForIssue: octokit_createReactionForIssue_mock
         }
       }
-    }) as unknown as InstanceType<typeof GitHub>
+    }) as unknown as ReturnType<typeof getOctokit>
 )

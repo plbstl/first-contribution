@@ -1,4 +1,4 @@
-import type { GitHub } from '@actions/github/lib/utils.d.ts'
+import type { getOctokit } from '@actions/github'
 import type { Issue, PullRequest } from '@octokit/webhooks-types'
 
 /**
@@ -9,7 +9,7 @@ import type { Issue, PullRequest } from '@octokit/webhooks-types'
  * @returns `true` if the event's payload was the user's first contribution.
  */
 export async function was_the_first_contribution(
-  octokit: InstanceType<typeof GitHub>,
+  octokit: ReturnType<typeof getOctokit>,
   opts: WasTheFirstContributionOpts
 ): Promise<boolean> {
   const { is_pull_request, issue_or_pull_request, ...listForRepo_opts } = opts

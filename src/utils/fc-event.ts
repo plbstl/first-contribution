@@ -1,4 +1,6 @@
-import type { WebhookPayload } from '@actions/github/lib/interfaces.d.ts'
+import type { context } from '@actions/github'
+
+type WebhookPayload = (typeof context)['payload']
 
 /**
  * Creates and returns a new `first-contribution` event.
