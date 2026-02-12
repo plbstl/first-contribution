@@ -14,6 +14,9 @@ export default defineConfig({
       include: ['src/**'],
       reporter: ['text', 'json-summary']
     },
-    setupFiles: ['tests/setup.ts']
+    setupFiles: ['tests/setup.ts'],
+    server: {
+      deps: { inline: true }
+    }
   }
 })
