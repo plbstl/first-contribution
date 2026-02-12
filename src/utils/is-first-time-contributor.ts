@@ -39,14 +39,14 @@ export async function is_first_time_contributor(
 
   const contribution_mode = core.getInput('contribution-mode')
 
-  // --- Mode 1: Track first contribution ONCE across both issues and PRs ---
+  // Mode 1: Track first contribution ONCE across both issues and PRs
   // If the user has exactly one contribution (the one that triggered this workflow),
   // they are a first-time contributor.
   if (contribution_mode === 'once') {
     return contributions.length === 1
   }
 
-  // --- Mode 2: Track first issues and first PRs INDEPENDENTLY ---
+  // Mode 2: Track first issues and first PRs INDEPENDENTLY
   // This is the default behavior. A user can be a first-timer for an issue
   // and also a first-timer for a pull request.
   if (is_pull_request) {

@@ -49,7 +49,7 @@ async function generateTestsReport(testsReport) {
     startTime
   } = testsReport
 
-  // -- Generate and save tests badge --
+  // Generate and save tests badge
   const totalSkipped = numPendingTests + numTodoTests
   const badgeMessageParts = [
     { count: numPassedTests, label: 'passed' },
@@ -67,7 +67,7 @@ async function generateTestsReport(testsReport) {
   })
   await fs.writeFile('assets/tests-badge.svg', testsBadgeSvg)
 
-  // -- Generate and save tests report --
+  // Generate and save tests report
 
   // Title and badge
   const markdown = ['# Tests Report\n', `![Tests badge](tests-badge.svg)\n`]
@@ -184,7 +184,7 @@ async function generateTestsReport(testsReport) {
 
 /** @param {import('../coverage/coverage-summary.json')} [coverageReport] */
 async function generateCoverageReport(coverageReport) {
-  // -- Generate and save coverage badge --
+  // Generate and save coverage badge
   const totalStatementsCoverage = coverageReport?.total.statements.pct
   const coverageBadgeSvg = makeBadge({
     label: 'coverage',
@@ -193,7 +193,7 @@ async function generateCoverageReport(coverageReport) {
   })
   await fs.writeFile('assets/coverage-badge.svg', coverageBadgeSvg)
 
-  // -- Generate and save coverage report --
+  // Generate and save coverage report
 
   // Title and badge
   const markdown = ['# Code Coverage Report\n', `![Coverage badge](coverage-badge.svg)\n`]
@@ -239,7 +239,7 @@ async function generateCoverageReport(coverageReport) {
   console.log(`✅ Coverage report generated at: 'assets/coverage-report.md'`)
 }
 
-// --- Helpers ---
+//- Helpers-
 
 /**
  * Returns a color based on coverage percentage.
