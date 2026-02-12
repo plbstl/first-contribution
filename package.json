@@ -29,7 +29,6 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@swc/core",
       "esbuild",
       "unrs-resolver"
     ]
@@ -42,7 +41,7 @@
     "lint": "eslint .",
     "mdlint": "markdownlint . --ignore-path .gitignore",
     "report": "./scripts/gen-reports",
-    "bundle": "rollup --config rollup.config.js",
+    "bundle": "rolldown --config",
     "all": "pnpm format && pnpm typecheck && pnpm lint && pnpm mdlint && pnpm report && pnpm bundle"
   },
   "license": "MIT",
@@ -54,12 +53,6 @@
     "@eslint/js": "10.0.1",
     "@jscpd/badge-reporter": "4.0.4",
     "@octokit/webhooks-types": "7.6.1",
-    "@rollup/plugin-alias": "6.0.0",
-    "@rollup/plugin-commonjs": "29.0.0",
-    "@rollup/plugin-node-resolve": "16.0.3",
-    "@rollup/plugin-swc": "0.4.0",
-    "@rollup/plugin-terser": "0.4.4",
-    "@swc/core": "1.15.11",
     "@types/node": "25.2.3",
     "@vitest/coverage-istanbul": "4.0.18",
     "@vitest/eslint-plugin": "1.6.7",
@@ -72,7 +65,7 @@
     "markdown-table": "3.0.4",
     "markdownlint-cli": "0.47.0",
     "prettier": "3.8.1",
-    "rollup": "4.57.1",
+    "rolldown": "1.0.0-rc.4",
     "typescript": "5.9.3",
     "typescript-eslint": "8.55.0",
     "vitest": "4.0.18"
