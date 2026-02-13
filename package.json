@@ -1,7 +1,7 @@
 {
   "name": "first-contribution",
   "description": "Automatically respond to a user's first contribution to your repository, using GitHub Actions.",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "author": "Paul Ebose",
   "private": true,
   "type": "module",
