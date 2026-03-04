@@ -12,10 +12,10 @@ export function get_fc_event(payload_action: 'opened' | 'closed', payload: Webho
   if (payload_action === 'closed') {
     if (payload.pull_request) {
       // This is a pull request.
-      action_type = payload.pull_request.merged ? 'merged' : 'closed'
+      action_type = payload.pull_request['merged'] ? 'merged' : 'closed'
     } else {
       // This is an issue.
-      action_type = payload.issue?.state_reason === 'completed' ? 'completed' : 'not-planned'
+      action_type = payload.issue?.['state_reason'] === 'completed' ? 'completed' : 'not-planned'
     }
   }
 
