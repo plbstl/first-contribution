@@ -80,11 +80,6 @@ export async function run(): Promise<ErrorOccurred> {
     const action_inputs = get_action_inputs(fc_event)
     core.debug('Message and labels inputs retrieved')
 
-    const truncated_msg = action_inputs.msg.replace(/^(.{150}).+(.{50})$/, '$1...$2')
-    core.info(
-      `Inputs:\n  labels: ${action_inputs.labels.toString()}\n  reactions: ${action_inputs.reactions.toString()}\n  message: ${truncated_msg}`
-    )
-
     // add reactions
     core.debug(`Attempting to react with: ${action_inputs.reactions.toString()}`)
     await add_reactions(octokit, payload_action, {
@@ -102,6 +97,9 @@ export async function run(): Promise<ErrorOccurred> {
       author_username: first_timer_username
     })
     core.info(comment_url ? `Comment created: ${comment_url}` : 'No comment was added')
+
+    const truncated_msg = action_inputs.msg.replace(/^(.{150}).+(.{50})$/, '$1...$2')
+    core.info(`message:\n${truncated_msg}`)
 
     // add labels
     core.debug(`Attempting to add labels to ${interaction}`)
