@@ -45,8 +45,11 @@ export async function is_first_time_contributor(
   // If the user has exactly one contribution (the one that triggered this workflow),
   // they are a first-time contributor
   if (contribution_mode === 'once') {
-    core.info("This is the author's first ever contribution to this repo")
-    return contributions.length === 1
+    const is_single_contribution = contributions.length === 1
+    if (is_single_contribution) {
+      core.info("This is the author's first ever contribution to this repo")
+    }
+    return is_single_contribution
   }
 
   // Mode 2: Track first issues and first PRs INDEPENDENTLY.
