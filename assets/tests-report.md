@@ -6,22 +6,22 @@
 
 - **Total Tests**: 56
 - **Test Suites**: 35
-- **Duration**: 913ms
+- **Duration**: 895ms
 
 | Status | File                                                                                           | Tests |  ✅  |  ❌  |  ⏭️ |   ⏳  |
 | :----: | :--------------------------------------------------------------------------------------------- | :---: | :-: | :-: | :-: | :--: |
-|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  |  5ms |
+|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  | 11ms |
 |    ✅   | [tests/issues.test.ts](#-testsissuestestts)                                                    |   3   |  3  |  -  |  -  |  4ms |
-|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   7   |  7  |  -  |  -  | 10ms |
-|    ✅   | [tests/pull_request.test.ts](#-testspull_requesttestts)                                        |   5   |  5  |  -  |  -  | 10ms |
-|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   9   |  9  |  -  |  -  |  6ms |
+|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   7   |  7  |  -  |  -  | 11ms |
+|    ✅   | [tests/pull_request.test.ts](#-testspull_requesttestts)                                        |   5   |  5  |  -  |  -  |  6ms |
+|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   9   |  9  |  -  |  -  |  4ms |
 |    ✅   | [tests/utils/add-labels.test.ts](#-testsutilsadd-labelstestts)                                 |   3   |  3  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/add-reactions.test.ts](#-testsutilsadd-reactionstestts)                           |   6   |  6  |  -  |  -  | 10ms |
+|    ✅   | [tests/utils/add-reactions.test.ts](#-testsutilsadd-reactionstestts)                           |   6   |  6  |  -  |  -  |  8ms |
 |    ✅   | [tests/utils/create-comment.test.ts](#-testsutilscreate-commenttestts)                         |   2   |  2  |  -  |  -  |  2ms |
 |    ✅   | [tests/utils/fc-event.test.ts](#-testsutilsfc-eventtestts)                                     |   6   |  6  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  |  4ms |
+|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  |  8ms |
 |    ✅   | [tests/utils/is-supported-event.test.ts](#-testsutilsis-supported-eventtestts)                 |   1   |  1  |  -  |  -  |  1ms |
-|    ✅   | [tests/utils/was-the-first-contribution.test.ts](#-testsutilswas-the-first-contributiontestts) |   5   |  5  |  -  |  -  |  7ms |
+|    ✅   | [tests/utils/was-the-first-contribution.test.ts](#-testsutilswas-the-first-contributiontestts) |   5   |  5  |  -  |  -  |  2ms |
 
 ## Details
 
