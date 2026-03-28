@@ -44,7 +44,7 @@ export async function run(): Promise<ErrorOccurred> {
       author_association === 'MEMBER' || author_association === 'OWNER' || author_association === 'COLLABORATOR'
 
     // skip org members
-    core.debug(`Checking if @${first_timer_username} is an org member or owner of this repo.`)
+    core.debug(`Checking if @${first_timer_username} is an internal contributor.`)
     core.debug(`Author association for @${first_timer_username}: ${author_association}.`)
 
     if (is_internal) {
@@ -57,7 +57,7 @@ export async function run(): Promise<ErrorOccurred> {
         core.info('Consider enabling `skip-internal-contributors` to avoid greeting internal contributors.')
       }
     } else {
-      core.debug(`@${first_timer_username} is NOT an org member or repo owner.`)
+      core.debug(`@${first_timer_username} is NOT an internal contributor.`)
     }
 
     // create octokit client
