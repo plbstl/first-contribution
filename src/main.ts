@@ -43,10 +43,10 @@ export async function run(): Promise<ErrorOccurred> {
     const is_internal =
       author_association === 'MEMBER' || author_association === 'OWNER' || author_association === 'COLLABORATOR'
 
-    core.debug(`Author association for @${first_timer_username}: ${author_association}.`)
-
     // skip org members
     core.debug(`Checking if @${first_timer_username} is an org member or owner of this repo.`)
+    core.debug(`Author association for @${first_timer_username}: ${author_association}.`)
+
     if (is_internal) {
       const skip_internal_contributors = core.getBooleanInput('skip-internal-contributors')
       core.debug(`skip-internal-contributors: ${String(skip_internal_contributors)}.`)
