@@ -98,7 +98,7 @@ describe('action', () => {
       })
     })
 
-    it('fails the action when `fail-on-error` is true', async () => {
+    it('fails the action when `fail-on-error` is enabled', async () => {
       core_getBooleanInput_spy.mockReturnValue(true)
 
       await main.run()
@@ -108,7 +108,7 @@ describe('action', () => {
       expect(run_spy).toHaveResolvedWith(true)
     })
 
-    it('logs an error without failing when `fail-on-error` is false', async () => {
+    it("doesn't fail the action when `fail-on-error` is disabled", async () => {
       core_getBooleanInput_spy.mockReturnValue(false)
 
       await main.run()
@@ -118,7 +118,7 @@ describe('action', () => {
       expect(run_spy).toHaveResolvedWith(true)
     })
 
-    it('logs an error when something other than an Error is thrown', async () => {
+    it('logs an error when something (Error or not) is thrown', async () => {
       core_getBooleanInput_spy.mockReturnValue(false)
       is_supported_event_spy.mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/only-throw-error
