@@ -41,7 +41,10 @@ export async function run(): Promise<ErrorOccurred> {
     const repo = github.context.repo.repo
     const author_association = issue_or_pull_request.author_association
     const is_internal =
-      author_association === 'MEMBER' || author_association === 'OWNER' || author_association === 'COLLABORATOR'
+      author_association === 'MEMBER' ||
+      author_association === 'OWNER' ||
+      author_association === 'COLLABORATOR' ||
+      author_association === 'CONTRIBUTOR'
 
     // skip org members
     core.debug(`Checking if @${first_timer_username} is an internal contributor.`)
