@@ -13,7 +13,8 @@ export async function add_labels(
 ): Promise<boolean> {
   // Only add labels for new issues/PRs and when the list of input labels is NOT empty.
   if (payload_action === 'opened' && opts.labels.length > 0) {
-    // can fail when the specified label is not already created in the repository.
+    // can fail when the specified label is not already created in the repository,
+    // AND write permission is not available to the CI runner.
     await octokit.rest.issues.addLabels({ ...opts })
     return true
   }
