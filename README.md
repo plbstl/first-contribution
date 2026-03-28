@@ -61,23 +61,24 @@ That's all you need.
 
 ### Inputs
 
-| Input                   | Description                                                                                               |
-| ----------------------- | --------------------------------------------------------------------------------------------------------- |
-| `token`                 | GitHub token for API access. [Default: github.token]                                                      |
-| `issue-opened-msg`      | Message for a first-time issue                                                                            |
-| `pr-opened-msg`         | Message for a first-time PR                                                                               |
-| `issue-completed-msg`   | Message when a first-time issue is closed as completed                                                    |
-| `issue-not-planned-msg` | Message when a first-time issue is closed as not planned                                                  |
-| `pr-merged-msg`         | Message when a first-time PR is merged                                                                    |
-| `pr-closed-msg`         | Message when a first-time PR is closed (not merged)                                                       |
-| `labels`                | Labels to add (comma separated)                                                                           |
-| `issue-labels`          | Labels for issues (overrides labels)                                                                      |
-| `pr-labels`             | Labels for PRs (overrides labels)                                                                         |
-| `contribution-mode`     | `once` to greet only on a user’s absolute first interaction. [Default: greet on first issue and first PR] |
-| `fail-on-error`         | Fail the workflow if an error occurs. [Default: false]                                                    |
-| `reactions`             | Reactions to add (comma separated)                                                                        |
-| `issue-reactions`       | Reactions for issues (overrides reactions)                                                                |
-| `pr-reactions`          | Reactions for PRs (overrides reactions)                                                                   |
+| Input                        | Description                                                                                               |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `token`                      | GitHub token for API access. [Default: github.token]                                                      |
+| `issue-opened-msg`           | Message for a first-time issue                                                                            |
+| `pr-opened-msg`              | Message for a first-time PR                                                                               |
+| `issue-completed-msg`        | Message when a first-time issue is closed as completed                                                    |
+| `issue-not-planned-msg`      | Message when a first-time issue is closed as not planned                                                  |
+| `pr-merged-msg`              | Message when a first-time PR is merged                                                                    |
+| `pr-closed-msg`              | Message when a first-time PR is closed (not merged)                                                       |
+| `labels`                     | Labels to add (comma separated)                                                                           |
+| `issue-labels`               | Labels for issues (overrides labels)                                                                      |
+| `pr-labels`                  | Labels for PRs (overrides labels)                                                                         |
+| `reactions`                  | Reactions to add (comma separated)                                                                        |
+| `issue-reactions`            | Reactions for issues (overrides reactions)                                                                |
+| `pr-reactions`               | Reactions for PRs (overrides reactions)                                                                   |
+| `contribution-mode`          | `once` to greet only on a user’s absolute first interaction. [Default: greet on first issue and first PR] |
+| `fail-on-error`              | Fail the workflow if an error occurs. [Default: false]                                                    |
+| `skip-internal-contributors` | Skip contributors with `MEMBER`, `OWNER`, or `COLLABORATOR` association. [Default: false]                 |
 
 > [!NOTE]
 >
@@ -160,6 +161,7 @@ jobs:
           pr-labels: first-pr, needs-review
           issue-reactions: eyes
           pr-reactions: +1
+          skip-internal-contributors: true
 
           # Reuse message text by referencing another input field
           pr-opened-msg: issue-opened-msg

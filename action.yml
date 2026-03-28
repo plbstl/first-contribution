@@ -48,6 +48,9 @@ inputs:
   fail-on-error:
     description: Fail the workflow step if an error occurs.
     default: 'false'
+  skip-internal-contributors:
+    description: Skip users with MEMBER, OWNER, or COLLABORATOR association.
+    default: 'false'
 
 outputs:
   type:
