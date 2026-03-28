@@ -49,7 +49,7 @@ export async function run(): Promise<ErrorOccurred> {
       const skip_internal_contributors = core.getBooleanInput('skip-internal-contributors')
       core.debug(`skip-internal-contributors: ${String(skip_internal_contributors)}.`)
       if (skip_internal_contributors) {
-        core.info(`@${first_timer_username} is an internal contributor. Exiting..`)
+        core.info(`@${first_timer_username} is an internal contributor (${author_association}). Exiting..`)
         return false
       } else {
         core.info('Consider enabling `skip-internal-contributors` to avoid greeting internal contributors.')
