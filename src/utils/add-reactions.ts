@@ -31,7 +31,7 @@ export async function add_reactions(
   const successful_reactions: string[] = []
   const failed_reactions: string[] = []
 
-  core.debug(`Attempting to add reactions: ${opts.reactions.join(', ')}`)
+  core.debug(`Attempting to add reactions: ${opts.reactions.toString()}`)
 
   for (const reaction of opts.reactions) {
     try {
@@ -49,10 +49,10 @@ export async function add_reactions(
   }
 
   if (successful_reactions.length > 0) {
-    core.info(`Reactions added: ${successful_reactions.join(', ')}`)
+    core.info(`Reactions added: ${successful_reactions.toString()}`)
   }
 
   if (failed_reactions.length > 0) {
-    core.warning(`Failed to add reaction(s): ${failed_reactions.join(', ')}`)
+    core.warning(`Failed to add reaction(s): ${failed_reactions.toString()}`)
   }
 }
