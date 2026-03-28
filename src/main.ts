@@ -29,7 +29,7 @@ export async function run(): Promise<ErrorOccurred> {
     core.debug('Checking if triggered event is supported')
     const supported_event = is_supported_event(github.context.eventName, payload_action)
     if (!supported_event) {
-      core.info(`\`${github.context.eventName}.${JSON.stringify(payload_action)}\` event is NOT supported. Exiting..`)
+      core.info(`\`${github.context.eventName}.${String(payload_action)}\` event is NOT supported. Exiting..`)
       return false
     }
     core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)
@@ -73,7 +73,6 @@ export async function run(): Promise<ErrorOccurred> {
       core.info(`\`${first_timer_username}\` does not meet the criteria for being a first timer. Exiting..`)
       return false
     }
-
     core.debug('Author meets the criteria for this event.')
 
     // retrieve inputs
