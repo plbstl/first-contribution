@@ -75,6 +75,6 @@ function get_msg_input(event: FCEvent): string {
  * @returns An array of reaction emojis to add to the issue or pull request body.
  */
 function get_reactions_input(event_name: FCEvent['name']): string[] {
-  const reactions = core.getInput(`${event_name}-reactions`) || core.getInput('reactions')
+  const reactions = core.getInput(`${event_name}-reactions`).trim() || core.getInput('reactions').trim()
   return reactions ? reactions.split(',').map(reaction => reaction.trim()) : []
 }
