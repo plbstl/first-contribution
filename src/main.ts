@@ -81,6 +81,11 @@ export async function run(): Promise<ErrorOccurred> {
     const action_inputs = get_action_inputs(fc_event)
     core.debug('Message and labels inputs retrieved')
 
+    const truncated_msg = action_inputs.msg.replace(/^(.{150}).+(.{50})$/, '$1...$2')
+    core.info(
+      `Inputs:\n  labels: ${action_inputs.labels.toString()}\n  reactions: ${action_inputs.reactions.toString()}\n  message: ${truncated_msg}`
+    )
+
     // add reactions
     core.debug(`Attempting to react with: ${action_inputs.reactions.toString()}`)
     await add_reactions(octokit, payload_action, {
@@ -126,3 +131,17 @@ export async function run(): Promise<ErrorOccurred> {
     return true
   }
 }
+
+// too lazy to also show end part of the message. and add tests
+// function truncateStringAtWord(str: string, limit = 200) {
+//   const segmenter = new Intl.Segmenter(undefined, { granularity: 'word' })
+//   let lastWordBreak = -1
+
+//   for (const word of segmenter.segment(str)) {
+//     if (word.isWordLike) continue
+//     if (word.index >= limit) break
+//     lastWordBreak = word.index
+//   }
+
+//   return str.slice(0, lastWordBreak) + '...'
+// }
