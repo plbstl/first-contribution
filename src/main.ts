@@ -99,7 +99,7 @@ export async function run(): Promise<ErrorOccurred> {
     core.info(comment_url ? `Comment created: ${comment_url}` : 'No comment was added')
 
     const truncated_msg = action_inputs.msg.replace(/^(.{150}).+(.{50})$/, '$1...$2')
-    core.info(`message:\n${truncated_msg}`)
+    core.info(`Comment body:\n${truncated_msg}`)
 
     // add labels
     core.debug(`Attempting to add labels to ${interaction}`)
