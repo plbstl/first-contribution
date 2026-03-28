@@ -41,10 +41,73 @@ describe('action', () => {
     expect(getOctokit_mock).not.toHaveBeenCalled()
   })
 
+  it('exits action when `skip-internal-contributors` is enabled', async () => {
+    // Supported event
+    github_context_mock.eventName = 'pull_request_target'
+    github_context_mock.payload.action = 'opened'
+    github_context_mock.payload.pull_request = {
+      number: 456,
+      user: { login: 'ghosty' },
+      author_association: 'MEMBER'
+    }
+    // skip-internal-contributors= true
+    core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
+
+    await main.run()
+
+    expect(getOctokit_mock).not.toHaveBeenCalled()
+    expect(run_spy).toHaveResolvedWith(false)
+  })
+
+  it('continues execution for non-org-member when `skip-internal-contributors` is enabled', async () => {
+    // Supported event
+    github_context_mock.eventName = 'pull_request_target'
+    github_context_mock.payload.action = 'opened'
+    github_context_mock.payload.pull_request = {
+      number: 456,
+      user: { login: 'ghosty' },
+      author_association: 'NONE'
+    }
+    // skip-internal-contributors= true
+    core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
+    octokit_listCommits_mock.mockResolvedValue({ data: [] })
+    octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
+
+    await main.run()
+
+    expect(getOctokit_mock).toHaveBeenCalled()
+    expect(run_spy).toHaveResolvedWith(false)
+  })
+
+  it('continues execution for org member when `skip-internal-contributors` is disabled', async () => {
+    // Supported event
+    github_context_mock.eventName = 'pull_request_target'
+    github_context_mock.payload.action = 'opened'
+    github_context_mock.payload.pull_request = {
+      number: 456,
+      user: { login: 'ghosty' },
+      author_association: 'MEMBER'
+    }
+    // skip-internal-contributors= false
+    core_getBooleanInput_spy.mockReturnValue(false)
+    octokit_listCommits_mock.mockResolvedValue({ data: [] })
+    octokit_listForRepo_mock.mockReturnValue({ data: [] })
+
+    await main.run()
+
+    expect(getOctokit_mock).toHaveBeenCalled()
+    expect(run_spy).toHaveResolvedWith(false)
+  })
+
   it('exits action when the issue or pull request author is NOT a first-time contributor', async () => {
+    // Supported event
     github_context_mock.eventName = 'issues'
     github_context_mock.payload.action = 'opened'
-    github_context_mock.payload.issue = { number: 123, user: { login: 'ghosty' } }
+    github_context_mock.payload.issue = {
+      number: 123,
+      user: { login: 'ghosty' },
+      author_association: 'MEMBER'
+    }
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
 
@@ -58,7 +121,11 @@ describe('action', () => {
     // Supported event
     github_context_mock.eventName = 'issues'
     github_context_mock.payload.action = 'closed'
-    github_context_mock.payload.issue = { number: 16, user: { login: 'issue-ghosty' } }
+    github_context_mock.payload.issue = {
+      number: 16,
+      user: { login: 'issue-ghosty' },
+      author_association: 'NONE'
+    }
     // First-time contributor
     octokit_listForRepo_mock.mockResolvedValue({ data: [{ number: 16, created_at: '2025-01-01T12:00:00Z' }] })
 
@@ -76,7 +143,11 @@ describe('action', () => {
     github_context_mock.eventName = 'pull_request_target'
     github_context_mock.payload.action = 'opened'
     github_context_mock.payload.issue = undefined
-    github_context_mock.payload.pull_request = { number: 19, user: { login: 'pr-ghosty' } }
+    github_context_mock.payload.pull_request = {
+      number: 19,
+      user: { login: 'pr-ghosty' },
+      author_association: 'MEMBER'
+    }
     // First-time contributor
     octokit_listForRepo_mock.mockReturnValue({ data: [{ event: { state: 'opened' }, pull_request: [{}] }] })
 

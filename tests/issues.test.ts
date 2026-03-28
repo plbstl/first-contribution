@@ -37,7 +37,7 @@ describe('issues', () => {
       // Supported event
       github_context_mock.eventName = 'issues'
       github_context_mock.payload.action = 'opened'
-      github_context_mock.payload.issue = { number: 8, user: { login: 'ghosty' } }
+      github_context_mock.payload.issue = { number: 8, user: { login: 'ghosty' }, author_association: 'MEMBER' }
 
       await main.run()
 
@@ -62,7 +62,12 @@ describe('issues', () => {
       // Supported event
       github_context_mock.eventName = 'issues'
       github_context_mock.payload.action = 'closed'
-      github_context_mock.payload.issue = { number: 23, user: { login: 'ghosty' }, state_reason: 'completed' }
+      github_context_mock.payload.issue = {
+        number: 23,
+        user: { login: 'ghosty' },
+        state_reason: 'completed',
+        author_association: 'OWNER'
+      }
 
       await main.run()
 
@@ -85,7 +90,12 @@ describe('issues', () => {
       // Supported event
       github_context_mock.eventName = 'issues'
       github_context_mock.payload.action = 'closed'
-      github_context_mock.payload.issue = { number: 8, user: { login: 'ghosty' }, state_reason: 'not_planned' }
+      github_context_mock.payload.issue = {
+        number: 8,
+        user: { login: 'ghosty' },
+        state_reason: 'not_planned',
+        author_association: 'CONTRIBUTOR'
+      }
 
       await main.run()
 

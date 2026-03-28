@@ -1,4 +1,5 @@
 import type { getOctokit } from '@actions/github'
+import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import { vitest } from 'vitest'
 
 vitest.mock('@actions/github', () => {
@@ -8,7 +9,14 @@ vitest.mock('@actions/github', () => {
   }
 })
 
-type IssueOrPullRequestStub = { number: number; user: { login: string }; [key: string]: unknown } | undefined
+type IssueOrPullRequestStub =
+  | {
+      number: number
+      user: { login: string }
+      author_association: (Issue | PullRequest)['author_association']
+      [key: string]: unknown
+    }
+  | undefined
 
 /** `'@actions/github'.context` */
 export const github_context_mock = {

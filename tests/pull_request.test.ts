@@ -40,7 +40,11 @@ describe('pull_request', () => {
       // Supported event
       github_context_mock.eventName = 'pull_request_target'
       github_context_mock.payload.action = 'opened'
-      github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' } }
+      github_context_mock.payload.pull_request = {
+        number: 4,
+        user: { login: 'randy' },
+        author_association: 'COLLABORATOR'
+      }
 
       await main.run()
 
@@ -68,7 +72,12 @@ describe('pull_request', () => {
       octokit_listForRepo_mock.mockResolvedValue({
         data: [{ number: 7, pull_request: {}, created_at: '2025-05-31T12:00:00Z' }]
       })
-      github_context_mock.payload.pull_request = { number: 7, user: { login: 'randy' }, merged: true }
+      github_context_mock.payload.pull_request = {
+        number: 7,
+        user: { login: 'randy' },
+        merged: true,
+        author_association: 'NONE'
+      }
 
       await main.run()
 
@@ -87,7 +96,12 @@ describe('pull_request', () => {
       octokit_listForRepo_mock.mockResolvedValue({
         data: [{ number: 4, pull_request: {}, created_at: '2025-04-20T12:00:00Z' }]
       })
-      github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: false }
+      github_context_mock.payload.pull_request = {
+        number: 4,
+        user: { login: 'randy' },
+        merged: false,
+        author_association: 'FIRST_TIMER'
+      }
 
       await main.run()
 
@@ -110,7 +124,12 @@ describe('pull_request', () => {
         ]
       })
       // The event is for PR #4, which is the historically first one
-      github_context_mock.payload.pull_request = { number: 4, user: { login: 'randy' }, merged: true }
+      github_context_mock.payload.pull_request = {
+        number: 4,
+        user: { login: 'randy' },
+        merged: true,
+        author_association: 'FIRST_TIME_CONTRIBUTOR'
+      }
 
       await main.run()
 
@@ -128,7 +147,12 @@ describe('pull_request', () => {
         ]
       })
       // The event is for PR #5, which is NOT the first one
-      github_context_mock.payload.pull_request = { number: 5, user: { login: 'randy' }, merged: true }
+      github_context_mock.payload.pull_request = {
+        number: 5,
+        user: { login: 'randy' },
+        merged: true,
+        author_association: 'MANNEQUIN'
+      }
 
       await main.run()
 

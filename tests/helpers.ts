@@ -36,10 +36,19 @@ export const pr_closed_msg = 'PR was closed. Will not be merged'
 export const octokit = getOctokit_mock()
 
 // Spy on and mock the GitHub Actions core library
-export const core_getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput')
 export const core_error_spy_mock = vitest.spyOn(core, 'error').mockReturnValue()
 export const core_setFailed_spy_mock = vitest.spyOn(core, 'setFailed').mockReturnValue()
 export const core_setOutput_spy_mock = vitest.spyOn(core, 'setOutput').mockReturnValue()
+export const core_getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput').mockImplementation(name => {
+  switch (name) {
+    case 'skip-internal-contributors':
+      return false
+    case 'fail-on-error':
+      return false
+    default:
+      return false
+  }
+})
 export const core_getInput_spy_mock = vitest.spyOn(core, 'getInput').mockImplementation(name => {
   switch (name) {
     case 'token':
