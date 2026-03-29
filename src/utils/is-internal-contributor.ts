@@ -25,7 +25,7 @@ export async function is_internal_contributor(
     repo
   })
 
-  if (result.status === 204) {
+  if (result.status.toString() === '204') {
     if (ignore_option) {
       core.info('Consider enabling `skip-internal-contributors` to avoid greeting internal contributors.')
       return false

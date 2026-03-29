@@ -2,7 +2,7 @@
  * Unit tests for the action's `is_internal_contributor` util.
  */
 
-import { beforeEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { is_internal_contributor } from '~src/utils/index.ts'
 import { core_getBooleanInput_spy, octokit } from '~tests/helpers.ts'
 import { octokit_checkCollaborator } from '~tests/setup.ts'
