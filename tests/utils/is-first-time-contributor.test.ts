@@ -9,7 +9,7 @@ import { octokit_listCommits_mock, octokit_listForRepo_mock } from '~tests/setup
 
 describe('is_first_time_contributor()', () => {
   const default_opts = {
-    creator: 'ghosty',
+    author: 'ghosty',
     owner: 'owner',
     repo: 'repo'
   }
@@ -25,7 +25,7 @@ describe('is_first_time_contributor()', () => {
 
       expect(result).toBe(false)
       expect(octokit_listCommits_mock).toHaveBeenCalledExactlyOnceWith(
-        expect.objectContaining({ author: default_opts.creator })
+        expect.objectContaining({ author: default_opts.author })
       )
       expect(octokit_listForRepo_mock).not.toHaveBeenCalled()
     })
@@ -42,7 +42,7 @@ describe('is_first_time_contributor()', () => {
       expect(result).toBe(true)
       expect(octokit_listCommits_mock).toHaveBeenCalled()
       expect(octokit_listForRepo_mock).toHaveBeenCalledExactlyOnceWith(
-        expect.objectContaining({ creator: default_opts.creator })
+        expect.objectContaining({ creator: default_opts.author })
       )
     })
   })

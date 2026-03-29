@@ -30,7 +30,7 @@ describe('create_comment()', () => {
       issue_number: 2,
       owner: 'owner',
       repo: 'repo',
-      author_username: 'randomUser007'
+      author: 'randomUser007'
     }
 
     const comment_url = await create_comment(octokit, create_comment_opts)

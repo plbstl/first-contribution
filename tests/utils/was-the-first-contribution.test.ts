@@ -10,7 +10,7 @@ import { octokit_listForRepo_mock } from '~tests/setup.ts'
 
 describe('was_the_first_contribution()', () => {
   const default_opts = {
-    creator: 'ghosty',
+    author: 'ghosty',
     owner: 'owner',
     repo: 'repo'
   }

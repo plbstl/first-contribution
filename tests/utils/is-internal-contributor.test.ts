@@ -9,7 +9,7 @@ import { octokit_checkCollaborator, octokit_checkMembershipForUser } from '~test
 
 describe('is_internal_contributor()', () => {
   const default_opts = {
-    creator: 'ghosty',
+    author: 'ghosty',
     owner: 'owner',
     repo: 'repo'
   }
