@@ -32,7 +32,7 @@ jobs:
       issues: write # Only needed when adding comments and labels on issues
       pull-requests: write # Only needed when adding comments and labels on PRs
     steps:
-      - uses: plbstl/first-contribution@4fb1541ce2706255850d56c5684552607be1ae9b # v4.2.0
+      - uses: plbstl/first-contribution@7c31f41b0e7a70adfcae06cf964679f61af6780b # v4.3.0
         with:
           issue-opened-msg: |
             Hey @{fc-author} 👋
@@ -98,7 +98,7 @@ That's all you need.
 ### Reactions
 
 ```yaml
-- uses: plbstl/first-contribution@4fb1541ce2706255850d56c5684552607be1ae9b # v4.2.0
+- uses: plbstl/first-contribution@7c31f41b0e7a70adfcae06cf964679f61af6780b # v4.3.0
   with:
     issue-reactions: eyes
     pr-reactions: +1, rocket
@@ -107,7 +107,7 @@ That's all you need.
 ### Greet only once
 
 ```yaml
-- uses: plbstl/first-contribution@4fb1541ce2706255850d56c5684552607be1ae9b # v4.2.0
+- uses: plbstl/first-contribution@7c31f41b0e7a70adfcae06cf964679f61af6780b # v4.3.0
   with:
     contribution-mode: once
     issue-opened-msg: >
@@ -131,7 +131,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@4fb1541ce2706255850d56c5684552607be1ae9b # v4.2.0
+      - uses: plbstl/first-contribution@7c31f41b0e7a70adfcae06cf964679f61af6780b # v4.3.0
         with:
           pr-merged-msg: >
             @all-contributors please add @{fc-author} for ${{ join(github.event.pull_request.labels.*.name, ', ') }}
@@ -155,7 +155,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@4fb1541ce2706255850d56c5684552607be1ae9b # v4.2.0
+      - uses: plbstl/first-contribution@7c31f41b0e7a70adfcae06cf964679f61af6780b # v4.3.0
         env:
           GH_PAT_READ_ORG: ${{ secrets.GH_PAT_READ_ORG }} # https://github.com/settings/tokens/new?scopes=read:org
         with:
