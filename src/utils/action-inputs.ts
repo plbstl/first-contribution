@@ -62,9 +62,9 @@ function get_msg_input(event: FCEvent): string {
     'pr-merged-msg',
     'pr-closed-msg'
   ]
-  let msg = core.getInput(`${event.name}-${event.state}-msg`).trim()
+  let msg = core.getInput(`${event.name}-${event.state}-msg`)
   if (message_inputs.includes(msg)) {
-    msg = core.getInput(msg).trim()
+    msg = core.getInput(msg)
   }
   return msg
 }
@@ -75,6 +75,6 @@ function get_msg_input(event: FCEvent): string {
  * @returns An array of reaction emojis to add to the issue or pull request body.
  */
 function get_reactions_input(event_name: FCEvent['name']): string[] {
-  const reactions = core.getInput(`${event_name}-reactions`).trim() || core.getInput('reactions').trim()
+  const reactions = core.getInput(`${event_name}-reactions`) || core.getInput('reactions')
   return reactions ? reactions.split(',').map(reaction => reaction.trim()) : []
 }
