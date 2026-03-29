@@ -8,6 +8,7 @@ import {
   get_action_inputs,
   get_fc_event,
   is_first_time_contributor,
+  is_internal_contributor,
   is_supported_event,
   was_the_first_contribution
 } from './utils/index.ts'
@@ -43,11 +44,30 @@ export async function run(): Promise<ErrorOccurred> {
     core.debug('Octokit client created')
 
     // helper variables
-    const is_pull_request = !!payload.pull_request
-    const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
-    const first_timer_username = issue_or_pull_request.user.login
     const fc_event = get_fc_event(payload_action, payload)
     const interaction = fc_event.name === 'issue' ? 'issue' : 'pull request'
+    const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
+    const first_timer_username = issue_or_pull_request.user.login
+    const owner = github.context.repo.owner
+    const repo = github.context.repo.repo
+    const is_pull_request = !!payload.pull_request
+
+    // skip internal contributors
+    const pat_token = process.env['GH_PAT_READ_ORG']
+    if (!pat_token) {
+      throw new Error('GH_PAT_READ_ORG env variable is not set.')
+    }
+    const is_internal = await is_internal_contributor(octokit, pat_token, {
+      creator: first_timer_username,
+      owner,
+      repo
+    })
+    if (is_internal) {
+      core.info(`@${first_timer_username} is an internal contributor. Exiting..`)
+      return false
+    } else {
+      core.debug(`@${first_timer_username} is NOT an internal contributor.`)
+    }
 
     // check if author is first-timer
     core.debug(`Checking if ${interaction} is a first-time contribution from its author`)
@@ -55,14 +75,16 @@ export async function run(): Promise<ErrorOccurred> {
     if (payload_action === 'opened') {
       core.debug('Event is "opened". Checking for first-time contributor.')
       is_relevant_first_timer = await is_first_time_contributor(octokit, {
-        ...github.context.repo,
+        owner,
+        repo,
         creator: first_timer_username,
         is_pull_request
       })
     } else {
       core.debug('Event is "closed". Checking if this was their first contribution.')
       is_relevant_first_timer = await was_the_first_contribution(octokit, {
-        ...github.context.repo,
+        owner,
+        repo,
         creator: first_timer_username,
         is_pull_request,
         issue_or_pull_request
@@ -83,7 +105,8 @@ export async function run(): Promise<ErrorOccurred> {
     // add reactions
     core.debug(`Attempting to react with: ${action_inputs.reactions.toString()}`)
     await add_reactions(octokit, payload_action, {
-      ...github.context.repo,
+      owner,
+      repo,
       issue_number: issue_or_pull_request.number,
       reactions: action_inputs.reactions
     })
@@ -91,7 +114,8 @@ export async function run(): Promise<ErrorOccurred> {
     // create comment
     core.debug('Attempting to create comment on GitHub')
     const comment_url = await create_comment(octokit, {
-      ...github.context.repo,
+      owner,
+      repo,
       body: action_inputs.msg,
       issue_number: issue_or_pull_request.number,
       author_username: first_timer_username
@@ -104,7 +128,8 @@ export async function run(): Promise<ErrorOccurred> {
     // add labels
     core.debug(`Attempting to add labels to ${interaction}`)
     const did_add_labels = await add_labels(octokit, payload_action, {
-      ...github.context.repo,
+      owner,
+      repo,
       labels: action_inputs.labels,
       issue_number: issue_or_pull_request.number
     })

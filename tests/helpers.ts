@@ -19,6 +19,7 @@ export const add_labels_spy = vitest.spyOn(utils, 'add_labels')
 export const create_comment_spy = vitest.spyOn(utils, 'create_comment')
 export const get_fc_event_spy = vitest.spyOn(utils, 'get_fc_event')
 export const is_first_time_contributor_spy = vitest.spyOn(utils, 'is_first_time_contributor')
+export const is_internal_contributor_spy = vitest.spyOn(utils, 'is_internal_contributor')
 export const is_supported_event_spy = vitest.spyOn(utils, 'is_supported_event')
 export const was_the_first_contribution_spy = vitest.spyOn(utils, 'was_the_first_contribution')
 
@@ -36,10 +37,19 @@ export const pr_closed_msg = 'PR was closed. Will not be merged'
 export const octokit = getOctokit_mock()
 
 // Spy on and mock the GitHub Actions core library
-export const core_getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput')
 export const core_error_spy_mock = vitest.spyOn(core, 'error').mockReturnValue()
 export const core_setFailed_spy_mock = vitest.spyOn(core, 'setFailed').mockReturnValue()
 export const core_setOutput_spy_mock = vitest.spyOn(core, 'setOutput').mockReturnValue()
+export const core_getBooleanInput_spy = vitest.spyOn(core, 'getBooleanInput').mockImplementation(name => {
+  switch (name) {
+    case 'skip-internal-contributors':
+      return false
+    case 'fail-on-error':
+      return false
+    default:
+      return false
+  }
+})
 export const core_getInput_spy_mock = vitest.spyOn(core, 'getInput').mockImplementation(name => {
   switch (name) {
     case 'token':
@@ -85,4 +95,10 @@ export function general_assertions_closed_issue_or_pull_request(): void {
   // Assert that the correct function was used
   expect(was_the_first_contribution_spy).toHaveResolvedWith(true)
   expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
+}
+
+export function not_a_collaborator(): void {
+  const err = new Error('Not Found') as Error & { status: number }
+  err.status = 404
+  throw err
 }
