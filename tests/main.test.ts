@@ -61,12 +61,12 @@ describe('action', () => {
 
   it('continues execution for non-org-member when `skip-internal-contributors` is enabled', async () => {
     // Supported event
-    github_context_mock.eventName = 'pull_request_target'
+    github_context_mock.eventName = 'issues'
     github_context_mock.payload.action = 'opened'
-    github_context_mock.payload.pull_request = { number: 456, user: { login: 'ghosty' } }
+    github_context_mock.payload.pull_request = { number: 789, user: { login: 'ghosty' } }
     // skip-internal-contributors= true
     core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
-    octokit_checkCollaborator.mockReturnValue({ result: { status: 404 } })
+    octokit_checkCollaborator.mockReturnValue({ status: 404 })
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
 
@@ -85,7 +85,7 @@ describe('action', () => {
     core_getBooleanInput_spy.mockReturnValue(false)
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [] })
-    octokit_checkCollaborator.mockReturnValue({ result: { status: 204 } })
+    octokit_checkCollaborator.mockReturnValue({ status: 204 })
 
     await main.run()
 
