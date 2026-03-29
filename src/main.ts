@@ -8,6 +8,7 @@ import {
   get_action_inputs,
   get_fc_event,
   is_first_time_contributor,
+  is_internal_contributor,
   is_supported_event,
   was_the_first_contribution
 } from './utils/index.ts'
@@ -34,35 +35,6 @@ export async function run(): Promise<ErrorOccurred> {
     }
     core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)
 
-    // helper variables 1
-    const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
-    const first_timer_username = issue_or_pull_request.user.login
-    const owner = github.context.repo.owner
-    const repo = github.context.repo.repo
-    const author_association = issue_or_pull_request.author_association
-    const is_internal =
-      author_association === 'MEMBER' ||
-      author_association === 'OWNER' ||
-      author_association === 'COLLABORATOR' ||
-      author_association === 'CONTRIBUTOR'
-
-    // skip org members
-    core.debug(`Checking if @${first_timer_username} is an internal contributor.`)
-    core.debug(`Author association for @${first_timer_username}: ${author_association}.`)
-
-    if (is_internal) {
-      const skip_internal_contributors = core.getBooleanInput('skip-internal-contributors')
-      core.debug(`skip-internal-contributors: ${String(skip_internal_contributors)}.`)
-      if (skip_internal_contributors) {
-        core.info(`@${first_timer_username} is an internal contributor (${author_association}). Exiting..`)
-        return false
-      } else {
-        core.info('Consider enabling `skip-internal-contributors` to avoid greeting internal contributors.')
-      }
-    } else {
-      core.debug(`@${first_timer_username} is NOT an internal contributor.`)
-    }
-
     // create octokit client
     core.debug('Retrieving `token` input')
     const token = core.getInput('token', { required: true })
@@ -71,10 +43,23 @@ export async function run(): Promise<ErrorOccurred> {
     const octokit = github.getOctokit(token)
     core.debug('Octokit client created')
 
-    // helper variables 2
-    const is_pull_request = !!payload.pull_request
+    // helper variables
     const fc_event = get_fc_event(payload_action, payload)
     const interaction = fc_event.name === 'issue' ? 'issue' : 'pull request'
+    const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
+    const first_timer_username = issue_or_pull_request.user.login
+    const owner = github.context.repo.owner
+    const repo = github.context.repo.repo
+    const is_pull_request = !!payload.pull_request
+
+    // skip internal contributors
+    const is_internal = await is_internal_contributor(octokit, { creator: first_timer_username, owner, repo })
+    if (is_internal) {
+      core.info(`@${first_timer_username} is an internal contributor. Exiting..`)
+      return false
+    } else {
+      core.debug(`@${first_timer_username} is NOT an internal contributor.`)
+    }
 
     // check if author is first-timer
     core.debug(`Checking if ${interaction} is a first-time contribution from its author`)
