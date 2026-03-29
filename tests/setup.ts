@@ -1,6 +1,8 @@
 import type { getOctokit } from '@actions/github'
 import { vitest } from 'vitest'
 
+vitest.stubEnv('GH_PAT_READ_ORG', '***')
+
 vitest.mock('@actions/github', () => {
   return {
     context: github_context_mock,
@@ -38,6 +40,7 @@ export const reset_github_context_mock = (): void => {
 // Mock octokit client
 export const octokit_addLabels_mock = vitest.fn()
 export const octokit_checkCollaborator = vitest.fn()
+export const octokit_checkMembershipForUser = vitest.fn()
 export const octokit_createComment_mock = vitest.fn()
 export const octokit_createReactionForIssue_mock = vitest.fn()
 export const octokit_listCommits_mock = vitest.fn()
@@ -47,6 +50,9 @@ export const getOctokit_mock = vitest.fn(
   () =>
     ({
       rest: {
+        orgs: {
+          checkMembershipForUser: octokit_checkMembershipForUser
+        },
         repos: {
           listCommits: octokit_listCommits_mock,
           checkCollaborator: octokit_checkCollaborator

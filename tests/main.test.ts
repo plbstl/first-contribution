@@ -24,6 +24,7 @@ import {
   getOctokit_mock,
   github_context_mock,
   octokit_checkCollaborator,
+  octokit_checkMembershipForUser,
   octokit_listCommits_mock,
   octokit_listForRepo_mock,
   reset_github_context_mock
@@ -51,7 +52,7 @@ describe('action', () => {
     github_context_mock.payload.pull_request = { number: 456, user: { login: 'ghosty' } }
     // skip-internal-contributors= true
     core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
-    octokit_checkCollaborator.mockReturnValue({ status: 204 })
+    octokit_checkMembershipForUser.mockReturnValue({ status: 204 })
 
     await main.run()
 
@@ -67,7 +68,7 @@ describe('action', () => {
     github_context_mock.payload.pull_request = { number: 789, user: { login: 'ghosty' } }
     // skip-internal-contributors= true
     core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
-    octokit_checkCollaborator.mockReturnValue({ status: 404 })
+    octokit_checkMembershipForUser.mockImplementation(not_a_collaborator)
     octokit_checkCollaborator.mockImplementation(not_a_collaborator)
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
@@ -85,9 +86,9 @@ describe('action', () => {
     github_context_mock.payload.pull_request = { number: 456, user: { login: 'ghosty' } }
     // skip-internal-contributors= false
     core_getBooleanInput_spy.mockReturnValue(false)
+    octokit_checkMembershipForUser.mockReturnValue({ status: 204 })
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [] })
-    octokit_checkCollaborator.mockReturnValue({ status: 204 })
 
     await main.run()
 
@@ -142,6 +143,20 @@ describe('action', () => {
     expect(core_setOutput_spy_mock).toHaveBeenCalledWith('type', 'pr')
     expect(core_setOutput_spy_mock).toHaveBeenCalledWith('username', 'pr-ghosty')
     expect(run_spy).toHaveReturned()
+  })
+
+  it('throws if GH_PAT_READ_ORG is not set', async () => {
+    // Supported event
+    github_context_mock.eventName = 'pull_request_target'
+    github_context_mock.payload.action = 'opened'
+    github_context_mock.payload.pull_request = { number: 456, user: { login: 'ghosty' } }
+    // remove PAT env
+    vitest.unstubAllEnvs()
+
+    await main.run()
+
+    expect(is_internal_contributor_spy).not.toHaveBeenCalled()
+    expect(run_spy).toHaveResolvedWith(true)
   })
 
   describe('when an error is thrown', () => {

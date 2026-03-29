@@ -53,7 +53,15 @@ export async function run(): Promise<ErrorOccurred> {
     const is_pull_request = !!payload.pull_request
 
     // skip internal contributors
-    const is_internal = await is_internal_contributor(octokit, { creator: first_timer_username, owner, repo })
+    const pat_token = process.env['GH_PAT_READ_ORG']
+    if (!pat_token) {
+      throw new Error('GH_PAT_READ_ORG env variable is not set.')
+    }
+    const is_internal = await is_internal_contributor(octokit, pat_token, {
+      creator: first_timer_username,
+      owner,
+      repo
+    })
     if (is_internal) {
       core.info(`@${first_timer_username} is an internal contributor. Exiting..`)
       return false

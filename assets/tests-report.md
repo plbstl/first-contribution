@@ -4,25 +4,25 @@
 
 ## Summary
 
-- **Total Tests**: 64
+- **Total Tests**: 68
 - **Test Suites**: 39
-- **Duration**: 924ms
+- **Duration**: 941ms
 
 | Status | File                                                                                           | Tests |  ✅  |  ❌  |  ⏭️ |   ⏳  |
 | :----: | :--------------------------------------------------------------------------------------------- | :---: | :-: | :-: | :-: | :--: |
-|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  |  9ms |
+|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  | 13ms |
 |    ✅   | [tests/issues.test.ts](#-testsissuestestts)                                                    |   3   |  3  |  -  |  -  |  5ms |
-|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   10  |  10 |  -  |  -  | 14ms |
-|    ✅   | [tests/pull_request.test.ts](#-testspull_requesttestts)                                        |   5   |  5  |  -  |  -  | 10ms |
-|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   9   |  9  |  -  |  -  |  7ms |
-|    ✅   | [tests/utils/add-labels.test.ts](#-testsutilsadd-labelstestts)                                 |   3   |  3  |  -  |  -  |  3ms |
+|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   11  |  11 |  -  |  -  |  8ms |
+|    ✅   | [tests/pull_request.test.ts](#-testspull_requesttestts)                                        |   5   |  5  |  -  |  -  |  8ms |
+|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   9   |  9  |  -  |  -  |  3ms |
+|    ✅   | [tests/utils/add-labels.test.ts](#-testsutilsadd-labelstestts)                                 |   3   |  3  |  -  |  -  |  2ms |
 |    ✅   | [tests/utils/add-reactions.test.ts](#-testsutilsadd-reactionstestts)                           |   6   |  6  |  -  |  -  |  9ms |
-|    ✅   | [tests/utils/create-comment.test.ts](#-testsutilscreate-commenttestts)                         |   2   |  2  |  -  |  -  |  3ms |
+|    ✅   | [tests/utils/create-comment.test.ts](#-testsutilscreate-commenttestts)                         |   2   |  2  |  -  |  -  |  2ms |
 |    ✅   | [tests/utils/fc-event.test.ts](#-testsutilsfc-eventtestts)                                     |   6   |  6  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  | 11ms |
-|    ✅   | [tests/utils/is-internal-contributor.test.ts](#-testsutilsis-internal-contributortestts)       |   5   |  5  |  -  |  -  |  6ms |
-|    ✅   | [tests/utils/is-supported-event.test.ts](#-testsutilsis-supported-eventtestts)                 |   1   |  1  |  -  |  -  |  1ms |
-|    ✅   | [tests/utils/was-the-first-contribution.test.ts](#-testsutilswas-the-first-contributiontestts) |   5   |  5  |  -  |  -  |  6ms |
+|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  |  9ms |
+|    ✅   | [tests/utils/is-internal-contributor.test.ts](#-testsutilsis-internal-contributortestts)       |   8   |  8  |  -  |  -  |  7ms |
+|    ✅   | [tests/utils/is-supported-event.test.ts](#-testsutilsis-supported-eventtestts)                 |   1   |  1  |  -  |  -  |  2ms |
+|    ✅   | [tests/utils/was-the-first-contribution.test.ts](#-testsutilswas-the-first-contributiontestts) |   5   |  5  |  -  |  -  |  3ms |
 
 ## Details
 
@@ -53,6 +53,7 @@
   ✅ exits action when the issue or pull request author is NOT a first-time contributor
   ✅ sets the correct action's outputs for issues
   ✅ sets the correct action's outputs for pull requests
+  ✅ throws if GH_PAT_READ_ORG is not set
 
   ✅ fails the action when `fail-on-error` is enabled
   ✅ doesn't fail the action when `fail-on-error` is disabled
@@ -151,11 +152,14 @@
 ```txt
   ✅ author is internal contributor
   ✅ author is NOT internal contributor
+  ✅ author is NOT org member but IS repo collaborator
 
   ✅ author is internal contributor
   ✅ author is NOT internal contributor
+  ✅ author is NOT org member but IS repo collaborator
 
-  ✅ rethrow error that isn't 404
+  ✅ rethrows error if org check fails with non-404
+  ✅ rethrows error if collaborator check fails with non-404
 
 ```
 
