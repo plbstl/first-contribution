@@ -47,7 +47,7 @@ export async function was_the_first_contribution(
   // Should not happen, but as a safeguard
   if (!first_ever_contribution) {
     core.info('Interesting...')
-    core.info(`All contributions by @${listForRepo_opts.creator}:\n${JSON.stringify(contributions)}\n`)
+    core.info(`All contributions by @${listForRepo_opts.author}:\n${JSON.stringify(contributions)}\n`)
     return false
   }
 
@@ -56,7 +56,7 @@ export async function was_the_first_contribution(
 }
 
 interface WasTheFirstContributionOpts {
-  creator: string
+  author: string
   is_pull_request: boolean
   issue_or_pull_request: Issue | PullRequest
   owner: string

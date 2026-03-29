@@ -13,7 +13,7 @@ export async function is_first_time_contributor(
   octokit: ReturnType<typeof getOctokit>,
   opts: IsFirstTimeContributorOpts
 ): Promise<boolean> {
-  const { is_pull_request, creator, owner, repo } = opts
+  const { is_pull_request, author, owner, repo } = opts
 
   core.debug('Retrieving commit history')
 
@@ -21,7 +21,7 @@ export async function is_first_time_contributor(
   const { data: commits } = await octokit.rest.repos.listCommits({
     owner,
     repo,
-    author: creator,
+    author,
     per_page: 1
   })
   core.info(`Author's commit_count: ${commits.length.toString()}`)
@@ -33,7 +33,7 @@ export async function is_first_time_contributor(
 
   // Fetch all issues and PRs by the author
   const { data: contributions } = await octokit.rest.issues.listForRepo({
-    creator,
+    creator: author,
     owner,
     repo,
     state: 'all'
@@ -68,7 +68,7 @@ export async function is_first_time_contributor(
 
 interface IsFirstTimeContributorOpts {
   /** Username of the user that created the issue or pull request. */
-  creator: string
+  author: string
   /** Whether the contribution that triggered the workflow is a pull request. */
   is_pull_request: boolean
   /** Username of the repository's owner. */

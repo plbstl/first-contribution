@@ -18,7 +18,7 @@ describe('create_comment()', () => {
       repo: 'repo'
     }
 
-    const comment_url = await create_comment(octokit, { ...create_comment_opts, author_username: 'randomUser007' })
+    const comment_url = await create_comment(octokit, { ...create_comment_opts, author: 'randomUser007' })
 
     expect(comment_url).toBe(created_comment_url)
     expect(octokit_createComment_mock).toHaveBeenCalledExactlyOnceWith(create_comment_opts)

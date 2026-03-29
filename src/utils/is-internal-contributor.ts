@@ -15,7 +15,7 @@ export async function is_internal_contributor(
   pat_token: string,
   opts: IsInternalContributorOpts
 ): Promise<boolean> {
-  const { creator, owner, repo } = opts
+  const { author, owner, repo } = opts
 
   const skip = core.getBooleanInput('skip-internal-contributors')
   core.debug(`skip-internal-contributors: ${String(skip)}.`)
@@ -23,24 +23,24 @@ export async function is_internal_contributor(
   const is404 = (err: unknown): boolean => (err as { status: number } | undefined)?.status === 404
 
   const isMember = await (async () => {
-    core.debug(`Checking if @${creator} is an org member.`)
+    core.debug(`Checking if @${author} is an org member.`)
 
     try {
       await github.getOctokit(pat_token).rest.orgs.checkMembershipForUser({
         org: owner,
-        username: creator
+        username: author
       })
       return true
     } catch (err) {
       if (!is404(err)) throw err
     }
 
-    core.debug(`@${creator} is NOT a member of \`${owner}\`.`)
+    core.debug(`@${author} is NOT a member of \`${owner}\`.`)
 
-    core.debug(`Checking if @${creator} is a collaborator in \`${repo}\`.`)
+    core.debug(`Checking if @${author} is a collaborator in \`${repo}\`.`)
     try {
       await octokit.rest.repos.checkCollaborator({
-        username: creator,
+        username: author,
         owner,
         repo
       })
@@ -63,7 +63,7 @@ export async function is_internal_contributor(
 
 interface IsInternalContributorOpts {
   /** Username of the user that created the issue or pull request. */
-  creator: string
+  author: string
   /** Name of the repository's owner. */
   owner: string
   /** Name of the repository. */

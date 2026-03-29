@@ -11,8 +11,8 @@ export async function create_comment(octokit: ReturnType<typeof getOctokit>, opt
   if (!opts.body) return ''
 
   // Replace {fc-author} with the issue or pull request author
-  const { author_username, body, ...rest } = opts
-  const transformed_body = body.replaceAll('{fc-author}', author_username)
+  const { author, body, ...rest } = opts
+  const transformed_body = body.replaceAll('{fc-author}', author)
 
   // Create a comment on GitHub and return its html_url
   const comment = await octokit.rest.issues.createComment({ ...rest, body: transformed_body })
@@ -29,5 +29,5 @@ interface CreateCommentOpts {
   /** Name of the repository. */
   repo: string
   /** Username of the issue or pull request author. */
-  author_username: string
+  author: string
 }

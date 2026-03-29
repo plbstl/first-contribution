@@ -47,7 +47,7 @@ export async function run(): Promise<ErrorOccurred> {
     const fc_event = get_fc_event(payload_action, payload)
     const interaction = fc_event.name === 'issue' ? 'issue' : 'pull request'
     const issue_or_pull_request = (payload.issue ?? payload.pull_request) as Issue | PullRequest
-    const first_timer_username = issue_or_pull_request.user.login
+    const author = issue_or_pull_request.user.login
     const owner = github.context.repo.owner
     const repo = github.context.repo.repo
     const is_pull_request = !!payload.pull_request
@@ -58,15 +58,15 @@ export async function run(): Promise<ErrorOccurred> {
       throw new Error('GH_PAT_READ_ORG env variable is not set.')
     }
     const is_internal = await is_internal_contributor(octokit, pat_token, {
-      creator: first_timer_username,
+      author,
       owner,
       repo
     })
     if (is_internal) {
-      core.info(`@${first_timer_username} is an internal contributor. Exiting..`)
+      core.info(`@${author} is an internal contributor. Exiting..`)
       return false
     } else {
-      core.debug(`@${first_timer_username} is NOT an internal contributor.`)
+      core.debug(`@${author} is NOT an internal contributor.`)
     }
 
     // check if author is first-timer
@@ -77,7 +77,7 @@ export async function run(): Promise<ErrorOccurred> {
       is_relevant_first_timer = await is_first_time_contributor(octokit, {
         owner,
         repo,
-        creator: first_timer_username,
+        author,
         is_pull_request
       })
     } else {
@@ -85,14 +85,14 @@ export async function run(): Promise<ErrorOccurred> {
       is_relevant_first_timer = await was_the_first_contribution(octokit, {
         owner,
         repo,
-        creator: first_timer_username,
+        author,
         is_pull_request,
         issue_or_pull_request
       })
     }
 
     if (!is_relevant_first_timer) {
-      core.info(`\`${first_timer_username}\` does not meet the criteria for being a first timer. Exiting..`)
+      core.info(`\`${author}\` does not meet the criteria for being a first timer. Exiting..`)
       return false
     }
     core.debug('Author meets the criteria for this event.')
@@ -118,7 +118,7 @@ export async function run(): Promise<ErrorOccurred> {
       repo,
       body: action_inputs.msg,
       issue_number: issue_or_pull_request.number,
-      author_username: first_timer_username
+      author
     })
     core.info(comment_url ? `Comment created: ${comment_url}` : 'No comment was added')
 
@@ -138,7 +138,7 @@ export async function run(): Promise<ErrorOccurred> {
     core.setOutput('comment-url', comment_url)
     core.setOutput('number', issue_or_pull_request.number)
     core.setOutput('type', fc_event.name)
-    core.setOutput('username', first_timer_username)
+    core.setOutput('username', author)
 
     return false
   } catch (error) {
