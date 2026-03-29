@@ -33,7 +33,7 @@ export async function is_internal_contributor(
 
     return true
   } catch (error) {
-    if ((error as any)?.status === 404) {
+    if ((error as { status: number } | undefined)?.status === 404) {
       // not a collaborator
       return false
     }

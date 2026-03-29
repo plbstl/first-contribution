@@ -97,7 +97,7 @@ export function general_assertions_closed_issue_or_pull_request(): void {
   expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
 }
 
-export function not_a_collaborator() {
+export function not_a_collaborator(): void {
   const err = new Error('Not Found') as Error & { status: number }
   err.status = 404
   throw err
