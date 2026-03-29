@@ -19,6 +19,7 @@ export const add_labels_spy = vitest.spyOn(utils, 'add_labels')
 export const create_comment_spy = vitest.spyOn(utils, 'create_comment')
 export const get_fc_event_spy = vitest.spyOn(utils, 'get_fc_event')
 export const is_first_time_contributor_spy = vitest.spyOn(utils, 'is_first_time_contributor')
+export const is_internal_contributor_spy = vitest.spyOn(utils, 'is_internal_contributor')
 export const is_supported_event_spy = vitest.spyOn(utils, 'is_supported_event')
 export const was_the_first_contribution_spy = vitest.spyOn(utils, 'was_the_first_contribution')
 

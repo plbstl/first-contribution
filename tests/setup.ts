@@ -1,5 +1,4 @@
 import type { getOctokit } from '@actions/github'
-import type { Issue, PullRequest } from '@octokit/webhooks-types'
 import { vitest } from 'vitest'
 
 vitest.mock('@actions/github', () => {
@@ -38,17 +37,19 @@ export const reset_github_context_mock = (): void => {
 
 // Mock octokit client
 export const octokit_addLabels_mock = vitest.fn()
+export const octokit_checkCollaborator = vitest.fn().mockResolvedValue({ status: 404 })
 export const octokit_createComment_mock = vitest.fn()
-export const octokit_listForRepo_mock = vitest.fn()
-export const octokit_listCommits_mock = vitest.fn()
 export const octokit_createReactionForIssue_mock = vitest.fn()
+export const octokit_listCommits_mock = vitest.fn()
+export const octokit_listForRepo_mock = vitest.fn()
 
 export const getOctokit_mock = vitest.fn(
   () =>
     ({
       rest: {
         repos: {
-          listCommits: octokit_listCommits_mock
+          listCommits: octokit_listCommits_mock,
+          checkCollaborator: octokit_checkCollaborator
         },
         issues: {
           addLabels: octokit_addLabels_mock,

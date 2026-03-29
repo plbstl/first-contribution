@@ -15,12 +15,14 @@ import {
   core_setFailed_spy_mock,
   core_setOutput_spy_mock,
   is_first_time_contributor_spy,
+  is_internal_contributor_spy,
   is_supported_event_spy,
   run_spy
 } from './helpers.ts'
 import {
   getOctokit_mock,
   github_context_mock,
+  octokit_checkCollaborator,
   octokit_listCommits_mock,
   octokit_listForRepo_mock,
   reset_github_context_mock
@@ -41,17 +43,19 @@ describe('action', () => {
     expect(getOctokit_mock).not.toHaveBeenCalled()
   })
 
-  it('exits action when `skip-internal-contributors` is enabled', async () => {
+  it('stops execution for org member when `skip-internal-contributors` is enabled', async () => {
     // Supported event
     github_context_mock.eventName = 'pull_request_target'
     github_context_mock.payload.action = 'opened'
     github_context_mock.payload.pull_request = { number: 456, user: { login: 'ghosty' } }
     // skip-internal-contributors= true
     core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
+    octokit_checkCollaborator.mockReturnValue({ status: 204 })
 
     await main.run()
 
-    expect(getOctokit_mock).not.toHaveBeenCalled()
+    expect(is_internal_contributor_spy).toHaveBeenCalled()
+    expect(is_first_time_contributor_spy).not.toHaveBeenCalled()
     expect(run_spy).toHaveResolvedWith(false)
   })
 
@@ -62,12 +66,13 @@ describe('action', () => {
     github_context_mock.payload.pull_request = { number: 456, user: { login: 'ghosty' } }
     // skip-internal-contributors= true
     core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
+    octokit_checkCollaborator.mockReturnValue({ result: { status: 404 } })
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
 
     await main.run()
 
-    expect(getOctokit_mock).toHaveBeenCalled()
+    expect(is_first_time_contributor_spy).toHaveBeenCalled()
     expect(run_spy).toHaveResolvedWith(false)
   })
 
@@ -80,10 +85,11 @@ describe('action', () => {
     core_getBooleanInput_spy.mockReturnValue(false)
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [] })
+    octokit_checkCollaborator.mockReturnValue({ result: { status: 204 } })
 
     await main.run()
 
-    expect(getOctokit_mock).toHaveBeenCalled()
+    expect(is_first_time_contributor_spy).toHaveBeenCalled()
     expect(run_spy).toHaveResolvedWith(false)
   })
 
