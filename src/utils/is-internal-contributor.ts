@@ -18,7 +18,6 @@ export async function is_internal_contributor(
   const { author, owner, repo } = opts
 
   const skip = core.getBooleanInput('skip-internal-contributors')
-  core.debug(`skip-internal-contributors: ${String(skip)}.`)
 
   const is404 = (err: unknown): boolean => (err as { status: number } | undefined)?.status === 404
 

@@ -122,9 +122,6 @@ export async function run(): Promise<ErrorOccurred> {
     })
     core.info(comment_url ? `Comment created: ${comment_url}` : 'No comment was added')
 
-    const truncated_msg = action_inputs.msg.replace(/^(.{150}).+(.{50})$/, '$1...$2')
-    core.info(`Comment body:\n${truncated_msg}`)
-
     // add labels
     core.debug(`Attempting to add labels to ${interaction}`)
     const did_add_labels = await add_labels(octokit, payload_action, {
@@ -133,7 +130,7 @@ export async function run(): Promise<ErrorOccurred> {
       labels: action_inputs.labels,
       issue_number: issue_or_pull_request.number
     })
-    core.info(did_add_labels ? `Labels added: ${action_inputs.labels.toString()}` : 'No label was added')
+    core.info(did_add_labels ? `Labels added` : 'No label was added')
 
     core.setOutput('comment-url', comment_url)
     core.setOutput('number', issue_or_pull_request.number)

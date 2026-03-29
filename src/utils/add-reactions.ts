@@ -31,7 +31,7 @@ export async function add_reactions(
   const successful_reactions: string[] = []
   const failed_reactions: string[] = []
 
-  core.debug(`Attempting to add reactions: ${opts.reactions.toString()}`)
+  core.debug(`Attempting to add reactions`)
 
   for (const reaction of opts.reactions) {
     try {
