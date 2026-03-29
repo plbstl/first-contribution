@@ -12,7 +12,7 @@
 
 Automatically welcome first-time contributors on issues and pull requests.
 
-## Quick Start
+## Quick start
 
 Create `.github/workflows/welcome.yml` and paste:
 
@@ -61,24 +61,24 @@ That's all you need.
 
 ### Inputs
 
-| Input                        | Description                                                                                                                  |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `token`                      | GitHub token for API access. [Default: github.token]                                                                         |
-| `issue-opened-msg`           | Message for a first-time issue                                                                                               |
-| `pr-opened-msg`              | Message for a first-time PR                                                                                                  |
-| `issue-completed-msg`        | Message when a first-time issue is closed as completed                                                                       |
-| `issue-not-planned-msg`      | Message when a first-time issue is closed as not planned                                                                     |
-| `pr-merged-msg`              | Message when a first-time PR is merged                                                                                       |
-| `pr-closed-msg`              | Message when a first-time PR is closed (not merged)                                                                          |
-| `labels`                     | Labels to add (comma separated)                                                                                              |
-| `issue-labels`               | Labels for issues (overrides labels)                                                                                         |
-| `pr-labels`                  | Labels for PRs (overrides labels)                                                                                            |
-| `reactions`                  | Reactions to add (comma separated)                                                                                           |
-| `issue-reactions`            | Reactions for issues (overrides reactions)                                                                                   |
-| `pr-reactions`               | Reactions for PRs (overrides reactions)                                                                                      |
-| `contribution-mode`          | `once` to greet only on a user’s absolute first interaction. [Default: greet on first issue and first PR]                    |
-| `fail-on-error`              | Fail the workflow if an error occurs. [Default: false]                                                                       |
-| `skip-internal-contributors` | Skip org members and repository collaborators. Needs `GH_PAT_READ_ORG` env variable. See [Advanced](#advanced-configuration) |
+| Input                        | Description                                                                                                                                        |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `token`                      | GitHub token for API access. [Default: github.token]                                                                                               |
+| `issue-opened-msg`           | Message for a first-time issue                                                                                                                     |
+| `pr-opened-msg`              | Message for a first-time PR                                                                                                                        |
+| `issue-completed-msg`        | Message when a first-time issue is closed as completed                                                                                             |
+| `issue-not-planned-msg`      | Message when a first-time issue is closed as not planned                                                                                           |
+| `pr-merged-msg`              | Message when a first-time PR is merged                                                                                                             |
+| `pr-closed-msg`              | Message when a first-time PR is closed (not merged)                                                                                                |
+| `labels`                     | Labels to add (comma separated)                                                                                                                    |
+| `issue-labels`               | Labels for issues (overrides labels)                                                                                                               |
+| `pr-labels`                  | Labels for PRs (overrides labels)                                                                                                                  |
+| `reactions`                  | Reactions to add (comma separated)                                                                                                                 |
+| `issue-reactions`            | Reactions for issues (overrides reactions)                                                                                                         |
+| `pr-reactions`               | Reactions for PRs (overrides reactions)                                                                                                            |
+| `contribution-mode`          | `once` to greet only on a user’s absolute first interaction. [Default: greet on first issue and first PR]                                          |
+| `fail-on-error`              | Fail the workflow if an error occurs. [Default: false]                                                                                             |
+| `skip-internal-contributors` | Skip org members and repository collaborators. Needs `GH_PAT_READ_ORG` env variable. See [Skip internal contributors](#skip-internal-contributors) |
 
 > [!NOTE]
 >
@@ -104,7 +104,7 @@ That's all you need.
     pr-reactions: +1, rocket
 ```
 
-### Greet Only Once
+### Greet only once
 
 ```yaml
 - uses: plbstl/first-contribution@4fb1541ce2706255850d56c5684552607be1ae9b # v4.2.0
@@ -115,7 +115,7 @@ That's all you need.
     pr-opened-msg: issue-opened-msg
 ```
 
-### After Merge (all-contributors)
+### After merge (all-contributors)
 
 ```yaml
 name: Add new contributor
@@ -137,7 +137,7 @@ jobs:
             @all-contributors please add @{fc-author} for ${{ join(github.event.pull_request.labels.*.name, ', ') }}
 ```
 
-### Advanced Configuration
+### Advanced configuration
 
 ```yaml
 name: First contribution flow
@@ -183,6 +183,25 @@ jobs:
 > [!TIP]
 >
 > Action logs can help for troubleshooting
+
+## Skip internal contributors
+
+Internal contributors are organization members and repository collaborators.
+
+To enable this behavior, set `skip-internal-contributors` to true, and populate the `GH_PAT_READ_ORG` env variable.
+
+```yml
+steps:
+  - uses: plbstl/first-contribution@commit-sha
+    env:
+      GH_PAT_READ_ORG: ${{ secrets.GH_PAT_READ_ORG }}
+    with:
+      skip-internal-contributors: true
+      # other options...
+```
+
+Create a Personal Access Token (PAT) with <https://github.com/settings/tokens/new?scopes=read:org>. Only `read:org`
+scope is needed.
 
 ## Security
 
