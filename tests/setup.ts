@@ -37,7 +37,7 @@ export const reset_github_context_mock = (): void => {
 
 // Mock octokit client
 export const octokit_addLabels_mock = vitest.fn()
-export const octokit_checkCollaborator = vitest.fn().mockResolvedValue({ status: 404 })
+export const octokit_checkCollaborator = vitest.fn()
 export const octokit_createComment_mock = vitest.fn()
 export const octokit_createReactionForIssue_mock = vitest.fn()
 export const octokit_listCommits_mock = vitest.fn()

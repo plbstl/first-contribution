@@ -16,24 +16,30 @@ export async function is_internal_contributor(
   const skip_internal_contributors = core.getBooleanInput('skip-internal-contributors')
   core.debug(`skip-internal-contributors: ${String(skip_internal_contributors)}.`)
 
-  const ignore_option = !skip_internal_contributors
+  const disabled = !skip_internal_contributors
 
   core.debug(`Checking if @${creator} is an internal contributor.`)
-  const result = await octokit.rest.repos.checkCollaborator({
-    username: creator,
-    owner,
-    repo
-  })
+  try {
+    await octokit.rest.repos.checkCollaborator({
+      username: creator,
+      owner,
+      repo
+    })
 
-  if (result.status.toString() === '204') {
-    if (ignore_option) {
+    if (disabled) {
       core.info('Consider enabling `skip-internal-contributors` to avoid greeting internal contributors.')
       return false
     }
 
     return true
+  } catch (error) {
+    if ((error as any)?.status === 404) {
+      // not a collaborator
+      return false
+    }
+
+    throw error
   }
-  return false
 }
 
 interface IsInternalContributorOpts {

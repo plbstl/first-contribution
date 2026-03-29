@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from 'vitest'
 import { is_internal_contributor } from '~src/utils/index.ts'
-import { core_getBooleanInput_spy, octokit } from '~tests/helpers.ts'
+import { core_getBooleanInput_spy, not_a_collaborator, octokit } from '~tests/helpers.ts'
 import { octokit_checkCollaborator } from '~tests/setup.ts'
 
 describe('is_internal_contributor()', () => {
@@ -18,6 +18,7 @@ describe('is_internal_contributor()', () => {
     it('author is internal contributor', async () => {
       core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
       octokit_checkCollaborator.mockResolvedValue({ status: 204 })
+
       const result = await is_internal_contributor(octokit, default_opts)
       // should be skipped
       expect(result).toBe(true)
@@ -25,7 +26,8 @@ describe('is_internal_contributor()', () => {
 
     it('author is NOT internal contributor', async () => {
       core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
-      octokit_checkCollaborator.mockResolvedValue({ status: 404 })
+      octokit_checkCollaborator.mockImplementation(not_a_collaborator)
+
       const result = await is_internal_contributor(octokit, default_opts)
       // should NOT be skipped
       expect(result).toBe(false)
@@ -36,6 +38,7 @@ describe('is_internal_contributor()', () => {
     it('author is internal contributor', async () => {
       core_getBooleanInput_spy.mockReturnValue(false)
       octokit_checkCollaborator.mockResolvedValue({ status: 204 })
+
       const result = await is_internal_contributor(octokit, default_opts)
       // should NOT be skipped
       expect(result).toBe(false)
@@ -43,10 +46,22 @@ describe('is_internal_contributor()', () => {
 
     it('author is NOT internal contributor', async () => {
       core_getBooleanInput_spy.mockReturnValue(false)
-      octokit_checkCollaborator.mockResolvedValue({ status: 404 })
+      octokit_checkCollaborator.mockImplementation(not_a_collaborator)
+
       const result = await is_internal_contributor(octokit, default_opts)
       // should NOT be skipped
       expect(result).toBe(false)
     })
+  })
+
+  it("rethrow error that isn't 404", async () => {
+    core_getBooleanInput_spy.mockReturnValue(false)
+    octokit_checkCollaborator.mockImplementation(() => {
+      throw new Error('Something')
+    })
+
+    const result = is_internal_contributor(octokit, default_opts)
+
+    await expect(result).rejects.toThrow('Something')
   })
 })

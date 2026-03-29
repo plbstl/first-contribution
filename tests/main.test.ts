@@ -17,6 +17,7 @@ import {
   is_first_time_contributor_spy,
   is_internal_contributor_spy,
   is_supported_event_spy,
+  not_a_collaborator,
   run_spy
 } from './helpers.ts'
 import {
@@ -67,6 +68,7 @@ describe('action', () => {
     // skip-internal-contributors= true
     core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
     octokit_checkCollaborator.mockReturnValue({ status: 404 })
+    octokit_checkCollaborator.mockImplementation(not_a_collaborator)
     octokit_listCommits_mock.mockResolvedValue({ data: [] })
     octokit_listForRepo_mock.mockReturnValue({ data: [{}, {}] })
 
