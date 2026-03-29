@@ -192,7 +192,7 @@ To enable this behavior, set `skip-internal-contributors` to true, and populate 
 
 ```yml
 steps:
-  - uses: plbstl/first-contribution@commit-sha
+  - uses: plbstl/first-contribution@7c31f41b0e7a70adfcae06cf964679f61af6780b # v4.3.0
     env:
       GH_PAT_READ_ORG: ${{ secrets.GH_PAT_READ_ORG }}
     with:
