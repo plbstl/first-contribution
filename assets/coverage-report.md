@@ -6,10 +6,10 @@
 
 | Category   | Percentage | Covered/Total |
 | :--------- | :--------: | :-----------: |
-| Statements |    100%    |    157/157    |
-| Branches   |    100%    |     72/72     |
-| Functions  |    100%    |     18/18     |
-| Lines      |    100%    |    151/151    |
+| Statements |    100%    |    162/162    |
+| Branches   |    100%    |     70/70     |
+| Functions  |    100%    |     19/19     |
+| Lines      |    100%    |    156/156    |
 
 ## Coverage by File
 
@@ -23,5 +23,6 @@
 | `src/utils/create-comment.ts`             | `████████████████████` |    100% |
 | `src/utils/fc-event.ts`                   | `████████████████████` |    100% |
 | `src/utils/is-first-time-contributor.ts`  | `████████████████████` |    100% |
+| `src/utils/is-internal-contributor.ts`    | `████████████████████` |    100% |
 | `src/utils/is-supported-event.ts`         | `████████████████████` |    100% |
 | `src/utils/was-the-first-contribution.ts` | `████████████████████` |    100% |

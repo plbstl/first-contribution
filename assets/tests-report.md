@@ -4,24 +4,25 @@
 
 ## Summary
 
-- **Total Tests**: 59
-- **Test Suites**: 35
-- **Duration**: 878ms
+- **Total Tests**: 63
+- **Test Suites**: 39
+- **Duration**: 936ms
 
 | Status | File                                                                                           | Tests |  ✅  |  ❌  |  ⏭️ |   ⏳  |
 | :----: | :--------------------------------------------------------------------------------------------- | :---: | :-: | :-: | :-: | :--: |
-|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  | 10ms |
-|    ✅   | [tests/issues.test.ts](#-testsissuestestts)                                                    |   3   |  3  |  -  |  -  |  7ms |
-|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   10  |  10 |  -  |  -  | 18ms |
-|    ✅   | [tests/pull_request.test.ts](#-testspull_requesttestts)                                        |   5   |  5  |  -  |  -  |  6ms |
-|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   9   |  9  |  -  |  -  |  3ms |
+|    ✅   | [tests/index.test.ts](#-testsindextestts)                                                      |   1   |  1  |  -  |  -  | 13ms |
+|    ✅   | [tests/issues.test.ts](#-testsissuestestts)                                                    |   3   |  3  |  -  |  -  |  9ms |
+|    ✅   | [tests/main.test.ts](#-testsmaintestts)                                                        |   10  |  10 |  -  |  -  | 11ms |
+|    ✅   | [tests/pull_request.test.ts](#-testspull_requesttestts)                                        |   5   |  5  |  -  |  -  |  7ms |
+|    ✅   | [tests/utils/action-inputs.test.ts](#-testsutilsaction-inputstestts)                           |   9   |  9  |  -  |  -  |  4ms |
 |    ✅   | [tests/utils/add-labels.test.ts](#-testsutilsadd-labelstestts)                                 |   3   |  3  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/add-reactions.test.ts](#-testsutilsadd-reactionstestts)                           |   6   |  6  |  -  |  -  |  8ms |
-|    ✅   | [tests/utils/create-comment.test.ts](#-testsutilscreate-commenttestts)                         |   2   |  2  |  -  |  -  |  2ms |
+|    ✅   | [tests/utils/add-reactions.test.ts](#-testsutilsadd-reactionstestts)                           |   6   |  6  |  -  |  -  |  9ms |
+|    ✅   | [tests/utils/create-comment.test.ts](#-testsutilscreate-commenttestts)                         |   2   |  2  |  -  |  -  |  4ms |
 |    ✅   | [tests/utils/fc-event.test.ts](#-testsutilsfc-eventtestts)                                     |   6   |  6  |  -  |  -  |  2ms |
-|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  | 13ms |
-|    ✅   | [tests/utils/is-supported-event.test.ts](#-testsutilsis-supported-eventtestts)                 |   1   |  1  |  -  |  -  |  1ms |
-|    ✅   | [tests/utils/was-the-first-contribution.test.ts](#-testsutilswas-the-first-contributiontestts) |   5   |  5  |  -  |  -  | 11ms |
+|    ✅   | [tests/utils/is-first-time-contributor.test.ts](#-testsutilsis-first-time-contributortestts)   |   8   |  8  |  -  |  -  |  7ms |
+|    ✅   | [tests/utils/is-internal-contributor.test.ts](#-testsutilsis-internal-contributortestts)       |   4   |  4  |  -  |  -  |  2ms |
+|    ✅   | [tests/utils/is-supported-event.test.ts](#-testsutilsis-supported-eventtestts)                 |   1   |  1  |  -  |  -  |  2ms |
+|    ✅   | [tests/utils/was-the-first-contribution.test.ts](#-testsutilswas-the-first-contributiontestts) |   5   |  5  |  -  |  -  |  5ms |
 
 ## Details
 
@@ -46,7 +47,7 @@
 
 ```txt
   ✅ exits action when the triggered event is NOT supported
-  ✅ exits action when `skip-internal-contributors` is enabled
+  ✅ stops execution for org member when `skip-internal-contributors` is enabled
   ✅ continues execution for non-org-member when `skip-internal-contributors` is enabled
   ✅ continues execution for org member when `skip-internal-contributors` is disabled
   ✅ exits action when the issue or pull request author is NOT a first-time contributor
@@ -142,6 +143,17 @@
   ✅ returns false for a subsequent issue
   ✅ returns true for a first PR, even with a prior issue
   ✅ returns false for a subsequent PR
+
+```
+
+### ✅ tests/utils/is-internal-contributor.test.ts
+
+```txt
+  ✅ author is internal contributor
+  ✅ author is NOT internal contributor
+
+  ✅ author is internal contributor
+  ✅ author is NOT internal contributor
 
 ```
 
