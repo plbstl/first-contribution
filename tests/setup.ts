@@ -13,7 +13,6 @@ type IssueOrPullRequestStub =
   | {
       number: number
       user: { login: string }
-      author_association: (Issue | PullRequest)['author_association']
       [key: string]: unknown
     }
   | undefined
