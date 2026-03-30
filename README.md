@@ -56,6 +56,11 @@ That's all you need.
 - Lets you customize messages for open, merge, and close events
 - Adds labels and emoji reactions
 - Detects real first-time contributors (checks commit history too)
+- Lets you skip welcoming internal contributors (org members/collaborators)
+
+> [!TIP]
+>
+> Action logs can help for troubleshooting
 
 ## Configuration
 
@@ -180,11 +185,7 @@ jobs:
             Your first PR was merged. Thank you!
 ```
 
-> [!TIP]
->
-> Action logs can help for troubleshooting
-
-## Skip internal contributors
+### Skip internal contributors
 
 Internal contributors are organization members and repository collaborators.
 
@@ -207,18 +208,18 @@ scope is needed.
 
 This action uses `pull_request_target` so it can comment on PRs from forks.
 
-That is safe **as long as you do not check out untrusted code from the PR**.
+That is safe as long as you **do not check out untrusted code from the PR**.
 
 Safe:
 
 ```yaml
-- uses: actions/checkout@commit-sha # v6.x.x
+- uses: actions/checkout@commit-sha # vX.X.X
 ```
 
 Unsafe:
 
 ```yaml
-- uses: actions/checkout@commit-sha # v6.x.x
+- uses: actions/checkout@commit-sha # vX.X.X
   with:
     ref: ${{ github.event.pull_request.head.sha }}
 ```
