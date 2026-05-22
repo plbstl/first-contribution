@@ -53,20 +53,24 @@ export async function run(): Promise<ErrorOccurred> {
     const is_pull_request = !!payload.pull_request
 
     // skip internal contributors
-    const pat_token = process.env['GH_PAT_READ_ORG']
-    if (!pat_token) {
-      throw new Error('GH_PAT_READ_ORG env variable is not set.')
-    }
-    const is_internal = await is_internal_contributor(octokit, pat_token, {
-      author,
-      owner,
-      repo
-    })
-    if (is_internal) {
-      core.info(`@${author} is an internal contributor. Exiting..`)
-      return false
-    } else {
-      core.debug(`@${author} is NOT an internal contributor.`)
+    const should_skip = core.getBooleanInput('skip-internal-contributors')
+    if (should_skip) {
+      const pat_token = process.env['GH_PAT_READ_ORG']
+      if (pat_token) {
+        const is_internal = await is_internal_contributor(octokit, pat_token, {
+          author,
+          owner,
+          repo
+        })
+        if (is_internal) {
+          core.info(`@${author} is an internal contributor. Exiting..`)
+          return false
+        } else {
+          core.debug(`@${author} is NOT an internal contributor.`)
+        }
+      } else {
+        core.info('`GH_PAT_READ_ORG` env variable is unavailable. Cannot skip internal contributors.')
+      }
     }
 
     // check if author is first-timer
