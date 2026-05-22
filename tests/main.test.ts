@@ -145,18 +145,20 @@ describe('action', () => {
     expect(run_spy).toHaveReturned()
   })
 
-  it('throws if GH_PAT_READ_ORG is not set', async () => {
+  it('does not throw if GH_PAT_READ_ORG is not set', async () => {
     // Supported event
     github_context_mock.eventName = 'pull_request_target'
     github_context_mock.payload.action = 'opened'
     github_context_mock.payload.pull_request = { number: 456, user: { login: 'ghosty' } }
     // remove PAT env
     vitest.unstubAllEnvs()
+    // skip internal contributors
+    core_getBooleanInput_spy.mockReturnValue(true)
 
     await main.run()
 
     expect(is_internal_contributor_spy).not.toHaveBeenCalled()
-    expect(run_spy).toHaveResolvedWith(true)
+    expect(run_spy).toHaveResolvedWith(false)
   })
 
   describe('when an error is thrown', () => {
