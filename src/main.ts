@@ -21,27 +21,27 @@ type ErrorOccurred = boolean
  */
 export async function run(): Promise<ErrorOccurred> {
   try {
-    core.debug('Retrieving webhook payload')
+    core.info('Retrieving webhook payload')
     const payload = github.context.payload
     const payload_action = payload.action
-    core.debug('Retrieved webhook payload')
+    core.info('Retrieved webhook payload')
 
     // check if event is supported
-    core.debug('Checking if triggered event is supported')
+    core.info('Checking if triggered event is supported')
     const supported_event = is_supported_event(github.context.eventName, payload_action)
     if (!supported_event) {
       core.info(`\`${github.context.eventName}.${String(payload_action)}\` event is NOT supported. Exiting..`)
       return false
     }
-    core.debug(`Supported event: \`${github.context.eventName}.${payload_action}\``)
+    core.info(`Supported event: \`${github.context.eventName}.${payload_action}\``)
 
     // create octokit client
-    core.debug('Retrieving `token` input')
+    core.info('Retrieving `token` input')
     const token = core.getInput('token', { required: true })
-    core.debug('`token` input retrieved')
-    core.debug('Creating octokit client')
+    core.info('`token` input retrieved')
+    core.info('Creating octokit client')
     const octokit = github.getOctokit(token)
-    core.debug('Octokit client created')
+    core.info('Octokit client created')
 
     // helper variables
     const fc_event = get_fc_event(payload_action, payload)
@@ -66,7 +66,7 @@ export async function run(): Promise<ErrorOccurred> {
           core.info(`@${author} is an internal contributor. Exiting..`)
           return false
         } else {
-          core.debug(`@${author} is NOT an internal contributor.`)
+          core.info(`@${author} is NOT an internal contributor.`)
         }
       } else {
         core.info('`GH_PAT_READ_ORG` env variable is unavailable. Cannot skip internal contributors.')
@@ -74,10 +74,10 @@ export async function run(): Promise<ErrorOccurred> {
     }
 
     // check if author is first-timer
-    core.debug(`Checking if ${interaction} is a first-time contribution from its author`)
+    core.info(`Checking if ${interaction} is a first-time contribution from its author`)
     let is_relevant_first_timer = false
     if (payload_action === 'opened') {
-      core.debug('Event is "opened". Checking for first-time contributor.')
+      core.info('Event is "opened". Checking for first-time contributor.')
       is_relevant_first_timer = await is_first_time_contributor(octokit, {
         owner,
         repo,
@@ -85,7 +85,7 @@ export async function run(): Promise<ErrorOccurred> {
         is_pull_request
       })
     } else {
-      core.debug('Event is "closed". Checking if this was their first contribution.')
+      core.info('Event is "closed". Checking if this was their first contribution.')
       is_relevant_first_timer = await was_the_first_contribution(octokit, {
         owner,
         repo,
@@ -99,15 +99,15 @@ export async function run(): Promise<ErrorOccurred> {
       core.info(`\`${author}\` does not meet the criteria for being a first timer. Exiting..`)
       return false
     }
-    core.debug('Author meets the criteria for this event.')
+    core.info('Author meets the criteria for this event.')
 
     // retrieve inputs
-    core.debug('Retrieving relevant message and labels inputs')
+    core.info('Retrieving relevant message and labels inputs')
     const action_inputs = get_action_inputs(fc_event)
-    core.debug('Message and labels inputs retrieved')
+    core.info('Message and labels inputs retrieved')
 
     // add reactions
-    core.debug(`Attempting to react with: ${action_inputs.reactions.toString()}`)
+    core.info(`Attempting to react with: ${action_inputs.reactions.toString()}`)
     await add_reactions(octokit, payload_action, {
       owner,
       repo,
@@ -116,7 +116,7 @@ export async function run(): Promise<ErrorOccurred> {
     })
 
     // create comment
-    core.debug('Attempting to create comment on GitHub')
+    core.info('Attempting to create comment on GitHub')
     const comment_url = await create_comment(octokit, {
       owner,
       repo,
@@ -127,7 +127,7 @@ export async function run(): Promise<ErrorOccurred> {
     core.info(comment_url ? `Comment created: ${comment_url}` : 'No comment was added')
 
     // add labels
-    core.debug(`Attempting to add labels to ${interaction}`)
+    core.info(`Attempting to add labels to ${interaction}`)
     const did_add_labels = await add_labels(octokit, payload_action, {
       owner,
       repo,

@@ -19,7 +19,7 @@ export async function was_the_first_contribution(
 ): Promise<boolean> {
   const { is_pull_request, issue_or_pull_request, ...listForRepo_opts } = opts
 
-  core.debug('Retrieving issues and PRs')
+  core.info('Retrieving issues and PRs')
 
   const { data: contributions } = await octokit.rest.issues.listForRepo({
     ...listForRepo_opts,
@@ -28,7 +28,7 @@ export async function was_the_first_contribution(
     direction: 'asc'
   })
 
-  core.debug('Filtering for relevant contributions')
+  core.info('Filtering for relevant contributions')
 
   // Filter for either issues or PRs
   const relevant_contributions = contributions.filter(item =>
