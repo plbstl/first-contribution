@@ -57,7 +57,8 @@ export async function run(): Promise<ErrorOccurred> {
     if (should_skip) {
       const pat_token = process.env['GH_PAT_READ_ORG']
       if (pat_token) {
-        const is_internal = await is_internal_contributor(octokit, pat_token, {
+        const org_octokit = github.getOctokit(pat_token)
+        const is_internal = await is_internal_contributor(org_octokit, {
           author,
           owner,
           repo
@@ -71,6 +72,8 @@ export async function run(): Promise<ErrorOccurred> {
       } else {
         core.info('`GH_PAT_READ_ORG` env variable is unavailable. Cannot skip internal contributors.')
       }
+    } else {
+      // core.info('Consider enabling `skip-internal-contributors` to avoid greeting internal contributors.')
     }
 
     // check if author is first-timer
