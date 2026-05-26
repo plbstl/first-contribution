@@ -14,70 +14,34 @@ describe('is_internal_contributor()', () => {
     repo: 'repo'
   }
 
-  const pat_token = '***'
+  it('author is internal contributor', async () => {
+    core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
+    octokit_checkMembershipForUser.mockResolvedValue({ status: 204 })
 
-  describe('`skip-internal-contributors` is enabled', () => {
-    it('author is internal contributor', async () => {
-      core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
-      octokit_checkMembershipForUser.mockResolvedValue({ status: 204 })
-
-      const result = await is_internal_contributor(octokit, pat_token, default_opts)
-      // should be skipped
-      expect(result).toBe(true)
-    })
-
-    it('author is NOT internal contributor', async () => {
-      core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
-      octokit_checkMembershipForUser.mockImplementation(not_a_collaborator)
-      octokit_checkCollaborator.mockImplementation(not_a_collaborator)
-
-      const result = await is_internal_contributor(octokit, pat_token, default_opts)
-      // should NOT be skipped
-      expect(result).toBe(false)
-    })
-
-    it('author is NOT org member but IS repo collaborator', async () => {
-      core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
-      octokit_checkMembershipForUser.mockImplementation(not_a_collaborator)
-      octokit_checkCollaborator.mockResolvedValue({ status: 204 })
-
-      const result = await is_internal_contributor(octokit, pat_token, default_opts)
-
-      // should be skipped
-      expect(result).toBe(true)
-    })
+    const result = await is_internal_contributor(octokit, default_opts)
+    // should be skipped
+    expect(result).toBe(true)
   })
 
-  describe('`skip-internal-contributors` is disabled', () => {
-    it('author is internal contributor', async () => {
-      core_getBooleanInput_spy.mockReturnValue(false)
-      octokit_checkMembershipForUser.mockResolvedValue({ status: 204 })
+  it('author is NOT internal contributor', async () => {
+    core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
+    octokit_checkMembershipForUser.mockImplementation(not_a_collaborator)
+    octokit_checkCollaborator.mockImplementation(not_a_collaborator)
 
-      const result = await is_internal_contributor(octokit, pat_token, default_opts)
-      // should NOT be skipped
-      expect(result).toBe(false)
-    })
+    const result = await is_internal_contributor(octokit, default_opts)
+    // should NOT be skipped
+    expect(result).toBe(false)
+  })
 
-    it('author is NOT internal contributor', async () => {
-      core_getBooleanInput_spy.mockReturnValue(false)
-      octokit_checkMembershipForUser.mockImplementation(not_a_collaborator)
-      octokit_checkCollaborator.mockImplementation(not_a_collaborator)
+  it('author is NOT org member but IS repo collaborator', async () => {
+    core_getBooleanInput_spy.mockImplementation(name => name === 'skip-internal-contributors')
+    octokit_checkMembershipForUser.mockImplementation(not_a_collaborator)
+    octokit_checkCollaborator.mockResolvedValue({ status: 204 })
 
-      const result = await is_internal_contributor(octokit, pat_token, default_opts)
-      // should NOT be skipped
-      expect(result).toBe(false)
-    })
+    const result = await is_internal_contributor(octokit, default_opts)
 
-    it('author is NOT org member but IS repo collaborator', async () => {
-      core_getBooleanInput_spy.mockReturnValue(false)
-      octokit_checkMembershipForUser.mockImplementation(not_a_collaborator)
-      octokit_checkCollaborator.mockResolvedValue({ status: 204 })
-
-      const result = await is_internal_contributor(octokit, pat_token, default_opts)
-
-      // should NOT be skipped
-      expect(result).toBe(false)
-    })
+    // should be skipped
+    expect(result).toBe(true)
   })
 
   it('rethrows error if org check fails with non-404', async () => {
@@ -86,7 +50,7 @@ describe('is_internal_contributor()', () => {
       throw new Error('Boom')
     })
 
-    const result = is_internal_contributor(octokit, pat_token, default_opts)
+    const result = is_internal_contributor(octokit, default_opts)
 
     await expect(result).rejects.toThrow('Boom')
   })
@@ -98,7 +62,7 @@ describe('is_internal_contributor()', () => {
       throw new Error('Something')
     })
 
-    const result = is_internal_contributor(octokit, pat_token, default_opts)
+    const result = is_internal_contributor(octokit, default_opts)
 
     await expect(result).rejects.toThrow('Something')
   })
