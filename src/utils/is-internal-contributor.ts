@@ -22,7 +22,7 @@ export async function is_internal_contributor(
   const is404 = (err: unknown): boolean => (err as { status: number } | undefined)?.status === 404
 
   const isMember = await (async () => {
-    core.debug(`Checking if @${author} is an org member.`)
+    core.info(`Checking if @${author} is an org member.`)
 
     try {
       await github.getOctokit(pat_token).rest.orgs.checkMembershipForUser({
@@ -34,9 +34,9 @@ export async function is_internal_contributor(
       if (!is404(err)) throw err
     }
 
-    core.debug(`@${author} is NOT a member of \`${owner}\`.`)
+    core.info(`@${author} is NOT a member of \`${owner}\`.`)
 
-    core.debug(`Checking if @${author} is a collaborator in \`${repo}\`.`)
+    core.info(`Checking if @${author} is a collaborator in \`${repo}\`.`)
     try {
       await octokit.rest.repos.checkCollaborator({
         username: author,

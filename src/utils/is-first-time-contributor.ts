@@ -15,7 +15,7 @@ export async function is_first_time_contributor(
 ): Promise<boolean> {
   const { is_pull_request, author, owner, repo } = opts
 
-  core.debug('Retrieving commit history')
+  core.info('Retrieving commit history')
 
   // Check for any prior commits by the user
   const { data: commits } = await octokit.rest.repos.listCommits({
@@ -29,7 +29,7 @@ export async function is_first_time_contributor(
     return false
   }
 
-  core.debug('No prior commits. Retrieving issues and PRs')
+  core.info('No prior commits. Retrieving issues and PRs')
 
   // Fetch all issues and PRs by the author
   const { data: contributions } = await octokit.rest.issues.listForRepo({
