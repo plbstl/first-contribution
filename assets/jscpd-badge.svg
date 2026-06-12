@@ -1,20 +1,15 @@
-<svg width="99.9" height="20" viewBox="0 0 999 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="copy/paste: 0%">
-  <title>copy/paste: 0%</title>
-  <linearGradient id="gMuyZ" x2="0" y2="100%">
-    <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="125" height="20">
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="OtMXc"><rect width="999" height="200" rx="30" fill="#FFF"/></mask>
-  <g mask="url(#OtMXc)">
-    <rect width="709" height="200" fill="#555"/>
-    <rect width="290" height="200" fill="#3C1" x="709"/>
-    <rect width="999" height="200" fill="url(#gMuyZ)"/>
+  <rect rx="3" width="125" height="20" fill="#555"/>
+  <rect rx="3" x="87" width="38" height="20" fill="#27ae60"/>
+  <rect rx="3" width="125" height="20" fill="url(#s)"/>
+  <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="11">
+    <text x="43" y="15" fill="#010101" fill-opacity=".3">duplication</text>
+    <text x="43" y="14">duplication</text>
+    <text x="106" y="15" fill="#010101" fill-opacity=".3">0.0%</text>
+    <text x="106" y="14">0.0%</text>
   </g>
-  <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
-    <text x="60" y="148" textLength="609" fill="#000" opacity="0.25">copy/paste</text>
-    <text x="50" y="138" textLength="609">copy/paste</text>
-    <text x="764" y="148" textLength="190" fill="#000" opacity="0.25">0%</text>
-    <text x="754" y="138" textLength="190">0%</text>
-  </g>
-  
 </svg>
