@@ -123,8 +123,8 @@ describe('pull_request', () => {
       // SCENARIO: User opens PR #4, then PR #5. Then PR #5 is closed.
       octokit_listForRepo_mock.mockResolvedValue({
         data: [
-          { number: 4, pull_request: {}, created_at: '2025-01-01T10:00:00Z' }, // First PR
-          { number: 5, pull_request: {}, created_at: '2025-01-01T11:00:00Z' } // Second PR
+          { number: 4, pull_request: {}, created_at: '2025-02-02T10:00:00Z' }, // First PR
+          { number: 5, pull_request: {}, created_at: '2025-02-02T11:00:00Z' } // Second PR
         ]
       })
       // The event is for PR #5, which is NOT the first one
