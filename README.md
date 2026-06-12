@@ -32,7 +32,7 @@ jobs:
       issues: write # Only needed when adding comments and labels on issues
       pull-requests: write # Only needed when adding comments and labels on PRs
     steps:
-      - uses: plbstl/first-contribution@fa732d1b5586da1a72ba34290a32e87467a59b78 # v4.3.2
+      - uses: plbstl/first-contribution@2c36bdb58684587f60549a69aaa3ec00b9d5f4fe # v4.3.3
         with:
           issue-opened-msg: |
             Hey @{fc-author} 👋
@@ -103,7 +103,7 @@ That's all you need.
 ### Reactions
 
 ```yaml
-- uses: plbstl/first-contribution@fa732d1b5586da1a72ba34290a32e87467a59b78 # v4.3.2
+- uses: plbstl/first-contribution@2c36bdb58684587f60549a69aaa3ec00b9d5f4fe # v4.3.3
   with:
     issue-reactions: eyes
     pr-reactions: +1, rocket
@@ -112,7 +112,7 @@ That's all you need.
 ### Greet only once
 
 ```yaml
-- uses: plbstl/first-contribution@fa732d1b5586da1a72ba34290a32e87467a59b78 # v4.3.2
+- uses: plbstl/first-contribution@2c36bdb58684587f60549a69aaa3ec00b9d5f4fe # v4.3.3
   with:
     contribution-mode: once
     issue-opened-msg: >
@@ -136,7 +136,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@fa732d1b5586da1a72ba34290a32e87467a59b78 # v4.3.2
+      - uses: plbstl/first-contribution@2c36bdb58684587f60549a69aaa3ec00b9d5f4fe # v4.3.3
         with:
           pr-merged-msg: >
             @all-contributors please add @{fc-author} for ${{ join(github.event.pull_request.labels.*.name, ', ') }}
@@ -160,7 +160,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: plbstl/first-contribution@fa732d1b5586da1a72ba34290a32e87467a59b78 # v4.3.2
+      - uses: plbstl/first-contribution@2c36bdb58684587f60549a69aaa3ec00b9d5f4fe # v4.3.3
         env:
           GH_PAT_READ_ORG: ${{ secrets.GH_PAT_READ_ORG }} # https://github.com/settings/tokens/new?scopes=read:org
         with:
@@ -193,7 +193,7 @@ To enable this behavior, set `skip-internal-contributors` to true, and populate 
 
 ```yml
 steps:
-  - uses: plbstl/first-contribution@fa732d1b5586da1a72ba34290a32e87467a59b78 # v4.3.2
+  - uses: plbstl/first-contribution@2c36bdb58684587f60549a69aaa3ec00b9d5f4fe # v4.3.3
     env:
       GH_PAT_READ_ORG: ${{ secrets.GH_PAT_READ_ORG }}
     with:
