@@ -1,10 +1,5 @@
 {
   "pattern": "{tests,src}/**",
   "threshold": 0.3,
-  "output": "assets",
-  "reportersOptions": {
-    "badge": {
-      "subject": "copy/paste"
-    }
-  }
+  "output": "assets"
 }
