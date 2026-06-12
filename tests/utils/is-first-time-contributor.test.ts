@@ -105,7 +105,7 @@ describe('is_first_time_contributor()', () => {
     it('returns false for a subsequent PR', async () => {
       octokit_listForRepo_mock.mockReturnValue({ data: [{ pull_request: {} }, { pull_request: {} }] })
 
-      await is_first_time_contributor(octokit, { ...default_opts, is_pull_request: false })
+      await is_first_time_contributor(octokit, { ...default_opts, is_pull_request: true })
 
       expect(is_first_time_contributor_spy).toHaveResolvedWith(false)
     })

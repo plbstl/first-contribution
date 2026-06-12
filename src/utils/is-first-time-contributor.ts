@@ -58,11 +58,11 @@ export async function is_first_time_contributor(
   if (is_pull_request) {
     const pr_count = contributions.filter(item => item.pull_request).length
     core.info(`Author's pr_count: ${pr_count.toString()}`)
-    return pr_count === 1
+    return pr_count <= 1
   } else {
     const issue_count = contributions.filter(item => !item.pull_request).length
     core.info(`Author's issue_count: ${issue_count.toString()}`)
-    return issue_count === 1
+    return issue_count <= 1
   }
 }
 
