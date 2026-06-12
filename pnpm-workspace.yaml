@@ -1,22 +1,10 @@
 allowBuilds:
   unrs-resolver: true
-
 minimumReleaseAgeExclude:
-  - '@jscpd/badge-reporter@4.2.4'
-  - '@jscpd/core@4.2.4'
-  - '@jscpd/finder@4.2.4'
-  - '@jscpd/html-reporter@4.2.4'
-  - '@jscpd/tokenizer@4.2.4'
-  - '@typescript-eslint/eslint-plugin@8.60.0'
-  - '@typescript-eslint/parser@8.60.0'
-  - '@typescript-eslint/project-service@8.60.0'
-  - '@typescript-eslint/scope-manager@8.60.0'
-  - '@typescript-eslint/tsconfig-utils@8.60.0'
-  - '@typescript-eslint/type-utils@8.60.0'
-  - '@typescript-eslint/types@8.60.0'
-  - '@typescript-eslint/typescript-estree@8.60.0'
-  - '@typescript-eslint/utils@8.60.0'
-  - '@typescript-eslint/visitor-keys@8.60.0'
-  - jscpd-sarif-reporter@4.2.4
-  - jscpd@4.2.4
-  - typescript-eslint@8.60.0
+  - cpd-darwin-arm64@5.0.8
+  - cpd-darwin-x64@5.0.8
+  - cpd-linux-arm64-gnu@5.0.8
+  - cpd-linux-x64-gnu@5.0.8
+  - cpd-linux-x64-musl@5.0.8
+  - cpd-windows-x64-msvc@5.0.8
+  - jscpd@5.0.8
