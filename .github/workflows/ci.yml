@@ -32,7 +32,7 @@ jobs:
 
       - name: Setup PNPM
         id: setup-pnpm
-        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Setup Node.js
         id: setup-node
@@ -90,7 +90,7 @@ jobs:
 
       - name: Setup PNPM
         id: setup-pnpm
-        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
         with:
           cache: true
           run_install: true
@@ -127,7 +127,7 @@ jobs:
 
       - name: Setup PNPM
         id: setup-pnpm
-        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
         with:
           cache: true
           run_install: true
@@ -138,7 +138,7 @@ jobs:
 
       - name: Lint Codebase
         id: super-linter
-        uses: super-linter/super-linter/slim@9e863354e3ff62e0727d37183162c4a88873df41 # v8.6.0
+        uses: super-linter/super-linter/slim@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
         env:
           FILTER_REGEX_EXCLUDE: ^dist/
           # To report GitHub Actions status checks
